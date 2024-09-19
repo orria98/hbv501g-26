@@ -1,10 +1,13 @@
 /**
  * Aðferðir sem kallað er á til að eiga við Ingredient töflu í gagnagrunni.
  */
-package hbv501g.recipes;
+package hbv501g.recipes.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import hbv501g.recipes.model.Ingredient;
+import hbv501g.recipes.repository.IngredientRepository;
 
 import java.util.List;
 

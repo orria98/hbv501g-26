@@ -2,7 +2,7 @@
 
 Recipe collection program with ingredient price calculation.
 
-To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser. Note that in this case, upper case letters are *not* recognized
+To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser. 
 
 You can also run the application class and then run `curl http://localhost:8080` in the terminal to run the commandlineRunner method in the application.
 
@@ -41,16 +41,27 @@ Nær í eitt hráefni eftir id
 http://localhost:8080/GetIngredientByID?id=2
 
 
+### Ingredient/\<id>
+Nær í eitt hráefni eftir id
+
+**Dæmi:**\
+http://localhost:8080/Ingredient/1
+
+
 
 ## Possible problems
-* Capitalization of search parameters
+* Capitalization of search parameters (should be fixed)
 * White screen in browser: no results found
+* Getting multiple results but expecting one
 
 
 
 ## Helpful links: 
 https://spring.io/guides/gs/spring-boot
+
 https://spring.io/guides/gs/accessing-data-mysql
+
+https://spring.io/guides/gs/rest-service
 
 sqlite uppsetning: https://www.baeldung.com/spring-boot-sqlite
 https://www.blackslate.io/articles/integrate-sqlite-with-spring-boot

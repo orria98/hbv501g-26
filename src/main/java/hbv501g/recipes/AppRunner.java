@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import hbv501g.recipes.model.Ingredient;
+import hbv501g.recipes.service.IngredientService;
+
 @Component
 public class AppRunner implements CommandLineRunner {
 
