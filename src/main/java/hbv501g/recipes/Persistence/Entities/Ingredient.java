@@ -3,20 +3,22 @@
  * útgáfa af þessum object fer í gagnagrunninn
  */
 
-package hbv501g.recipes.model;
+package hbv501g.recipes.Persistence.Entities;
 
+import hbv501g.recipes.Persistence.enums.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import hbv501g.recipes.enums.*;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "ingredients")
 public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     private String name;
     private Enum<Unit> unit;
@@ -107,8 +109,8 @@ public class Ingredient {
         return this.price;
     }
 
-    public Long getId() {
-        return this.id;
+    public Long getID() {
+        return this.ID;
     }
 
     public String getStore() {
@@ -122,7 +124,7 @@ public class Ingredient {
     // Customizable toString
     @Override
     public String toString() {
-        return "Ingredient [id:" + id + ", name=" + name + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
+        return "Ingredient [id:" + ID + ", name=" + name + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
     }
 
 }
