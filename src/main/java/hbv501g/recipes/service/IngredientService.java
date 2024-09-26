@@ -11,10 +11,9 @@ import hbv501g.recipes.repository.IngredientRepository;
 
 import java.util.List;
 
-
 @Service
 public class IngredientService {
-    
+
     @Autowired
     private IngredientRepository ingredientRepository;
 
@@ -22,12 +21,13 @@ public class IngredientService {
      * 
      * @return All ingredients from the database
      */
-    public List<Ingredient> getAllIngredients(){
+    public List<Ingredient> getAllIngredients() {
         return ingredientRepository.findAll();
     }
 
     /**
      * Adds a given Java object to the database
+     * 
      * @param ingredient - the java object
      * @return the ingredient saved to db
      */
@@ -39,13 +39,13 @@ public class IngredientService {
         return ingredientRepository.findById(id).orElse(null);
     }
 
-    // TODO: Passa hvað gerist ef fleiri hafa sama nafn
     /**
+     * Assumes the ingredient name is unique
      * 
      * @param IngredientName - the name to search for
      * @return One or no ingredients
      */
-    public Ingredient getIngredientByName(String IngredientName){
+    public Ingredient getIngredientByName(String IngredientName) {
         return ingredientRepository.findByIngredientName(IngredientName);
     }
 

@@ -1,19 +1,21 @@
 /**
- * Controller fyrir forritið. Ákvarðar hvar endpoints eru (með GetMapping)
+ * Controller fyrir hráefni. Ákvarðar hvar endpoints eru (með GetMapping)
+ * Kallar á aðferðir í service til að nýta endpoints.
+ * Heldur utan um andpoints fyrir ingredient.
  * 
  */
 package hbv501g.recipes.controller;
 
-import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hbv501g.recipes.model.Ingredient;
 import hbv501g.recipes.service.IngredientService;
+import hbv501g.recipes.enums.*;
 
 import java.util.List;
 
@@ -38,22 +40,10 @@ public class IngredientController {
      * @param name : nafn hráefnis
      * @return one or no ingredient
      */
-    @GetMapping("/GetIngredient")
+    @GetMapping("/Ingredient/name/{name}")
     @ResponseBody
-    public Ingredient getIngredientByName(@RequestParam(value = "name", defaultValue = "hveiti") String name) {
+    public Ingredient getIngredientByName(@PathVariable(value = "name") String name) {
         return ingredientService.getIngredientByName(name);
-    }
-
-    /**
-     * Nær í hráefni eftir id.
-     * 
-     * @param id
-     * @return
-     */
-    @GetMapping("/GetIngredientByID")
-    @ResponseBody
-    public Ingredient getIngredientById(@RequestParam(value = "id", defaultValue = "1") String id) {
-        return ingredientService.getIngredientById(Long.parseLong(id));
     }
 
     /**
@@ -64,7 +54,7 @@ public class IngredientController {
      */
     @GetMapping("/Ingredient/{id}")
     @ResponseBody
-    public Ingredient getTheIngredientById(@PathVariable(value = "id") Long id) {
+    public Ingredient getIngredientById(@PathVariable(value = "id") Long id) {
         return ingredientService.getIngredientById(id);
     }
 
@@ -73,7 +63,7 @@ public class IngredientController {
      * 
      * @return all ingredients in db
      */
-    @GetMapping("/GetAllIngredients")
+    @GetMapping("/Ingredient/all")
     @ResponseBody
     public List<Ingredient> getAllIngredients() {
         return ingredientService.getAllIngredients();
@@ -84,19 +74,22 @@ public class IngredientController {
      * 
      * @return innihald Ingredient töflunnar
      */
-    @GetMapping("/InitIngredients")
+    @GetMapping("/Ingredient/init")
     @ResponseBody
     public List<Ingredient> InitIngredients() {
         List<Ingredient> AllIngredients = ingredientService.getAllIngredients();
 
         if (AllIngredients.size() == 0) {
-            Ingredient ingredient = new Ingredient("ger", "g", 25, 250);
+            Ingredient ingredient = new Ingredient("ger", Unit.G, 25, 250);
             ingredientService.createIngredient(ingredient);
 
-            ingredient = new Ingredient("hveiti", "kg", 2, 500);
+            ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
             ingredientService.createIngredient(ingredient);
 
-            ingredient = new Ingredient("sykur", "kg", 1, 400);
+            ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
+            ingredientService.createIngredient(ingredient);
+
+            ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
             ingredientService.createIngredient(ingredient);
 
             AllIngredients = ingredientService.getAllIngredients();
@@ -105,19 +98,5 @@ public class IngredientController {
         return AllIngredients;
     }
 
-    // Gerir faux ingredient með http://localhost:8080/DummyIngredient?name=sykur
-    @GetMapping("/DummyIngredient")
-    @ResponseBody
-    @Remove
-    public Ingredient ingredient(@RequestParam(value = "name", defaultValue = "Hveiti") String name) {
-        return new Ingredient(name, "g", 100, 250);
-    }
-
-    @GetMapping("/GetHveiti")
-    @ResponseBody
-    @Remove
-    public Ingredient getHveiti() {
-        return ingredientService.getIngredientByName("hveiti");
-    }
 
 }

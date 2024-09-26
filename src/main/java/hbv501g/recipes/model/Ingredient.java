@@ -1,15 +1,6 @@
 /**
- * Entity klasi (basically object). Þetta er það sem fer í gagnagrunninn.
- * An Ingredient object contains the following data: 
- *  * String name:          the name of the ingredient. At the moment, this should be unique.
- *  * enum unit:            the unit of measure. Should be ml or g at first?
- *  * double quantity:      quantity in the given unit of measure.
- *  * double price:         the price for this quantity of the ingredient
- *  * String store:         the store where the price was found
- *  * String manufacturer:  the manufacturer or brand 
- * 
- * 
- * 
+ * Entity klasi. Getur staðið einn sem java object, en 
+ * útgáfa af þessum object fer í gagnagrunninn
  */
 
 package hbv501g.recipes.model;
@@ -18,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import hbv501g.recipes.enums.*;
 
 @Entity
 public class Ingredient {
@@ -27,23 +19,44 @@ public class Ingredient {
     private Long id;
 
     private String name;
-    private String unit; // TODO: use enum?
+    private Enum<Unit> unit;
     private double quantity;
     private double price;
+    private String store;
+    private String brand;
 
     /**
      * Constructs an Ingredient object
      * 
-     * @param name: an ingredient name
-     * @param unit: unit of measure
+     * @param name:    an ingredient name
+     * @param unit:    unit of measure
      * @param quantity
      * @param price
      */
-    public Ingredient(String name, String unit, double quantity, double price) {
+    public Ingredient(String name, Enum<Unit> unit, double quantity, double price) {
         this.name = name;
         this.unit = unit;
         this.quantity = quantity;
         this.price = price;
+    }
+
+    /**
+     * Constructs an Ingredient object
+     * 
+     * @param name:    an ingredient name
+     * @param unit:    unit of measure
+     * @param quantity  
+     * @param price: total price of this amount of the ingredient
+     * @param store: the store where this price was found
+     * @param brand: company name or branding
+     */
+    public Ingredient(String name, Enum<Unit> unit, double quantity, double price, String store, String brand) {
+        this.name = name;
+        this.unit = unit;
+        this.quantity = quantity;
+        this.price = price;
+        this.store = store;
+        this.brand = brand;
     }
 
     /**
@@ -53,13 +66,12 @@ public class Ingredient {
 
     }
 
-    
     // Getters and setters
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setUnit(String unit) {
+    public void setUnit(Enum<Unit> unit) {
         this.unit = unit;
     }
 
@@ -71,11 +83,19 @@ public class Ingredient {
         this.price = price;
     }
 
+    public void setStore(String store) {
+        this.store = store;
+    }
+
+    public void SetBrand(String brand) {
+        this.brand = brand;
+    }
+
     public String getName() {
         return this.name;
     }
 
-    public String getUnit() {
+    public Enum<Unit> getUnit() {
         return this.unit;
     }
 
@@ -91,11 +111,18 @@ public class Ingredient {
         return this.id;
     }
 
+    public String getStore() {
+        return this.store;
+    }
+
+    public String getBrand() {
+        return this.brand;
+    }
+
     // Customizable toString
     @Override
     public String toString() {
-        return "Ingredient [id=" + id + ", name=" + name + ", unit=" + unit + ", quantity=" + quantity + ", price="
-                + price + "]";
+        return "Ingredient [id:" + id + ", name=" + name + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
     }
 
 }
