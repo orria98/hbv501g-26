@@ -24,7 +24,7 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
 
-    private String name;
+    private String title;
     private Enum<Unit> unit;
     private double quantity;
     private double price;
@@ -38,8 +38,8 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String name, Enum<Unit> unit, double quantity, double price) {
-        this.name = name;
+    public Ingredient(String title, Enum<Unit> unit, double quantity, double price) {
+        this.title = title;
         this.unit = unit;
         this.quantity = quantity;
         this.price = price;
@@ -48,8 +48,8 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String name, Enum<Unit> unit, double quantity, double price, String store, String brand) {
-        this.name = name;
+    public Ingredient(String title, Enum<Unit> unit, double quantity, double price, String store, String brand) {
+        this.title = title;
         this.unit = unit;
         this.quantity = quantity;
         this.price = price;
@@ -65,8 +65,8 @@ public class Ingredient {
     }
 
     // Getters and setters
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setUnit(Enum<Unit> unit) {
@@ -89,8 +89,8 @@ public class Ingredient {
         this.brand = brand;
     }
 
-    public String getName() {
-        return this.name;
+    public String getTitle() {
+        return this.title;
     }
 
     public Enum<Unit> getUnit() {
@@ -146,7 +146,7 @@ public class Ingredient {
     // Customizable toString
     @Override
     public String toString() {
-        return "Ingredient [id:" + ID + ", name=" + name + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
+        return "Ingredient [id:" + ID + ", title=" + title + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
     }
 
 }

@@ -14,7 +14,7 @@ In a previous version, a `mydatabase.db` file was made when the program was run,
 
 
 ### Others: 
-**Get Ingredient by Name:** http://localhost:8080/ingredient/name/hveiti \
+**Get Ingredient by title:** http://localhost:8080/ingredient/title/hveiti \
 **Initalize some ingredients:** http://localhost:8080/ingredient/init
 
 ## Current possibilities
@@ -26,11 +26,11 @@ Skilar öllum hráefnum í gagnagrunni.
 http://localhost:8080/ingredient/all
 
 
-### ingredient/name/\<name>
+### ingredient/title/\<title>
 Skilar einu hráefni ef eitthvað finnst. Leitarorð þarf að vera nákvæmlega nafn hráefnisins.
 
 **Dæmi:**\
-http://localhost:8080/ingredient/name/hveiti
+http://localhost:8080/ingredient/title/hveiti
 
 
 ### ingredient/init

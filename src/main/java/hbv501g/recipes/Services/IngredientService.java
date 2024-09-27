@@ -17,7 +17,7 @@ public interface IngredientService {
     List<Ingredient> initIngredients();
 
     // Seinni skil
-    Ingredient findByName(String name);
+    Ingredient findByTitle(String title);
 
     
 

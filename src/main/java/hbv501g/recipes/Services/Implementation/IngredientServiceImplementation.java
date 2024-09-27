@@ -46,14 +46,14 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Finds the first ingredient with a given name
+     * Finds the first ingredient with a given title
      * 
-     * @param IngredientName - the name to search for
+     * @param title - the ingredient title to search for
      * @return One or no ingredients
      */
     @Override
-    public Ingredient findByName(String IngredientName) {
-        return ingredientRepository.findByName(IngredientName).get(0);
+    public Ingredient findByTitle(String title) {
+        return ingredientRepository.findByTitle(title).get(0);
     }
 
     /**

@@ -66,13 +66,13 @@ public class IngredientController {
     /**
      * Nær í hráefni eftir nafni.
      *
-     * @param name : nafn hráefnis
+     * @param title : nafn hráefnis
      * @return one or no ingredient
      */
-    @GetMapping("/ingredient/name/{name}")
+    @GetMapping("/ingredient/title/{title}")
     @ResponseBody
-    public Ingredient getIngredientByName(@PathVariable(value = "name") String name) {
-        return ingredientService.findByName(name);
+    public Ingredient getIngredientByTitle(@PathVariable(value = "title") String title) {
+        return ingredientService.findByTitle(title);
     }
 
 }
