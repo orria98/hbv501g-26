@@ -4,8 +4,8 @@ Recipe collection program with ingredient price calculation.
 
 To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser. 
 
-When the program is run, a `mydatabase.db` file is made, if it doesn't exist already. It's stored locally.
-
+<!-- When the program is run, a `mydatabase.db` file is made, if it doesn't exist already. It's stored locally. -->
+In a previous version, a `mydatabase.db` file was made when the program was run, but now it's a `dbfile.mv.db` when using application properties from Siggi. This can be changed in `application.properties`.
 
 ## Endpoint summary
 ### Assignment 2
@@ -74,9 +74,4 @@ Query: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
 
 Error page: https://www.baeldung.com/spring-boot-custom-error-page
 
-
-# About: 
-Controller: Should only contain the Mapping annotated dudes, send user input into the service\
-Service: The normal Java classes, which work with java objects\
-Repository: The library which connects to the database
 

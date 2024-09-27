@@ -12,14 +12,14 @@ public interface IngredientService {
 
     Ingredient findByID(Long id);
 
+    Ingredient save(Ingredient ingredient);
+
+    List<Ingredient> initIngredients();
+
     // Seinni skil
     Ingredient findByName(String name);
 
-    Ingredient save(Ingredient ingredient);
+    
 
-    // void delete(Long ID);
 
-    Ingredient update(Ingredient updatedIngredient);
-
-    List<Ingredient> findOrderedIngredients();
 }

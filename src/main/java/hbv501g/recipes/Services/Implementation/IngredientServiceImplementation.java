@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
+import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Repositories.IngredientRepository;
 import hbv501g.recipes.Services.IngredientService;
 
@@ -15,7 +16,7 @@ public class IngredientServiceImplementation implements IngredientService {
     private IngredientRepository ingredientRepository;
 
     @Autowired
-    public IngredientServiceImplementation(IngredientRepository ingredientRepository){
+    public IngredientServiceImplementation(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
 
@@ -28,12 +29,12 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findAll();
     }
 
-    //@Override
+    // @Override
     public Ingredient findByID(Long id) {
         return ingredientRepository.findById(id).orElse(null);
     }
 
-        /**
+    /**
      * Adds a given Java object to the database
      * 
      * @param ingredient - the java object
@@ -45,7 +46,7 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Assumes the ingredient name is unique
+     * Finds the first ingredient with a given name
      * 
      * @param IngredientName - the name to search for
      * @return One or no ingredients
@@ -55,17 +56,28 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findByName(IngredientName).get(0);
     }
 
-    @Override
-    public Ingredient update(Ingredient updatedIngredient) {
-        return ingredientRepository.save(updatedIngredient);
-    }
+    /**
+     * Þetta er ekki hluti af verkefninu, en auðveldar það að testa
+     */
+    public List<Ingredient> initIngredients() {
+        List<Ingredient> AllIngredients = findAll();
 
-    public List<Ingredient> findOrderedIngredients(){
-        return ingredientRepository.findOrderedIngredients();
-    }
+        if (AllIngredients.size() == 0) {
+            Ingredient ingredient = new Ingredient("ger", Unit.G, 25, 250);
+            save(ingredient);
 
-    // @Override
-    // public void delete(Long id) {
-    //     ingredientRepository.deleteById(id);
-    // }
+            ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
+            save(ingredient);
+
+            ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
+            save(ingredient);
+
+            ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
+            save(ingredient);
+
+            AllIngredients = findAll();
+        }
+
+        return AllIngredients;
+    }
 }

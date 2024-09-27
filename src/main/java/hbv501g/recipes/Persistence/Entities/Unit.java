@@ -1,4 +1,4 @@
-package hbv501g.recipes.Persistence.enums;
+package hbv501g.recipes.Persistence.Entities;
 
 /**
  * Enum for units of measure, currently contains milliliters and grams
