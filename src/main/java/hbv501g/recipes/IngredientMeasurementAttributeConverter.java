@@ -7,8 +7,11 @@ import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+/**
+ * Til að nota java object í entity án þess að geyma í töflu
+ */
 @Converter
-public class IngredientMeasurementAttributeConverter implements AttributeConverter<IngredientMeasurement,String> {
+public class IngredientMeasurementAttributeConverter implements AttributeConverter<IngredientMeasurement, String> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -16,7 +19,8 @@ public class IngredientMeasurementAttributeConverter implements AttributeConvert
         try {
             return objectMapper.writeValueAsString(ingredientMeasurement);
         } catch (JsonProcessingException jpe) {
-            //log.warn("Cannot convert Address into JSON");
+            System.out.println("Cannot convert IngredientMeasurement into JSON");
+            // log.warn("Cannot convert Address into JSON");
             return null;
         }
     }
@@ -26,7 +30,9 @@ public class IngredientMeasurementAttributeConverter implements AttributeConvert
         try {
             return objectMapper.readValue(value, IngredientMeasurement.class);
         } catch (JsonProcessingException e) {
-            //log.warn("Cannot convert JSON into Address");
+            System.out.println("Cannot convert JSON into IngredientMeasurement");
+
+            // log.warn("Cannot convert JSON into Address");
             return null;
         }
     }

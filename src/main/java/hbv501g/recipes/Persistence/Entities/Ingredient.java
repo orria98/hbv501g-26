@@ -5,11 +5,15 @@
 
 package hbv501g.recipes.Persistence.Entities;
 
-import hbv501g.recipes.Persistence.enums.*;
+import java.util.Date;
+
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,14 +30,13 @@ public class Ingredient {
     private double price;
     private String store;
     private String brand;
+    private boolean isPrivate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User createdBy;
+    private Date dateOfCreation;
 
     /**
      * Constructs an Ingredient object
-     * 
-     * @param name:    an ingredient name
-     * @param unit:    unit of measure
-     * @param quantity
-     * @param price
      */
     public Ingredient(String name, Enum<Unit> unit, double quantity, double price) {
         this.name = name;
@@ -44,13 +47,6 @@ public class Ingredient {
 
     /**
      * Constructs an Ingredient object
-     * 
-     * @param name:    an ingredient name
-     * @param unit:    unit of measure
-     * @param quantity  
-     * @param price: total price of this amount of the ingredient
-     * @param store: the store where this price was found
-     * @param brand: company name or branding
      */
     public Ingredient(String name, Enum<Unit> unit, double quantity, double price, String store, String brand) {
         this.name = name;
@@ -119,6 +115,32 @@ public class Ingredient {
 
     public String getBrand() {
         return this.brand;
+    }
+
+    
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
     }
 
     // Customizable toString

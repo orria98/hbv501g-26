@@ -3,11 +3,8 @@
  */
 package hbv501g.recipes;
 
-import org.apache.catalina.core.ApplicationContext;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 
 
 @SpringBootApplication
@@ -18,15 +15,10 @@ public class RecipesApplication {
 	}
 
 
-	
-	
-	
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			//System.out.println("Prints to the command line");
-
-
-		};
-	}
+	// public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+	// 	return args -> {
+	// 		//System.out.println("Prints to the command line");
+	// 	};
+	// }
 
 }

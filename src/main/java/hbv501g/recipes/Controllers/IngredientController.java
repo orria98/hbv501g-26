@@ -1,7 +1,6 @@
 /**
- * Controller fyrir hráefni. Ákvarðar hvar endpoints eru (með GetMapping)
+ * Controller fyrir hráefni. Ákvarðar hvar ingredient endpoints eru (með GetMapping og requestMapping)
  * Kallar á aðferðir í service til að nýta endpoints.
- * Heldur utan um andpoints fyrir ingredient.
  * 
  */
 package hbv501g.recipes.Controllers;
@@ -17,13 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.enums.*;
+import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Services.IngredientService;
 
 
 import java.util.List;
 
-@RestController // eða bara controller??
+@RestController 
 public class IngredientController {
     private IngredientService ingredientService;
 
@@ -32,10 +31,7 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    // /**
-    //  * 
-    //  * @return texti sem prentast í localhost
-    //  */
+    // Til að prenta línu frekar en að birta index.html
     // @RequestMapping("/")
     // public String index() {
     // return "You are currently running the recipe program. Please see the project readme for information on possible endpoints and actions.";
