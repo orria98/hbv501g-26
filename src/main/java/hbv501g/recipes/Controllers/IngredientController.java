@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Services.IngredientService;
 
 
@@ -40,25 +39,7 @@ public class IngredientController {
     @GetMapping("/ingredient/init")
     @ResponseBody
     public List<Ingredient> InitIngredients() {
-        List<Ingredient> AllIngredients = ingredientService.findAll();
-
-        if (AllIngredients.size() == 0) {
-            Ingredient ingredient = new Ingredient("ger", Unit.G, 25, 250);
-            ingredientService.save(ingredient);
-
-            ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
-            ingredientService.save(ingredient);
-
-            ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
-            ingredientService.save(ingredient);
-
-            ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
-            ingredientService.save(ingredient);
-
-            AllIngredients = ingredientService.findAll();
-        }
-
-        return AllIngredients;
+        return ingredientService.initIngredients();
     }
 
     /**

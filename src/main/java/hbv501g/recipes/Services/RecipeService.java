@@ -1,5 +1,19 @@
 package hbv501g.recipes.Services;
 
-public interface RecipeService {
+import java.util.List;
 
+import hbv501g.recipes.Persistence.Entities.Recipe;
+
+public interface RecipeService {
+    List<Recipe> initRecipes();
+
+
+     List<Recipe> findAll();
+
+
+    Recipe save(Recipe recipe);
+
+ 
+
+    
 }

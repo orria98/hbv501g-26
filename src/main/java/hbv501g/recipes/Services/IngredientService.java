@@ -10,6 +10,8 @@ import java.util.List;
 public interface IngredientService {
     List<Ingredient> findAll();
 
+    List<Ingredient> initIngredients();
+
     Ingredient findByID(Long id);
 
     // Seinni skil
