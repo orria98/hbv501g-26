@@ -14,9 +14,10 @@ public interface IngredientService {
 
     Ingredient save(Ingredient ingredient);
 
-    List<Ingredient> initIngredients();
 
-    // Seinni skil
+    // Ekki hluti af skilum
+    List<Ingredient> initIngredients();
+    
     Ingredient findByTitle(String title);
 
     

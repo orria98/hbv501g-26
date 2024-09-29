@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 
 /**
  * A Java object for the user. Pantry has not been implemented.
+ * The user entity was created so that the Ingredient entity could be fully made.
  */
 @Entity
 @Table(name = "users")

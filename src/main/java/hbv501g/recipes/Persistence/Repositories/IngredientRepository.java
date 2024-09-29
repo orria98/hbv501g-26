@@ -3,12 +3,7 @@
  * Kallað er á aðferðirnar í IngredientService klasanum.
  * Nafnið á aðferðinni ræður því hvað er sótt. findByTitle(String title) sækir eftir titli, en findByNafn gæti það ekki.
  * 
- * To get items by more specific criteria, @Query may be used. 
- * 
- * For example: @Query("select i from Ingredient i order by price") gets all ingredients 
- * ordered by price
- * 
- * Það þarf ekki að tilgreina save, delete og nokkur fleiri því það er í JpaRepository
+ * Það þarf ekki að tilgreina save, delete og nokkur fleiri því það er innbyggt?
  */
 package hbv501g.recipes.Persistence.Repositories;
 
@@ -24,9 +19,9 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     Ingredient findByID(Long id);
 
-    Ingredient save(Ingredient ingredient); // Ætti að mega sleppa þessu
+    //Ingredient save(Ingredient ingredient);
 
-    //Seinni skil
+    // Ekki hluti af skilum
     List<Ingredient> findByTitle(String title);
 
 }

@@ -1,5 +1,5 @@
 /**
- * Controller fyrir hráefni. Ákvarðar hvar ingredient endpoints eru (með GetMapping og requestMapping)
+ * Controller fyrir Ingredient. Ákvarðar hvar ingredient endpoints eru (með GetMapping og requestMapping)
  * Kallar á aðferðir í service til að nýta endpoints.
  * 
  */
@@ -25,20 +25,11 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    // Til að prenta línu frekar en að birta index.html
-    // @RequestMapping("/")
-    // public String index() {
-    // return "You are currently running the recipe program. Please see the project
-    // readme for information on possible endpoints and actions.";
-    // }
-
-
-
     /**
-     * Nær í hráefni eftir id.
+     * Endpoint sem nær í hráefni með gefið id.
      * 
      * @param id
-     * @return
+     * @return Ingredient með það id
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
@@ -47,7 +38,7 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint sem skilar öllum ingredients í töflunni :)
+     * Endpoint sem skilar öllum ingredients í töflunni
      * 
      * @return all ingredients in db
      */
@@ -57,6 +48,12 @@ public class IngredientController {
         return ingredientService.findAll();
     }
 
+    /**
+     * Initializes a few ingredients. Ekki hluti af skilum, en 
+     * gerir það auðveldara að prófa hvort forritið virki.
+     * 
+     * @return some ingredients
+     */
     @GetMapping("/ingredient/init")
     @ResponseBody
     public List<Ingredient> InitIngredients() {
@@ -64,7 +61,8 @@ public class IngredientController {
     }
 
     /**
-     * Nær í hráefni eftir nafni.
+     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti 
+     * af endpoints fyrir þetta verkefni.
      *
      * @param title : nafn hráefnis
      * @return one or no ingredient

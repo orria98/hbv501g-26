@@ -1,10 +1,8 @@
 /**
- * Application klasi fyrir allt forritið
+ * Application klasi fyrir forritið
  */
 package hbv501g.recipes;
 
-import org.apache.catalina.core.ApplicationContext;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,18 +13,6 @@ public class RecipesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RecipesApplication.class, args);
-	}
-
-
-	
-	
-	
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-			//System.out.println("Prints to the command line");
-
-
-		};
 	}
 
 }

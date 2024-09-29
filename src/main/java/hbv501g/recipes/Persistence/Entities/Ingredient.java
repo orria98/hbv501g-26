@@ -7,7 +7,6 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.util.Date;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -65,59 +64,54 @@ public class Ingredient {
     }
 
     // Getters and setters
+
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Enum<Unit> getUnit() {
+        return unit;
     }
 
     public void setUnit(Enum<Unit> unit) {
         this.unit = unit;
     }
 
+    public double getQuantity() {
+        return quantity;
+    }
+
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
     }
 
+    public String getStore() {
+        return store;
+    }
+
     public void setStore(String store) {
         this.store = store;
     }
 
-    public void SetBrand(String brand) {
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
         this.brand = brand;
     }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public Enum<Unit> getUnit() {
-        return this.unit;
-    }
-
-    public double getQuantity() {
-        return this.quantity;
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
-    public Long getID() {
-        return this.ID;
-    }
-
-    public String getStore() {
-        return this.store;
-    }
-
-    public String getBrand() {
-        return this.brand;
-    }
-
-    
 
     public boolean isPrivate() {
         return isPrivate;
@@ -143,7 +137,7 @@ public class Ingredient {
         this.dateOfCreation = dateOfCreation;
     }
 
-    // Customizable toString
+    // Custom toString aðferð
     @Override
     public String toString() {
         return "Ingredient [id:" + ID + ", title=" + title + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
