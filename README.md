@@ -2,6 +2,10 @@
 
 Recipe collection program with ingredient price calculation.
 
+Enjoy
+
+# About the program
+
 To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser. 
 
 When the program is run, a `mydatabase.db` file is made, if it doesn't exist already. It's stored locally.
