@@ -2,6 +2,10 @@
 
 Recipe collection program with ingredient price calculation.
 
+Enjoy
+
+# About the program
+
 To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser. 
 
 When the program is run, a `mydatabase.db` file is made, if it doesn't exist already. It's stored locally.
@@ -14,7 +18,7 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 
 
 ### Others: 
-**Get Ingredient by Name:** http://localhost:8080/ingredient/name/hveiti \
+**Get Ingredient by title:** http://localhost:8080/ingredient/title/hveiti \
 **Initalize some ingredients:** http://localhost:8080/ingredient/init
 
 ## Current possibilities
@@ -26,11 +30,11 @@ Skilar öllum hráefnum í gagnagrunni.
 http://localhost:8080/ingredient/all
 
 
-### ingredient/name/\<name>
+### ingredient/title/\<title>
 Skilar einu hráefni ef eitthvað finnst. Leitarorð þarf að vera nákvæmlega nafn hráefnisins.
 
 **Dæmi:**\
-http://localhost:8080/ingredient/name/hveiti
+http://localhost:8080/ingredient/title/hveiti
 
 
 ### ingredient/init
@@ -74,9 +78,4 @@ Query: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
 
 Error page: https://www.baeldung.com/spring-boot-custom-error-page
 
-
-# About: 
-Controller: Should only contain the Mapping annotated dudes, send user input into the service\
-Service: The normal Java classes, which work with java objects\
-Repository: The library which connects to the database
 

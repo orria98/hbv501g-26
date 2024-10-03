@@ -26,10 +26,23 @@ public class User {
     @Convert(converter = IngredientMeasurementAttributeConverter.class)
     private List<IngredientMeasurement> pantry;
 
+
+    //private List<Recipe> recipesByUser;
+
+
+
     public User(){
         pantry = new ArrayList<IngredientMeasurement>();
+        //recipesByUser = new ArrayList<Recipe>();
     }
 
+    public User(String username, String password, String email){
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        pantry = new ArrayList<IngredientMeasurement>();
+        //recipesByUser = new ArrayList<Recipe>();
+    }
     public String getUsername() {
         return username;
     }
@@ -61,6 +74,7 @@ public class User {
     public void setPantry(List<IngredientMeasurement> pantry) {
         this.pantry = pantry;
     }
+
 
     
 }

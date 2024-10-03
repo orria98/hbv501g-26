@@ -2,11 +2,12 @@ package hbv501g.recipes.Services.Implementation;
 
 import java.util.List;
 
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.Entities.Unit;
+import hbv501g.recipes.Persistence.Entities.Unit; 
 import hbv501g.recipes.Persistence.Repositories.IngredientRepository;
 import hbv501g.recipes.Services.IngredientService;
 
@@ -16,7 +17,7 @@ public class IngredientServiceImplementation implements IngredientService {
     private IngredientRepository ingredientRepository;
 
     @Autowired
-    public IngredientServiceImplementation(IngredientRepository ingredientRepository){
+    public IngredientServiceImplementation(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
 
@@ -29,12 +30,16 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findAll();
     }
 
-    //@Override
+    /**
+     * Finds an ingredient with the given id
+     * @param id to search for
+     */
+    @Override
     public Ingredient findByID(Long id) {
-        return ingredientRepository.findById(id).orElse(null);
+        return ingredientRepository.findByID(id);
     }
 
-        /**
+    /**
      * Adds a given Java object to the database
      * 
      * @param ingredient - the java object
@@ -46,14 +51,14 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Assumes the ingredient name is unique
+     * Finds the first ingredient with a given title
      * 
-     * @param IngredientName - the name to search for
+     * @param title - the ingredient title to search for
      * @return One or no ingredients
      */
     @Override
-    public Ingredient findByName(String IngredientName) {
-        return ingredientRepository.findByName(IngredientName).get(0);
+    public Ingredient findByTitle(String title) {
+        return ingredientRepository.findByTitle(title).get(0);
     }
 
     @Override
@@ -61,9 +66,9 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.save(updatedIngredient);
     }
 
-    public List<Ingredient> findOrderedIngredients(){
-        return ingredientRepository.findOrderedIngredients();
-    }
+    // public List<Ingredient> findOrderedIngredients(){
+    //     return ingredientRepository.findAllOrderByPrice();
+    // }
 
     // @Override
     // public void delete(Long id) {

@@ -10,18 +10,19 @@ import java.util.List;
 public interface IngredientService {
     List<Ingredient> findAll();
 
-    List<Ingredient> initIngredients();
-
     Ingredient findByID(Long id);
-
-    // Seinni skil
-    Ingredient findByName(String name);
 
     Ingredient save(Ingredient ingredient);
 
-    // void delete(Long ID);
+
+    // Ekki hluti af skilum
+    List<Ingredient> initIngredients();
+    
+    Ingredient findByTitle(String title);
 
     Ingredient update(Ingredient updatedIngredient);
 
-    List<Ingredient> findOrderedIngredients();
+    // List<Ingredient> findOrderedIngredients();
+
+
 }

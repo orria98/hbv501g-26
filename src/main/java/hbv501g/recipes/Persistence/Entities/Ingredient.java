@@ -7,12 +7,13 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.util.Date;
 
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -24,7 +25,7 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
 
-    private String name;
+    private String title;
     private Enum<Unit> unit;
     private double quantity;
     private double price;
@@ -38,8 +39,8 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String name, Enum<Unit> unit, double quantity, double price) {
-        this.name = name;
+    public Ingredient(String title, Enum<Unit> unit, double quantity, double price) {
+        this.title = title;
         this.unit = unit;
         this.quantity = quantity;
         this.price = price;
@@ -48,8 +49,8 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String name, Enum<Unit> unit, double quantity, double price, String store, String brand) {
-        this.name = name;
+    public Ingredient(String title, Enum<Unit> unit, double quantity, double price, String store, String brand) {
+        this.title = title;
         this.unit = unit;
         this.quantity = quantity;
         this.price = price;
@@ -65,59 +66,54 @@ public class Ingredient {
     }
 
     // Getters and setters
-    public void setName(String name) {
-        this.name = name;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Enum<Unit> getUnit() {
+        return unit;
     }
 
     public void setUnit(Enum<Unit> unit) {
         this.unit = unit;
     }
 
+    public double getQuantity() {
+        return quantity;
+    }
+
     public void setQuantity(double quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
     }
 
+    public String getStore() {
+        return store;
+    }
+
     public void setStore(String store) {
         this.store = store;
     }
 
-    public void SetBrand(String brand) {
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
         this.brand = brand;
     }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Enum<Unit> getUnit() {
-        return this.unit;
-    }
-
-    public double getQuantity() {
-        return this.quantity;
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
-    public Long getID() {
-        return this.ID;
-    }
-
-    public String getStore() {
-        return this.store;
-    }
-
-    public String getBrand() {
-        return this.brand;
-    }
-
-    
 
     public boolean isPrivate() {
         return isPrivate;
@@ -127,15 +123,8 @@ public class Ingredient {
         this.isPrivate = isPrivate;
     }
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Date getDateOfCreation() {
+    public Date getDateOfCreation() { 
         return dateOfCreation;
     }
 
@@ -143,10 +132,20 @@ public class Ingredient {
         this.dateOfCreation = dateOfCreation;
     }
 
-    // Customizable toString
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) { 
+        this.createdBy = createdBy;
+    }
+
+
+
+    // Custom toString aðferð
     @Override
     public String toString() {
-        return "Ingredient [id:" + ID + ", name=" + name + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
+        return "Ingredient [id:" + ID + ", title=" + title + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
     }
 
 }

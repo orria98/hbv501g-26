@@ -19,7 +19,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/initRecipes")
+    @GetMapping("/recipe/init")
     @ResponseBody
     public List<Recipe> initRecipes(){
         return recipeService.initRecipes();
