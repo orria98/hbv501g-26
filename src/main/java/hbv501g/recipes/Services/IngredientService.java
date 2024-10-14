@@ -22,7 +22,7 @@ public interface IngredientService {
 
     Ingredient update(Ingredient updatedIngredient);
 
-    // List<Ingredient> findOrderedIngredients();
+    List<Ingredient> findOrderedIngredients();
 
 
 }

@@ -13,6 +13,8 @@ public interface RecipeService {
 
     Recipe save(Recipe recipe);
 
+    Recipe update(Recipe recipe);
+
  
 
     

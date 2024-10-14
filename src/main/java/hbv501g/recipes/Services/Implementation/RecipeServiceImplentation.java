@@ -5,10 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Recipe;
-import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Repositories.RecipeRepository;
 
 import hbv501g.recipes.Services.RecipeService;
@@ -31,16 +28,23 @@ public class RecipeServiceImplentation implements RecipeService {
         return recipeRepository.save(recipe);
     }
 
+    public Recipe update(Recipe updatedRecipe) {
+        return recipeRepository.save(updatedRecipe);
+    }
+
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
 
         if (AllRecipes.size() == 0) {
             Recipe recipe = new Recipe();
             recipe.setTitle("uppskrift 1");
-            recipe.addIngredientMeasurement(
-                    new IngredientMeasurement(new Ingredient("hveiti1", Unit.G, 10000, 5004), Unit.G, 500));
-            recipe.addIngredientMeasurement(
-                    new IngredientMeasurement(new Ingredient("ger1", Unit.G, 100, 408), Unit.G, 20));
+            // recipe.addIngredientMeasurement(new IngredientMeasurement(new Ingredient("hveiti1", Unit.G, 10000, 5004), Unit.G, 500));
+            // recipe.addIngredientMeasurement(new IngredientMeasurement(new Ingredient("ger1", Unit.G, 100, 408), Unit.G, 20));
+            
+            save(recipe);
+
+            recipe = new Recipe();
+            recipe.setTitle("uppskrift2");
             save(recipe);
 
             AllRecipes = findAll();

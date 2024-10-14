@@ -1,16 +1,21 @@
 package hbv501g.recipes.Persistence.Entities;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-import hbv501g.recipes.IngredientMeasurementAttributeConverter;
-import jakarta.persistence.Convert;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "users")
@@ -23,26 +28,36 @@ public class User {
     private String password;
     private String email;
 
-    @Convert(converter = IngredientMeasurementAttributeConverter.class)
-    private List<IngredientMeasurement> pantry;
+    @ElementCollection()
+    @CollectionTable(name = "ingredient_measurements")
+    private List<IngredientMeasurement> pantry = new ArrayList<>();
+
+    // TODO: passa hvernig þetta birtist í json
+    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore //needed to avoid infinite recursion
+    //@JsonManagedReference
+    private List<Recipe> recipesByUser = new ArrayList<>();
 
 
-    //private List<Recipe> recipesByUser;
+    // TODO: passa hvernig þetta birtist í json
+    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore //needed to avoid infinite recursion
+    private List<Ingredient> ingredientsByUser = new ArrayList<>(); // Geymir hver gerði ingredientið
 
 
 
-    public User(){
-        pantry = new ArrayList<IngredientMeasurement>();
-        //recipesByUser = new ArrayList<Recipe>();
+   
+
+    public User() {
+
     }
 
-    public User(String username, String password, String email){
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        pantry = new ArrayList<IngredientMeasurement>();
-        //recipesByUser = new ArrayList<Recipe>();
     }
+
     public String getUsername() {
         return username;
     }
@@ -75,6 +90,33 @@ public class User {
         this.pantry = pantry;
     }
 
+    public List<Recipe> getRecipesByUser() {
+        return recipesByUser;
+    }
+
+    public void setRecipesByUser(List<Recipe> recipesByUser) {
+        this.recipesByUser = recipesByUser;
+    }
+
+    public Long getID() {
+        return ID;
+    }
+
+    public void addIngredientMeasurement(IngredientMeasurement ingredientMeasurement){
+        pantry.add(ingredientMeasurement);
+    }
+    public void addRecipeByUser(Recipe recipeByUser){
+        recipesByUser.add(recipeByUser);
+    }
+
+    public List<Ingredient> getIngredientsByUser() {
+        return ingredientsByUser;
+    }
+
+    public void setIngredientsByUser(List<Ingredient> ingredientsByUser) {
+        this.ingredientsByUser = ingredientsByUser;
+    }
 
     
+
 }

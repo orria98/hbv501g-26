@@ -8,12 +8,9 @@ package hbv501g.recipes.Persistence.Entities;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -21,6 +18,7 @@ import jakarta.persistence.Table;
 @Table(name = "ingredients")
 public class Ingredient {
 
+    // ID er sjálfkrafa búið til þegar object er gerður
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
@@ -32,9 +30,11 @@ public class Ingredient {
     private String store;
     private String brand;
     private boolean isPrivate;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User createdBy;
     private Date dateOfCreation;
+
+    // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju
+    @ManyToOne //(fetch = FetchType.LAZY)
+    private User createdBy; // Bara til að geyma hver gerði ingredientið
 
     /**
      * Constructs an Ingredient object
@@ -123,8 +123,7 @@ public class Ingredient {
         this.isPrivate = isPrivate;
     }
 
-
-    public Date getDateOfCreation() { 
+    public Date getDateOfCreation() {
         return dateOfCreation;
     }
 
@@ -136,11 +135,13 @@ public class Ingredient {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) { 
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-
+    public Long getID() {
+        return ID;
+    }
 
     // Custom toString aðferð
     @Override

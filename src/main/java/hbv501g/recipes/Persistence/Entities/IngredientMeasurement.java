@@ -1,12 +1,36 @@
 package hbv501g.recipes.Persistence.Entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.ManyToOne;
+
+@Embeddable
 public class IngredientMeasurement {
 
-    private Ingredient ingredient;
+    
+
+    //@Column
+    //private Ingredient ingredient;
+    //private Long ingredientID;
+
+    //@OneToMany
+    //@JoinColumn(name = "Recipe_ID")
+    //private List<Ingredient> ingredients;
+    @ManyToOne
+    @JsonIdentityReference
+    private Ingredient ingredient; // TODO: aðeins að skoða hvernig þetta er
+
+    //@Column
     private Unit unit;
+
+    //@Column
     private double quantity;
+
+    public IngredientMeasurement(){
+
+    }
 
     public IngredientMeasurement(Ingredient ingredient, Unit unit, double quantity) {
         this.ingredient = ingredient;
@@ -14,11 +38,11 @@ public class IngredientMeasurement {
         this.quantity = quantity;
     }
 
-    public Ingredient getIngredient() {
+    public Ingredient getIngredientID() {
         return ingredient;
     }
 
-    public void setIngredient(Ingredient ingredient) {
+    public void setIngredientID(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
 

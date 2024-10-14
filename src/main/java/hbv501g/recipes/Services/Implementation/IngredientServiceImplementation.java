@@ -2,7 +2,6 @@ package hbv501g.recipes.Services.Implementation;
 
 import java.util.List;
 
-import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,9 +65,9 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.save(updatedIngredient);
     }
 
-    // public List<Ingredient> findOrderedIngredients(){
-    //     return ingredientRepository.findAllOrderByPrice();
-    // }
+    public List<Ingredient> findOrderedIngredients(){
+        return ingredientRepository.findAllByOrderByPrice();
+    }
 
     // @Override
     // public void delete(Long id) {

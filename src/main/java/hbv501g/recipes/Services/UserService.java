@@ -12,8 +12,12 @@ public interface UserService {
 
      List<User> findAll();
 
+     User findByID(Long id);
+
 
     User save(User user);
 
     List<User> initUsers();
+
+    User update(User user);
 }

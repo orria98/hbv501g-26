@@ -87,9 +87,9 @@ public class IngredientController {
     }
 
 
-    // @GetMapping("ingredient/all/ordered")
-    // public List<Ingredient> getOrderedIngredients(){
-    //     return ingredientService.findOrderedIngredients();
-    // }
+    @GetMapping("ingredient/all/ordered")
+    public List<Ingredient> getOrderedIngredients(){
+        return ingredientService.findOrderedIngredients();
+    }
 
 }

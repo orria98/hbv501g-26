@@ -24,4 +24,10 @@ public class RecipeController {
     public List<Recipe> initRecipes(){
         return recipeService.initRecipes();
     }
+
+    @GetMapping("/recipe/all")
+    @ResponseBody
+    public List<Recipe> getAllRecipes(){
+        return recipeService.findAll();
+    }
 }
