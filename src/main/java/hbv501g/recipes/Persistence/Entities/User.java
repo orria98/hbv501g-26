@@ -6,12 +6,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -28,19 +28,21 @@ public class User {
     private String password;
     private String email;
 
-    @ElementCollection()
-    @CollectionTable(name = "ingredient_measurements")
+    //@ElementCollection //(fetch = FetchType.LAZY)
+    //@CollectionTable(name = "ingredient_measurements")
+    @OneToMany
+    @JoinColumn(name = "recipeId")
     private List<IngredientMeasurement> pantry = new ArrayList<>();
 
     // TODO: passa hvernig þetta birtist í json
-    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore //needed to avoid infinite recursion
     //@JsonManagedReference
     private List<Recipe> recipesByUser = new ArrayList<>();
 
 
     // TODO: passa hvernig þetta birtist í json
-    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore //needed to avoid infinite recursion
     private List<Ingredient> ingredientsByUser = new ArrayList<>(); // Geymir hver gerði ingredientið
 

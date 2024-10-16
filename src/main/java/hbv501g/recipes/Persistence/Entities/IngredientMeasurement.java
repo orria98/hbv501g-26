@@ -1,13 +1,21 @@
 package hbv501g.recipes.Persistence.Entities;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-@Embeddable
+@Entity
 public class IngredientMeasurement {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long ID;
 
     
 
@@ -18,8 +26,9 @@ public class IngredientMeasurement {
     //@OneToMany
     //@JoinColumn(name = "Recipe_ID")
     //private List<Ingredient> ingredients;
-    @ManyToOne
-    @JsonIdentityReference
+    @ManyToOne //(fetch = FetchType.LAZY)
+    // @JsonIdentityReference
+    @JsonIgnore
     private Ingredient ingredient; // TODO: aðeins að skoða hvernig þetta er
 
     //@Column
