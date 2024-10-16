@@ -73,6 +73,23 @@ public class IngredientController {
         return ingredientService.findByTitle(title);
     }
 
+    //
+    //@ResponseBody
+    public Ingredient saveInredient(Ingredient ingredient){
+	return ingredientService.save(ingredient);
+    }
+    
+    /**
+     * Endpoint that finds an ingredient by id and
+     * removes it form the database.
+     *
+     * @param id : ID number of the ingreadient.
+     */
+    @GetMapping("/ingredient/id/{id}")
+    public void deleteIngredientById(@PathVariable(value = "id") Long id){
+	ingredientService.deleteById(id);
+    }
+
     // Ekki hluti af neinum skilum held ég
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){

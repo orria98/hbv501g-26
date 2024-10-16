@@ -92,4 +92,15 @@ public class IngredientServiceImplementation implements IngredientService {
 
         return AllIngredients;
     }
+
+    /**
+     * Find and delet the ingredient with maching id.
+     * 
+     * @param id : is a 8 byte integer and is the id
+     * 		   of the ingredient.
+     */
+    @Override
+    public void deleteById(Long id){
+	ingredientRepository.delet(id);
+    }
 }

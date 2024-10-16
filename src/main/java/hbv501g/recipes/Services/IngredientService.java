@@ -24,5 +24,7 @@ public interface IngredientService {
 
     List<Ingredient> findOrderedIngredients();
 
+    void deleteById(long id);
+
 
 }
