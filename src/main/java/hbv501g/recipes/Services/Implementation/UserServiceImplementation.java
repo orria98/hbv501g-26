@@ -61,4 +61,5 @@ public class UserServiceImplementation implements UserService {
     public User update(User updatedUser) {
         return userRepository.save(updatedUser);
     }
+
 }

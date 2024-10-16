@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.UserService;
 
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * All endpoints for the user table will be here
  */
