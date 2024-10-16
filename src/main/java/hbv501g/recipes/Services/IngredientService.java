@@ -20,7 +20,9 @@ public interface IngredientService {
     
     Ingredient findByTitle(String title);
 
-    
+    Ingredient update(Ingredient updatedIngredient);
+
+    List<Ingredient> findOrderedIngredients();
 
 
 }

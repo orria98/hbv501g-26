@@ -73,4 +73,13 @@ public class IngredientController {
         return ingredientService.findByTitle(title);
     }
 
+    // Ekki hluti af neinum skilum held ég
+    @GetMapping("ingredient/all/ordered")
+    public List<Ingredient> getOrderedIngredients(){
+        return ingredientService.findOrderedIngredients();
+    }
+
+
+
+
 }

@@ -2,7 +2,6 @@ package hbv501g.recipes.Services.Implementation;
 
 import java.util.List;
 
-import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +28,7 @@ public class IngredientServiceImplementation implements IngredientService {
     public List<Ingredient> findAll() {
         return ingredientRepository.findAll();
     }
+
 
     /**
      * Finds an ingredient with the given id
@@ -61,12 +61,17 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findByTitle(title).get(0);
     }
 
-    /**
-     * Þetta er ekki hluti af verkefninu, en auðveldar það að testa
-     */
-    @Remove
-    public List<Ingredient> initIngredients() {
-        List<Ingredient> AllIngredients = findAll();
+    @Override
+    public Ingredient update(Ingredient updatedIngredient) {
+        return ingredientRepository.save(updatedIngredient);
+    }
+
+    public List<Ingredient> findOrderedIngredients(){
+        return ingredientRepository.findAllByOrderByPrice();
+    }
+
+    public List<Ingredient> initIngredients(){
+            List<Ingredient> AllIngredients = findAll();
 
         if (AllIngredients.size() == 0) {
             Ingredient ingredient = new Ingredient("ger", Unit.G, 25, 250);
@@ -77,6 +82,7 @@ public class IngredientServiceImplementation implements IngredientService {
 
             ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
             save(ingredient);
+
 
             ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
             save(ingredient);
