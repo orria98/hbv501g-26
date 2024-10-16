@@ -26,4 +26,5 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     List<Ingredient> findAllByOrderByPrice();
 
+
 }

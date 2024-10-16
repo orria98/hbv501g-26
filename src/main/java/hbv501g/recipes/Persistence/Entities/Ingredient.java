@@ -38,6 +38,7 @@ public class Ingredient {
     @ManyToOne //(fetch = FetchType.LAZY)
     private User createdBy; // Bara til að geyma hver gerði ingredientið
 
+
     /**
      * Constructs an Ingredient object
      */
@@ -143,6 +144,7 @@ public class Ingredient {
 
     public Long getID() {
         return ID;
+
     }
 
     // Custom toString aðferð

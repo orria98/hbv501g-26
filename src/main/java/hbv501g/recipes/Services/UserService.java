@@ -20,4 +20,5 @@ public interface UserService {
     List<User> initUsers();
 
     User update(User user);
+
 }

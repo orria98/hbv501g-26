@@ -17,6 +17,16 @@ import jakarta.persistence.Table;
 
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+/**
+ * A Java object for the user. Pantry has not been implemented.
+ * The user entity was created so that the Ingredient entity could be fully made.
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -58,6 +68,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+
     }
 
     public String getUsername() {
@@ -120,5 +131,6 @@ public class User {
     }
 
     
+
 
 }

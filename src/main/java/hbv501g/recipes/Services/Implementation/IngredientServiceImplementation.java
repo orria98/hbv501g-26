@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.Entities.Unit; 
+import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Repositories.IngredientRepository;
 import hbv501g.recipes.Services.IngredientService;
 
@@ -41,7 +41,6 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-    /**
      * Adds a given Java object to the database
      * 
      * @param ingredient - the java object
@@ -59,15 +58,16 @@ public class IngredientServiceImplementation implements IngredientService {
      * @return One or no ingredients
      */
     @Override
-  
     public Ingredient findByTitle(String title) {
         return ingredientRepository.findByTitle(title).get(0);
     }
 
-    @Override
-    public Ingredient update(Ingredient updatedIngredient) {
-        return ingredientRepository.save(updatedIngredient);
-    }
+    /**
+     * Þetta er ekki hluti af verkefninu, en auðveldar það að testa
+     */
+    @Remove
+    public List<Ingredient> initIngredients() {
+        List<Ingredient> AllIngredients = findAll();
 
     public List<Ingredient> findOrderedIngredients(){
         return ingredientRepository.findAllByOrderByPrice();
@@ -90,6 +90,7 @@ public class IngredientServiceImplementation implements IngredientService {
 
             ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
             save(ingredient);
+
 
             ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
             save(ingredient);

@@ -13,6 +13,8 @@ import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.UserService;
 
+import org.springframework.web.bind.annotation.RestController;
+
 /**
  * All endpoints for the user table will be here
  */
@@ -68,4 +70,5 @@ public class UserController {
             System.out.println(recipes.get(i));
         }
     }
+
 }
