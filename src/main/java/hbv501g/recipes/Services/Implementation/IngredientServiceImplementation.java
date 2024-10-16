@@ -2,6 +2,7 @@ package hbv501g.recipes.Services.Implementation;
 
 import java.util.List;
 
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findAll();
     }
 
+
     /**
      * Finds an ingredient with the given id
      * @param id to search for
@@ -38,6 +40,7 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findByID(id);
     }
 
+    /**
     /**
      * Adds a given Java object to the database
      * 
@@ -56,6 +59,7 @@ public class IngredientServiceImplementation implements IngredientService {
      * @return One or no ingredients
      */
     @Override
+  
     public Ingredient findByTitle(String title) {
         return ingredientRepository.findByTitle(title).get(0);
     }
