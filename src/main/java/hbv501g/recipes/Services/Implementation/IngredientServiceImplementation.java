@@ -2,7 +2,6 @@ package hbv501g.recipes.Services.Implementation;
 
 import java.util.List;
 
-import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,11 +71,6 @@ public class IngredientServiceImplementation implements IngredientService {
     public List<Ingredient> findOrderedIngredients(){
         return ingredientRepository.findAllByOrderByPrice();
     }
-
-    // @Override
-    // public void delete(Long id) {
-    //     ingredientRepository.deleteById(id);
-    // }
 
     public List<Ingredient> initIngredients(){
             List<Ingredient> AllIngredients = findAll();

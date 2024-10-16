@@ -8,8 +8,6 @@ package hbv501g.recipes.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -75,18 +73,7 @@ public class IngredientController {
         return ingredientService.findByTitle(title);
     }
 
-        // ÞETTA VIRKAR TIL AÐ BREYTA NAFNI!!!!!
-    @RequestMapping(value = "/ingredient/put/name/{oldName}/{newName}", method = { RequestMethod.GET,
-            RequestMethod.PUT })
-    @ResponseBody
-    public Ingredient change(@PathVariable String oldName, @PathVariable String newName) {
-        Ingredient ingredient = ingredientService.findByTitle(oldName);
-        ingredient.setTitle(newName);
-        ingredientService.update(ingredient);
-        return ingredient;
-    }
-
-
+    // Ekki hluti af neinum skilum held ég
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
