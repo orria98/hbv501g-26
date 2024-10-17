@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private long ID;
 
     private String title;
     private String instructions;
@@ -101,7 +101,7 @@ public class Recipe {
         ingredientMeasurements.add(ingredientMeasurement);
     }
 
-    public Long getID() {
+    public long getID() {
         return ID;
     }
 

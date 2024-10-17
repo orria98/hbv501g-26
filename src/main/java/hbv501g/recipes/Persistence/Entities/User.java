@@ -23,7 +23,7 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private long ID;
 
     private String username;
     private String password;
@@ -97,7 +97,7 @@ public class User {
         this.recipesByUser = recipesByUser;
     }
 
-    public Long getID() {
+    public long getID() {
         return ID;
     }
 
