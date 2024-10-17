@@ -7,8 +7,10 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,7 +36,8 @@ public class Ingredient {
     private Date dateOfCreation;
 
     // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIncludeProperties(value = {"id", "username"}) // properties úr user til að birta í json fyrir ingredient
     private User createdBy; // Bara til að geyma hver gerði ingredientið
 
 

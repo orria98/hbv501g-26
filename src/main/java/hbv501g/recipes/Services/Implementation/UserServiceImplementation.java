@@ -11,7 +11,7 @@ import hbv501g.recipes.Persistence.Entities.*;
 
 @Service
 public class UserServiceImplementation implements UserService {
-   private UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     public UserServiceImplementation(UserRepository userRepository) {
@@ -26,20 +26,12 @@ public class UserServiceImplementation implements UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
-      public List<User> initUsers() {
+
+    public List<User> initUsers() {
         List<User> AllUsers = findAll();
 
         if (AllUsers.size() == 0) {
             User user = new User("Jón", "jon123", "jon123@gmail.com");
-            // Ingredient ingredient = new Ingredient("hraefni", Unit.G, 500, 7000);
-            
-            // user.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.G, 70));
-            // ingredient = new Ingredient("hraefni2", Unit.ML, 50, 800);
-            // user.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.G, 10));
-
-            // user.addRecipeByUser(new Recipe("uppskrift notanda 1", user));
-            // user.addRecipeByUser(new Recipe("uppskrift notanda 2", user));
-
             save(user);
 
             user = new User("Superman", "123", "superman@gmail.com");
@@ -55,9 +47,10 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User findByID(Long id){
+    public User findByID(Long id) {
         return userRepository.findByID(id);
     }
+
     public User update(User updatedUser) {
         return userRepository.save(updatedUser);
     }
