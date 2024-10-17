@@ -40,7 +40,7 @@ public class RecipeServiceImplentation implements RecipeService {
      */
     @Override
     public void deleteById(Long id){
-	recipeRepository.delet(id);
+	recipeRepository.delete(id);
     }
 
     public List<Recipe> initRecipes() {
