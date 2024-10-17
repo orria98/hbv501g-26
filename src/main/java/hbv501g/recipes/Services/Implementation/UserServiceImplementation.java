@@ -58,6 +58,7 @@ public class UserServiceImplementation implements UserService {
     public User findByID(Long id){
         return userRepository.findByID(id);
     }
+    
     public User update(User updatedUser) {
         return userRepository.save(updatedUser);
     }
