@@ -85,8 +85,9 @@ public class IngredientController {
      *
      * @param id : ID number of the ingreadient.
      */
-    @GetMapping("/ingredient/id/{id}")
-    public void deleteIngredientById(@PathVariable(value = "id") Long id){
+    @GetMapping("ingredient/id/{id}")
+    public void deleteIngredientById(@PathVariable(value = "id") Long id)
+    {
 	ingredientService.deleteById(id);
     }
 

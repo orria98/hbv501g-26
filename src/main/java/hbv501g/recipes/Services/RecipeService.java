@@ -8,14 +8,14 @@ public interface RecipeService {
     List<Recipe> initRecipes();
 
 
-     List<Recipe> findAll();
+    List<Recipe> findAll();
 
 
     Recipe save(Recipe recipe);
 
     Recipe update(Recipe recipe);
 
- 
+    void deletById(Long id);
 
     
 }

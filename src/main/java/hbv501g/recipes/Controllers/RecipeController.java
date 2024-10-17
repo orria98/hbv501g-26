@@ -30,4 +30,15 @@ public class RecipeController {
     public List<Recipe> getAllRecipes(){
         return recipeService.findAll();
     }
+
+    /**
+     * Endpoint that finds an recipe by id and
+     * removes it form the database.
+     *
+     * @param id : ID number of the recipe
+     */
+    @GetMapping("/recipe/{id}")
+    public void deleteRecipeById(@PathVariable(value = "id")Long id){
+	recipeService.deletById(id);
+    }
 }

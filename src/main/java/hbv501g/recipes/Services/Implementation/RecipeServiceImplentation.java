@@ -32,6 +32,17 @@ public class RecipeServiceImplentation implements RecipeService {
         return recipeRepository.save(updatedRecipe);
     }
 
+    /**
+     * Find and delet the rescipe with maching id.
+     *
+     * @param id : is a 8 byte integer and is the id
+     * 		   of the precipe.
+     */
+    @Override
+    public void deleteById(Long id){
+	recipeRepository.delet(id);
+    }
+
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
 
