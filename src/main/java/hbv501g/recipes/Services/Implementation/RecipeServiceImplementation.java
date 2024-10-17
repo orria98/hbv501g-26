@@ -38,6 +38,9 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.save(updatedRecipe);
     }
 
+    /**
+     * Initializes a few recipes, if none are found in the db
+     */
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
 

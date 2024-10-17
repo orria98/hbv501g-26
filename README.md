@@ -16,6 +16,21 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 **Get All Ingredients:** http://localhost:8080/ingredient/all \
 **Get Ingredient by ID:**  http://localhost:8080/ingredient/id/1
 
+### Assignment 3
+
+#### Recipe: 
+**Get all:** http://localhost:8080/recipe/all\
+
+
+
+#### User
+**Get pantry:** http://localhost:8080/user/id/1/pantry\
+**Delete pantry item:** http://localhost:8080/user/pantry/delete?uid=1&iid=1\
+**Add ingredient to pantry:** http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100\
+
+
+#### Ingredient
+
 
 ### Others: 
 **Get Ingredient by title:** http://localhost:8080/ingredient/title/hveiti \
