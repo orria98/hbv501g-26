@@ -19,8 +19,14 @@ public class RecipeServiceImplementation implements RecipeService {
         this.recipeRepository = recipeRepository;
     }
 
+    @Override
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public Recipe findByID(Long id){
+        return recipeRepository.findByID(id);
     }
 
     //@Override

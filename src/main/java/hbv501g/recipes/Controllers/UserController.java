@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.UserService;
+
 
 /**
  * All endpoints for the user table will be here
@@ -33,6 +35,11 @@ public class UserController {
     @ResponseBody
     public List<User> getAllUsers(){
         return userService.findAll();
+    }
+
+    @GetMapping("/user/id/{id}")
+    public User getUserById(@PathVariable(value =  "id") Long id) {
+        return userService.findByID(id);
     }
 
 

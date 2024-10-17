@@ -8,17 +8,13 @@ import java.util.List;
 import hbv501g.recipes.Persistence.Entities.User;
 
 public interface UserService {
+    List<User> findAll();
 
-
-     List<User> findAll();
-
-     User findByID(Long id);
-
+    User findByID(Long id);
 
     User save(User user);
 
     List<User> initUsers();
 
     User update(User user);
-
 }
