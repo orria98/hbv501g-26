@@ -24,7 +24,7 @@ public class Ingredient {
     // ID er sjálfkrafa búið til þegar object er gerður
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private long ID;
 
     private String title;
     private Enum<Unit> unit;
@@ -144,7 +144,7 @@ public class Ingredient {
         this.createdBy = createdBy;
     }
 
-    public Long getID() {
+    public long getID() {
         return ID;
 
     }
