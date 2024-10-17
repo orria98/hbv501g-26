@@ -11,10 +11,12 @@ public interface UserService {
     List<User> findAll();
 
     User findByID(Long id);
+    User findByUsername(String username);
 
     User save(User user);
 
     List<User> initUsers();
 
+    User login(User user);
     User update(User user);
 }
