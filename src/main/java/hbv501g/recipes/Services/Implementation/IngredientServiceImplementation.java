@@ -35,7 +35,7 @@ public class IngredientServiceImplementation implements IngredientService {
      * @param id to search for
      */
     @Override
-    public Ingredient findByID(Long id) {
+    public Ingredient findByID(long id) {
         return ingredientRepository.findByID(id);
     }
 

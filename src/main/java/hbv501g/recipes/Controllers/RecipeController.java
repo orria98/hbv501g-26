@@ -43,7 +43,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/id/{id}")
-    public Recipe getUserById(@PathVariable(value = "id") Long id) {
+    public Recipe getUserById(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
     }
 
