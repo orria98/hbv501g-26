@@ -77,17 +77,35 @@ public class UserServiceImplementation implements UserService {
         return userRepository.save(updatedUser);
     }
 
+    /**
+     * finds pantry of a user, and returns the contents
+     * 
+     * @param userId id of user owning pantry
+     * @return pantry contents for the user
+     */
     public List<IngredientMeasurement> findUserPantry(long userId) {
-        return findByID(userId).getPantry();
+        User user = findByID(userId);
+        if (user == null)
+            return null;
+
+        return user.getPantry();
     }
 
     /**
      * Adds ingredientMeasurement to pantry, if the ingredient isn't already in the
      * pantry.
      * IngredientMeasurement for this ingredient returned
+     * 
+     * @param uid       id of user owning pantry
+     * @param iid       id of ingredient to add to pantry
+     * @param unit      unit of measure
+     * @param quantityy quantity in pantry
+     * @return ingredient measurement with the ingredient
      */
     public IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity) {
         User user = findByID(uid);
+        if (user == null)
+            return null;
         List<IngredientMeasurement> pantry = user.getPantry();
         int index = indexOf(iid, pantry);
         IngredientMeasurement ingredientMeasurement;
@@ -106,18 +124,22 @@ public class UserServiceImplementation implements UserService {
     /**
      * Deletes this ingredient from the user's pantry, and updates the user
      * 
-     * @param uid user id
-     * @param iid ingredient id
+     * @param uid id of user owning pantry
+     * @param iid id of ingredient in the pantry item
      */
     public void deletePantryItem(long uid, long iid) {
         User user = findByID(uid);
+        if (user == null)
+            return;
+
         List<IngredientMeasurement> pantry = user.getPantry();
         int index = indexOf(iid, user.getPantry());
-        if (index != -1)
+        if (index != -1) {
             pantry.remove(index);
+            user.setPantry(pantry);
+            update(user);
+        }
 
-        user.setPantry(pantry);
-        update(user);
     }
 
     /**

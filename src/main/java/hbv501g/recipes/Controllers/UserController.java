@@ -64,19 +64,19 @@ public class UserController {
      */
     @GetMapping("/user/curr")
     public User getCurrentUser(HttpSession session) {
-        return  (User) session.getAttribute("LoggedInUser");
+        return (User) session.getAttribute("LoggedInUser");
     }
 
-    
     /**
      * Logs in a user with a given username and password. This is stored in the
      * session. If the user does not exist, or the password is wrong, then the
      * method returns null
      * Example of use:
      * http://localhost:8080/user/login?username=admin&password=admin
+     * 
      * @param session
      * @param username
-     * @param password 
+     * @param password
      * @return the user with the given username or password, or null
      */
     @RequestMapping(value = "/user/login")
@@ -96,10 +96,12 @@ public class UserController {
      * available, and returns the user. If the username is being used, the function
      * returns null. If a new user is made, it is then set as the current user.
      * Example of use: http://localhost:8080/user/signup?username=Sep&password=sep
+     * 
      * @param session
      * @param username
      * @param password
-     * @return a new user with the given username and password, or null if no user created
+     * @return a new user with the given username and password, or null if no user
+     *         created
      */
     @RequestMapping(value = "user/signup")
     public User signup(HttpSession session, @RequestParam String username, @RequestParam String password) {
@@ -115,8 +117,8 @@ public class UserController {
     /**
      * Endpoint to get the pantry of a user with the specified id
      * 
-     * @param id - user id
-     * @return
+     * @param id : user id
+     * @return pantry contents for user
      */
     @GetMapping("/user/id/{id}/pantry")
     public List<IngredientMeasurement> getUserPantry(@PathVariable(value = "id") long id) {
@@ -136,15 +138,17 @@ public class UserController {
     }
 
     /**
-     * Adds to pantry, get if using url such as http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100
+     * Adds to pantry, get if using url such as
+     * http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100
      * put if using put request on postman.
      * 
-     * If the ingredient is already in the pantry, that item is returned and not added to pantry
+     * If the ingredient is already in the pantry, that item is returned and not
+     * added to pantry
      * 
-     * @param uid user id
-     * @param iid ingredient id
+     * @param uid  user id
+     * @param iid  ingredient id
      * @param unit - t.d. G, ML...
-     * @param qty quantity
+     * @param qty  quantity
      * @return
      */
     @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
