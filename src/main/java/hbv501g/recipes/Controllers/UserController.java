@@ -54,19 +54,20 @@ public class UserController {
      */
     @GetMapping("/user/curr")
     public User getCurrentUser(HttpSession session) {
-        User sessionUser = (User) session.getAttribute("LoggedInUser");
-        if (sessionUser != null) {
-            return sessionUser;
-        }
-        return null;
+        return  (User) session.getAttribute("LoggedInUser");
     }
 
+    
     /**
      * Logs in a user with a given username and password. This is stored in the
      * session. If the user does not exist, or the password is wrong, then the
      * method returns null
      * Example of use:
      * http://localhost:8080/user/login?username=admin&password=admin
+     * @param session
+     * @param username
+     * @param password 
+     * @return the user with the given username or password, or null
      */
     @RequestMapping(value = "/user/login")
     public User login(HttpSession session, @RequestParam String username, @RequestParam String password) {
@@ -83,8 +84,12 @@ public class UserController {
     /**
      * Makes a new user with the given username and password, if the username is
      * available, and returns the user. If the username is being used, the function
-     * returns null
+     * returns null. If a new user is made, it is then set as the current user.
      * Example of use: http://localhost:8080/user/signup?username=Sep&password=sep
+     * @param session
+     * @param username
+     * @param password
+     * @return a new user with the given username and password, or null if no user created
      */
     @RequestMapping(value = "user/signup")
     public User signup(HttpSession session, @RequestParam String username, @RequestParam String password) {

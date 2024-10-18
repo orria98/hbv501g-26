@@ -1,43 +1,29 @@
 package hbv501g.recipes.Persistence.Entities;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Entity
+/**
+ * Klasinn heldur utan um sett af ingredient, unit og quantity, sem er notað í
+ * ingredient lista í recipe og pantry hjá user.
+ * 
+ * Klasinn er embeddable þó hann sé hvergi embedded, en er í staðinn notaður í
+ * elementCollection á tveimur stöðum í mismunandi töflum.
+ */
+@Embeddable
 public class IngredientMeasurement {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
 
-    
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id") // id í ingredient notað í töflu fyrir ingredient measurement
+    private Ingredient ingredient; 
 
-    //@Column
-    //private Ingredient ingredient;
-    //private Long ingredientID;
-
-    //@OneToMany
-    //@JoinColumn(name = "Recipe_ID")
-    //private List<Ingredient> ingredients;
-    @ManyToOne //(fetch = FetchType.LAZY)
-    // @JsonIdentityReference
-    @JsonIgnore
-    private Ingredient ingredient; // TODO: aðeins að skoða hvernig þetta er
-
-    //@Column
     private Unit unit;
 
-    //@Column
     private double quantity;
 
-    public IngredientMeasurement(){
+    public IngredientMeasurement() {
 
     }
 
