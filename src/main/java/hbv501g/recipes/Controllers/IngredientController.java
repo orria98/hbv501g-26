@@ -8,6 +8,7 @@ package hbv501g.recipes.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,10 +86,10 @@ public class IngredientController {
      * @param store : String value
      * @param brand : Stirng value
      */
-    @GetMapping("ingredient/created")
+    @RequestMapping("ingredient/created")
     public Ingredient saveInredient(
 				    @RequestParam String title,
-				    @RequestParam Enum<Unit> unit,
+				    @RequestParam Unit unit,
 				    @RequestParam double quantity,
 				    @RequestParam double price,
 				    @RequestParam String store,
@@ -105,7 +106,7 @@ public class IngredientController {
      *
      * @param id : ID number of the ingreadient.
      */
-    @GetMapping("ingredient/delet/{id}")
+    @GetMapping("ingredient/delete/{id}")
     public void deleteIngredientById(@PathVariable(value = "id") long id)
     {
 	ingredientService.deleteById(id);

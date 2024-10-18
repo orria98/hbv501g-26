@@ -38,7 +38,7 @@ public class RecipeController {
      *
      * @param id : ID number of the recipe
      */
-    @GetMapping("/recipe/delet/{id}")
+    @GetMapping("/recipe/delete/{id}")
     public void deleteRecipeById(@PathVariable(value = "id")long id){
 	recipeService.deleteById(id);
     }

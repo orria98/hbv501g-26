@@ -24,5 +24,5 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     List<Ingredient> findAllByOrderByPrice();
 
-    void delete(long id);
+    void deleteById(long id);
 }
