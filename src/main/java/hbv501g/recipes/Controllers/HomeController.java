@@ -49,7 +49,7 @@ public class HomeController {
             recipe = recipes.get(i);
             ingredient = ingredients.get(i%(ingredients.size()-1));
             recipe.setCreatedBy(users.get(1));
-            recipe.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.ML, i*1000));
+            recipe.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.ML, (i+1)*1000));
             recipeService.update(recipe);
         }
 
@@ -68,7 +68,6 @@ public class HomeController {
         for (int i = 0; i < users.size(); i++) {
             user = users.get(i);
             userService.addPantryItem(user.getID(), ingredient.getID(), Unit.G, 20 + i * 10);
-            //user.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.G, 20 + i * 10));
             userService.update(user);
         }
 
