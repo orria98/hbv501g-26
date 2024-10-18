@@ -60,6 +60,7 @@ http://localhost:8080/ingredient/id/1
 * White screen in browser: no results found
 * Getting multiple results but expecting one
 * New information not showing in json: make sure there's a getter for the variable
+* Recursively getting users for ingredients and ingredients for users (use @JsonIgnore or @JsonIncludeProperties)
 
 
 
@@ -77,5 +78,8 @@ Query: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
 
 
 Error page: https://www.baeldung.com/spring-boot-custom-error-page
+
+Element collection, safn af embeddable hlutum: https://en.wikibooks.org/wiki/Java_Persistence/ElementCollection
+
 
 

@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,7 +21,7 @@ import jakarta.persistence.Table;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private long ID;
 
     private String title;
     private String instructions;
@@ -29,16 +33,12 @@ public class Recipe {
     private double totalIngredientCost;
 
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-
-    @ManyToOne //(fetch = FetchType.LAZY)
-    //@JsonIgnore // Til að koma í veg fyrir að sýna recipes undir user undir recipes...
-    //@JsonBackReference // í staðinn fyrir jsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIncludeProperties(value = { "id", "username" }) // properties úr user til að birta í json fyrir recipe
     private User createdBy;
 
-    // TODO: skoða þetta betur
-    //@ElementCollection //(fetch = FetchType.LAZY)
-    @OneToMany
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "recipe_ingredients")
     private List<IngredientMeasurement> ingredientMeasurements = new ArrayList<>();
 
     public Recipe() {
@@ -101,7 +101,7 @@ public class Recipe {
         ingredientMeasurements.add(ingredientMeasurement);
     }
 
-    public Long getID() {
+    public long getID() {
         return ID;
     }
 
