@@ -12,17 +12,19 @@ import hbv501g.recipes.Persistence.Entities.User;
 public interface UserService {
     List<User> findAll();
 
-    User findByID(Long id);
+    User findByID(long id);
+    User findByUsername(String username);
 
     User save(User user);
 
     List<User> initUsers();
 
+    User login(User user);
     User update(User user);
 
-    List<IngredientMeasurement> findUserPantry(Long userId);
+    List<IngredientMeasurement> findUserPantry(long userId);
 
-    void deletePantryItem(Long uid, Long iid);
+    void deletePantryItem(long uid, long iid);
 
-    IngredientMeasurement addPantryItem(Long uid, Long iid, Unit unit, double quantity);
+    IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity);
 }

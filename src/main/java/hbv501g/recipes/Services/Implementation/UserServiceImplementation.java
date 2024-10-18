@@ -22,6 +22,22 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User login(User user) {
+        User doesExist = findByUsername(user.getUsername());
+        if (doesExist != null) {
+            if (doesExist.getPassword().equals(user.getPassword())) {
+                return doesExist;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -53,7 +69,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User findByID(Long id) {
+    public User findByID(long id) {
         return userRepository.findByID(id);
     }
 
@@ -61,20 +77,29 @@ public class UserServiceImplementation implements UserService {
         return userRepository.save(updatedUser);
     }
 
-    public List<IngredientMeasurement> findUserPantry(Long userId) {
+    public List<IngredientMeasurement> findUserPantry(long userId) {
         return findByID(userId).getPantry();
     }
 
     /**
-     * Adds ingredientMeasurement to pantry
+     * Adds ingredientMeasurement to pantry, if the ingredient isn't already in the
+     * pantry.
+     * IngredientMeasurement for this ingredient returned
      */
-    public IngredientMeasurement addPantryItem(Long uid, Long iid, Unit unit, double quantity) {
+    public IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity) {
         User user = findByID(uid);
-        Ingredient ingredient = ingredientService.findByID(iid);
+        List<IngredientMeasurement> pantry = user.getPantry();
+        int index = indexOf(iid, pantry);
+        IngredientMeasurement ingredientMeasurement;
 
-        IngredientMeasurement ingredientMeasurement = new IngredientMeasurement(ingredient, unit, quantity);
-        user.addIngredientMeasurement(ingredientMeasurement);
-        update(user);
+        if (index == -1) {
+            ingredientMeasurement = new IngredientMeasurement(ingredientService.findByID(iid), unit, quantity);
+            user.addIngredientMeasurement(ingredientMeasurement);
+            update(user);
+        } else {
+            ingredientMeasurement = pantry.get(index);
+        }
+
         return ingredientMeasurement;
     }
 
@@ -84,7 +109,7 @@ public class UserServiceImplementation implements UserService {
      * @param uid user id
      * @param iid ingredient id
      */
-    public void deletePantryItem(Long uid, Long iid) {
+    public void deletePantryItem(long uid, long iid) {
         User user = findByID(uid);
         List<IngredientMeasurement> pantry = user.getPantry();
         int index = indexOf(iid, user.getPantry());
@@ -103,7 +128,7 @@ public class UserServiceImplementation implements UserService {
      * @param pantry
      * @return index within pantry
      */
-    private int indexOf(Long ingredientId, List<IngredientMeasurement> pantry) {
+    private int indexOf(long ingredientId, List<IngredientMeasurement> pantry) {
         int index = 0;
         for (IngredientMeasurement item : pantry) {
             if (item.getIngredient().getID() == ingredientId)
