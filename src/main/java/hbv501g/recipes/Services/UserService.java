@@ -5,12 +5,14 @@ package hbv501g.recipes.Services;
 
 import java.util.List;
 
+import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
+import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
 
 public interface UserService {
     List<User> findAll();
 
-    User findByID(Long id);
+    User findByID(long id);
     User findByUsername(String username);
 
     User save(User user);
@@ -19,4 +21,10 @@ public interface UserService {
 
     User login(User user);
     User update(User user);
+
+    List<IngredientMeasurement> findUserPantry(long userId);
+
+    void deletePantryItem(long uid, long iid);
+
+    IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity);
 }

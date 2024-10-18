@@ -33,11 +33,11 @@ public class IngredientMeasurement {
         this.quantity = quantity;
     }
 
-    public Ingredient getIngredientID() {
+    public Ingredient getIngredient() {
         return ingredient;
     }
 
-    public void setIngredientID(Ingredient ingredient) {
+    public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
 
@@ -56,5 +56,12 @@ public class IngredientMeasurement {
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "IngredientMeasurement [ingredient=" + ingredient + ", unit=" + unit + ", quantity=" + quantity + "]";
+    }
+
+    
 
 }

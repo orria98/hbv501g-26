@@ -33,7 +33,7 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable(value = "id") Long id) {
+    public Ingredient getIngredientById(@PathVariable(value = "id") long id) {
         return ingredientService.findByID(id);
     }
 
