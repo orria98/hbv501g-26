@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
-
-
 /**
  * All endpoints for the user table will be here
  */
@@ -35,46 +32,69 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("/user/init")
     @ResponseBody
-    public List<User> initUsers(){
+    public List<User> initUsers() {
         return userService.initUsers();
     }
 
     @GetMapping("/user/all")
     @ResponseBody
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userService.findAll();
     }
 
     @GetMapping("/user/id/{id}")
-    public User getUserById(@PathVariable(value =  "id") Long id) {
+    public User getUserById(@PathVariable(value = "id") Long id) {
         return userService.findByID(id);
     }
 
+    /**
+     * Gets the user who is currently logged in
+     */
     @GetMapping("/user/curr")
-    public User getCurrentUser(HttpSession session, Model model) {
+    public User getCurrentUser(HttpSession session) {
         User sessionUser = (User) session.getAttribute("LoggedInUser");
-        if(sessionUser  != null){
-            model.addAttribute("LoggedInUser", sessionUser);
+        if (sessionUser != null) {
             return sessionUser;
         }
-        return new User();
+        return null;
     }
-    
 
-    @RequestMapping(value = "/user/login/{username}/{password}", method={RequestMethod.GET, RequestMethod.POST})
-    public User login(/*BindingResult result, */Model model, HttpSession session,@PathVariable(value = "username") String username, @PathVariable(value = "password") String password) {
-        /*if(result.hasErrors()){
-            return null;
-        }*/
-        User exists = userService.login(userService.findByUsername(username));
-        if(exists != null){
-            session.setAttribute("LoggedInUser", exists);
-            model.addAttribute("LoggedInUser", exists);
-            return exists;
+    /**
+     * Logs in a user with a given username and password. This is stored in the
+     * session. If the user does not exist, or the password is wrong, then the
+     * method returns null
+     * Example of use:
+     * http://localhost:8080/user/login?username=admin&password=admin
+     */
+    @RequestMapping(value = "/user/login")
+    public User login(HttpSession session, @RequestParam String username, @RequestParam String password) {
+        if (userService.findByUsername(username) != null) {
+            User exists = userService.login(userService.findByUsername(username));
+            if (exists != null) {
+                session.setAttribute("LoggedInUser", exists);
+                return exists;
+            }
         }
-        return new User();
+        return null;
     }
+
+    /**
+     * Makes a new user with the given username and password, if the username is
+     * available, and returns the user. If the username is being used, the function
+     * returns null
+     * Example of use: http://localhost:8080/user/signup?username=Sep&password=sep
+     */
+    @RequestMapping(value = "user/signup")
+    public User signup(HttpSession session, @RequestParam String username, @RequestParam String password) {
+        if (userService.findByUsername(username) == null) {
+            User newUser = new User(username, password);
+            userService.save(newUser);
+            session.setAttribute("LoggedInUser", newUser);
+            return newUser;
+        }
+        return null;
+    }
+
 }
