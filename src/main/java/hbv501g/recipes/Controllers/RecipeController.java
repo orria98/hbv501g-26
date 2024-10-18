@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Services.RecipeService;
@@ -37,8 +38,8 @@ public class RecipeController {
      *
      * @param id : ID number of the recipe
      */
-    @GetMapping("/recipe/{id}")
-    public void deleteRecipeById(@PathVariable(value = "id")Long id){
-	recipeService.deletById(id);
+    @GetMapping("/recipe/delet/{id}")
+    public void deleteRecipeById(@PathVariable(value = "id")long id){
+	recipeService.deleteById(id);
     }
 }

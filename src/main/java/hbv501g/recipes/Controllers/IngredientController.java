@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
+import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Services.IngredientService;
 
 import java.util.List;
@@ -73,9 +75,27 @@ public class IngredientController {
         return ingredientService.findByTitle(title);
     }
 
-    //
-    //@ResponseBody
-    public Ingredient saveInredient(Ingredient ingredient){
+    /**
+     * Endpoint createds new idgrediet for the database
+     *
+     * @param title : String value
+     * @param unit : is a Enum of unit
+     * @param quantity : double value
+     * @param price : double value
+     * @param store : String value
+     * @param brand : Stirng value
+     */
+    @GetMapping("ingredient/created")
+    public Ingredient saveInredient(
+				    @RequestParam String title,
+				    @RequestParam Enum<Unit> unit,
+				    @RequestParam double quantity,
+				    @RequestParam double price,
+				    @RequestParam String store,
+				    @RequestParam String brand
+				    )
+    {
+	Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
 	return ingredientService.save(ingredient);
     }
     
@@ -85,8 +105,8 @@ public class IngredientController {
      *
      * @param id : ID number of the ingreadient.
      */
-    @GetMapping("ingredient/id/{id}")
-    public void deleteIngredientById(@PathVariable(value = "id") Long id)
+    @GetMapping("ingredient/delet/{id}")
+    public void deleteIngredientById(@PathVariable(value = "id") long id)
     {
 	ingredientService.deleteById(id);
     }

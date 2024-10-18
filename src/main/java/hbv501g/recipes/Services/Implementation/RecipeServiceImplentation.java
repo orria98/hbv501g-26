@@ -39,7 +39,7 @@ public class RecipeServiceImplentation implements RecipeService {
      * 		   of the precipe.
      */
     @Override
-    public void deleteById(Long id){
+    public void deleteById(long id){
 	recipeRepository.delete(id);
     }
 

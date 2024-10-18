@@ -100,7 +100,7 @@ public class IngredientServiceImplementation implements IngredientService {
      * 		   of the ingredient.
      */
     @Override
-    public void deleteById(Long id){
-	ingredientRepository.delet(id);
+    public void deleteById(long id){
+	ingredientRepository.delete(id);
     }
 }
