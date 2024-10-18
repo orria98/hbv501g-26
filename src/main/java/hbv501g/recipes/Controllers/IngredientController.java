@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.Unit;
+import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.IngredientService;
+
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -36,7 +39,7 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable(value = "id") Long id) {
+    public Ingredient getIngredientById(@PathVariable(value = "id") long id) {
         return ingredientService.findByID(id);
     }
 
@@ -102,14 +105,17 @@ public class IngredientController {
     
     /**
      * Endpoint that finds an ingredient by id and
-     * removes it form the database.
-     *
-     * @param id : ID number of the ingreadient.
+     * removes it form the database if the uesr
+     * own the ingredient.
+     * @param session : is the current session
+     * @param id      : ID number of the ingredient
      */
     @GetMapping("ingredient/delete/{id}")
-    public void deleteIngredientById(@PathVariable(value = "id") long id)
+    public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id)
     {
-	ingredientService.deleteById(id);
+	if((ingredientService.findByID(id)).getCreatedBy() == (User)session.getAttribute("LoggedInUser")){
+	    ingredientService.deleteById(id);
+	}
     }
 
     // Ekki hluti af neinum skilum held ég

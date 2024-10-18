@@ -16,6 +16,21 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 **Get All Ingredients:** http://localhost:8080/ingredient/all \
 **Get Ingredient by ID:**  http://localhost:8080/ingredient/id/1
 
+### Assignment 3
+
+#### Recipe: 
+**Get all:** http://localhost:8080/recipe/all\
+
+
+
+#### User
+**Get pantry:** http://localhost:8080/user/id/1/pantry\
+**Delete pantry item:** http://localhost:8080/user/pantry/delete?uid=1&iid=1\
+**Add ingredient to pantry:** http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100\
+
+
+#### Ingredient
+
 
 ### Others: 
 **Get Ingredient by title:** http://localhost:8080/ingredient/title/hveiti \
@@ -60,6 +75,7 @@ http://localhost:8080/ingredient/id/1
 * White screen in browser: no results found
 * Getting multiple results but expecting one
 * New information not showing in json: make sure there's a getter for the variable
+* Recursively getting users for ingredients and ingredients for users (use @JsonIgnore or @JsonIncludeProperties)
 
 
 
@@ -77,5 +93,8 @@ Query: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
 
 
 Error page: https://www.baeldung.com/spring-boot-custom-error-page
+
+Element collection, safn af embeddable hlutum: https://en.wikibooks.org/wiki/Java_Persistence/ElementCollection
+
 
 

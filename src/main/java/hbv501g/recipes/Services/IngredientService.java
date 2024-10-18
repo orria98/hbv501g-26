@@ -10,7 +10,7 @@ import java.util.List;
 public interface IngredientService {
     List<Ingredient> findAll();
 
-    Ingredient findByID(Long id);
+    Ingredient findByID(long id);
 
     Ingredient save(Ingredient ingredient);
 

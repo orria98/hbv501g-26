@@ -11,16 +11,22 @@ import hbv501g.recipes.Persistence.Repositories.RecipeRepository;
 import hbv501g.recipes.Services.RecipeService;
 
 @Service
-public class RecipeServiceImplentation implements RecipeService {
+public class RecipeServiceImplementation implements RecipeService {
     private RecipeRepository recipeRepository;
 
     @Autowired
-    public RecipeServiceImplentation(RecipeRepository recipeRepository) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
     }
 
+    @Override
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public Recipe findByID(long id){
+        return recipeRepository.findByID(id);
     }
 
     //@Override
@@ -42,20 +48,19 @@ public class RecipeServiceImplentation implements RecipeService {
     public void deleteById(long id){
 	recipeRepository.deleteById(id);
     }
-
+    
+     /* Initializes a few recipes, if none are found in the db
+     */
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
 
         if (AllRecipes.size() == 0) {
             Recipe recipe = new Recipe();
             recipe.setTitle("uppskrift 1");
-            // recipe.addIngredientMeasurement(new IngredientMeasurement(new Ingredient("hveiti1", Unit.G, 10000, 5004), Unit.G, 500));
-            // recipe.addIngredientMeasurement(new IngredientMeasurement(new Ingredient("ger1", Unit.G, 100, 408), Unit.G, 20));
-            
             save(recipe);
 
             recipe = new Recipe();
-            recipe.setTitle("uppskrift2");
+            recipe.setTitle("uppskrift 2");
             save(recipe);
 
             AllRecipes = findAll();
