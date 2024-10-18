@@ -9,7 +9,7 @@ public interface RecipeService {
     
     List<Recipe> findAll();
 
-    Recipe findByID(Long id);
+    Recipe findByID(long id);
 
     Recipe save(Recipe recipe);
 
