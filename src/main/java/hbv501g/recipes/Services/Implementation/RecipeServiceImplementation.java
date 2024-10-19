@@ -1,22 +1,30 @@
 package hbv501g.recipes.Services.Implementation;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hbv501g.recipes.Persistence.Entities.Ingredient;
+import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Recipe;
+import hbv501g.recipes.Persistence.Entities.Unit;
+import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Persistence.Repositories.RecipeRepository;
-
+import hbv501g.recipes.Services.IngredientService;
 import hbv501g.recipes.Services.RecipeService;
 
 @Service
 public class RecipeServiceImplementation implements RecipeService {
     private RecipeRepository recipeRepository;
+    private IngredientService ingredientService;
 
     @Autowired
-    public RecipeServiceImplementation(RecipeRepository recipeRepository) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
+        this.ingredientService = ingredientService;
     }
 
     @Override
@@ -25,11 +33,11 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     @Override
-    public Recipe findByID(long id){
+    public Recipe findByID(long id) {
         return recipeRepository.findByID(id);
     }
 
-    //@Override
+    // @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
@@ -58,4 +66,50 @@ public class RecipeServiceImplementation implements RecipeService {
 
         return AllRecipes;
     }
+
+    /**
+     * Adds IngredientMeasurements to a recipe with the given recipeID. Also takes
+     * in lists of units, ingredient ids and quantities. Makes
+     * IngredientMeasurements from the Lists, where the ingredient with the
+     * ingredientID with index i, unit with index i and qty with index i form one
+     * measurement. These are added to the recipe. If the lists don't all have the
+     * same size, the recipe is returned without adding any ingredientMEasuremetns
+     * 
+     * @param recipeID      - the id of the recipe to which the ingredients are
+     *                      added
+     * @param ingredientIDs -a list with the ids of the ingredients in the
+     *                      measurements
+     * @param qty           - list with the quantities of the measurements
+     * @param units         - a list with the units of the measurements
+     * @return Recipe - the recipe with the given recipeID with the measurements
+     *         added
+     */
+    public Recipe addIngredients(long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+        Recipe recipe = findByID(recipeID);
+        List<IngredientMeasurement> measurements = new ArrayList<>();
+        if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
+            return recipe;
+        }
+        for (int i = 0; i < units.size(); i++) {
+            Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
+            measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
+        }
+        recipe.setIngredientMeasurements(measurements);
+        return recipe;
+    }
+
+    /**
+     * @param recipe
+     * @param author
+     * @param creationDate
+     * @return Recipe
+     */
+    @Override
+    public Recipe setRecipeAuthorAndDate(Recipe recipe, User author, Date creationDate) {
+        recipe.setCreatedBy(author);
+        recipe.setDateOfCreation(creationDate);
+        save(recipe);
+        return recipe;
+    }
+
 }

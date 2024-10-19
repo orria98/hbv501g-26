@@ -1,5 +1,7 @@
 package hbv501g.recipes.Controllers;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
+import hbv501g.recipes.Persistence.Entities.Unit;
+import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.RecipeService;
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 public class RecipeController {
@@ -47,4 +57,40 @@ public class RecipeController {
         return recipeService.findByID(id);
     }
 
+    /**
+     * Takes in a recipe. It can contain IngredientMeasurements already, but the
+     * ingredients can also be added later, with the addIngredients method and
+     * corresponding endpoint.
+     * The current user and today's date are added to the recipe. The user is found
+     * in the session. The recipe is saved in the database.
+     * 
+     * @param session
+     * @param newRecipe - a recipe that is being saved
+     * @return the new recipe
+     */
+    @PostMapping("/recipe/new")
+    public Recipe newRecipe(HttpSession session, @RequestBody Recipe newRecipe) {
+        User author = (User) session.getAttribute("LoggedInUser");
+        Date created = Date.valueOf(LocalDate.now());
+        return recipeService.setRecipeAuthorAndDate(newRecipe, author, created);
+    }
+
+    /**
+     * Takes in the id of a recipe, and lists of units, ingredient ids and
+     * quantities. Calls a method in the RecipeService to make make
+     * IngredientMeasurements from the Lists, where the ingredient with the
+     * ingredientID with index i, unit with index i and qty with index i form one
+     * measurement. These are added to the recipe
+     * 
+     * @param recipeID - the id of the recipe to which the ingredients are added
+     * @param units - a list with the units of the measurements
+     * @param ingredientIDs - a list with the ids of the ingredients in the measurements
+     * @param qty -  list with the quantities of the measurements
+     * @return the recipe with the given recipeID with the measurements added
+     */
+    @RequestMapping("recipe/addIngredients")
+    public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
+            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty) {
+        return recipeService.addIngredients(recipeID, ingredientIDs, qty, units);
+    }
 }
