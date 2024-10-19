@@ -92,7 +92,7 @@ public class IngredientController {
      * @param brand : Stirng value
      */
     @RequestMapping("ingredient/created")
-    public Ingredient saveInredient(
+    public Ingredient saveIngredient(
                     HttpSession session,
 				    @RequestParam String title,
 				    @RequestParam Unit unit,
