@@ -27,10 +27,13 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    public User login(User user) {
-        User doesExist = findByUsername(user.getUsername());
+    public User login(String username, String password) {
+        if (username==null || password==null){
+            return null;
+        }
+        User doesExist = findByUsername(username);
         if (doesExist != null) {
-            if (doesExist.getPassword().equals(user.getPassword())) {
+            if (doesExist.getPassword().equals(password)) {
                 return doesExist;
             }
         }
@@ -75,6 +78,18 @@ public class UserServiceImplementation implements UserService {
 
     public User update(User updatedUser) {
         return userRepository.save(updatedUser);
+    }
+
+    public User signup(String username, String password){
+        if (username == null || password == null){
+            return null;
+        }
+        if(findByUsername(username)==null){
+            User newUser=new User(username,password);
+            save(newUser);
+            return newUser;
+        }
+        return null;
     }
 
     /**
