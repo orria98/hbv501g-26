@@ -10,7 +10,7 @@ import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeService {
     List<Recipe> initRecipes();
-    
+
     List<Recipe> findAll();
 
     Recipe findByID(long id);
@@ -18,6 +18,11 @@ public interface RecipeService {
     Recipe save(Recipe recipe);
 
     Recipe update(Recipe recipe);
+
+    int getTotalPurchaseCost(long id);
+
+    double getTotalIngredientCost(long id);
+
     Recipe addIngredients(long recipeID, List<Long> ingredientIDs, List<Double> qty,List<Unit> units );
     Recipe setRecipeAuthorAndDate(Recipe recipe, User author, Date creationDate);
 }

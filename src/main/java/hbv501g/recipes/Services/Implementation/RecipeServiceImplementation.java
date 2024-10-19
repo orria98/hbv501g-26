@@ -37,7 +37,7 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findByID(id);
     }
 
-    // @Override
+    //  @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
@@ -65,6 +65,34 @@ public class RecipeServiceImplementation implements RecipeService {
         }
 
         return AllRecipes;
+    }
+
+    /**
+     * Gets the total purchase cost for a recipe specified by an id
+     * 
+     * @param id: recipe id
+     * @return total purchase cost for the recipe
+     */
+    public int getTotalPurchaseCost(long id) {
+        Recipe recipe = findByID(id);
+        if (recipe == null)
+            return 0;
+
+        return recipe.getTotalPurchaseCost();
+    }
+
+    /**
+     * Gets the total ingredient cost for a recipe specified by an id
+     * 
+     * @param id: recipe id
+     * @return total ingredient cost for the recipe
+     */
+    public double getTotalIngredientCost(long id) {
+        Recipe recipe = findByID(id);
+        if (recipe == null)
+            return 0;
+
+        return recipe.getTotalIngredientCost();
     }
 
     /**

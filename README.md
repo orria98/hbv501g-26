@@ -6,7 +6,7 @@ Enjoy
 
 # About the program
 
-To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser. 
+<!-- To run, run RecipesApplication.java and then go to http://localhost:8080 in your browser.  -->
 
 When the program is run, a `mydatabase.db` file is made, if it doesn't exist already. It's stored locally.
 
@@ -19,14 +19,14 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 ### Assignment 3
 
 #### Recipe: 
-**Get all:** http://localhost:8080/recipe/all\
+**Get all:** http://localhost:8080/recipe/all
 
 
 
 #### User
 **Get pantry:** http://localhost:8080/user/id/1/pantry\
 **Delete pantry item:** http://localhost:8080/user/pantry/delete?uid=1&iid=1\
-**Add ingredient to pantry:** http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100\
+**Add ingredient to pantry:** http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100
 
 
 #### Ingredient

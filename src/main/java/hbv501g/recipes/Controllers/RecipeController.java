@@ -58,6 +58,32 @@ public class RecipeController {
     }
 
     /**
+     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
+     * is
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("/recipe/id/{id}/totalpurch")
+    @ResponseBody
+    public int getTotalPurchaseCost(@PathVariable(value = "id") long id) {
+        return recipeService.getTotalPurchaseCost(id);
+    }
+
+     /**
+     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
+     * is
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("/recipe/id/{id}/totalIng")
+    @ResponseBody
+    public double getTotalIngredientCost(@PathVariable(value = "id") long id) {
+        return recipeService.getTotalIngredientCost(id);
+    }
+
+    /**
      * Takes in a recipe. It can contain IngredientMeasurements already, but the
      * ingredients can also be added later, with the addIngredients method and
      * corresponding endpoint.
