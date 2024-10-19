@@ -21,6 +21,7 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
+import java.time.LocalDate;
 
 @RestController
 public class IngredientController {
@@ -82,6 +83,7 @@ public class IngredientController {
     /**
      * Endpoint createds new idgrediet for the database
      *
+     * @param session : is the current session
      * @param title : String value
      * @param unit : is a Enum of unit
      * @param quantity : double value
@@ -91,6 +93,7 @@ public class IngredientController {
      */
     @RequestMapping("ingredient/created")
     public Ingredient saveInredient(
+                    HttpSession session,
 				    @RequestParam String title,
 				    @RequestParam Unit unit,
 				    @RequestParam double quantity,
@@ -100,6 +103,8 @@ public class IngredientController {
 				    )
     {
 	Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
+    ingredient.setCreatedBy((User)session.getAttribute("LoggedInUser"));
+    ingredient.setDateOfCreation(LocalDate.now());
 	return ingredientService.save(ingredient);
     }
     
@@ -113,7 +118,7 @@ public class IngredientController {
     @GetMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id)
     {
-	if((ingredientService.findByID(id)).getCreatedBy() == (User)session.getAttribute("LoggedInUser")){
+	if(ingredientService.findByID(id).getCreatedBy().getID() == ((User) session.getAttribute("LoggedInUser")).getID()){
 	    ingredientService.deleteById(id);
 	}
     }
