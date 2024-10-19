@@ -1,7 +1,8 @@
 package hbv501g.recipes.Services.Implementation;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,9 +134,9 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return Recipe
      */
     @Override
-    public Recipe setRecipeAuthorAndDate(Recipe recipe, User author, Date creationDate) {
+    public Recipe setRecipeAuthorAndDate(Recipe recipe, User author) {
         recipe.setCreatedBy(author);
-        recipe.setDateOfCreation(creationDate);
+        recipe.setDateOfCreation(Date.valueOf(LocalDate.now()));
         save(recipe);
         return recipe;
     }

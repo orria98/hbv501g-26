@@ -1,7 +1,5 @@
 package hbv501g.recipes.Controllers;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,8 +95,7 @@ public class RecipeController {
     @PostMapping("/recipe/new")
     public Recipe newRecipe(HttpSession session, @RequestBody Recipe newRecipe) {
         User author = (User) session.getAttribute("LoggedInUser");
-        Date created = Date.valueOf(LocalDate.now());
-        return recipeService.setRecipeAuthorAndDate(newRecipe, author, created);
+        return recipeService.setRecipeAuthorAndDate(newRecipe, author);
     }
 
     /**

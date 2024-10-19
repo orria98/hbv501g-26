@@ -24,5 +24,5 @@ public interface RecipeService {
     double getTotalIngredientCost(long id);
 
     Recipe addIngredients(long recipeID, List<Long> ingredientIDs, List<Double> qty,List<Unit> units );
-    Recipe setRecipeAuthorAndDate(Recipe recipe, User author, Date creationDate);
+    Recipe setRecipeAuthorAndDate(Recipe recipe, User author);
 }
