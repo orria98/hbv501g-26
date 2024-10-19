@@ -48,13 +48,24 @@ public class UserController {
         return userService.findAll();
     }
 
+    /**
+     * Finds and returns a user with a given ID. Returns that user if any user has
+     * the ID, otherwise it returns null
+     * 
+     * @param id - the userID of the requested user
+     * @return the user with that id, or null
+     */
     @GetMapping("/user/id/{id}")
     public User getUserById(@PathVariable(value = "id") long id) {
         return userService.findByID(id);
     }
 
     /**
-     * Gets the user who is currently logged in
+     * Gets the user who is currently logged in. It is stored as LoggedInUser in the
+     * current http session. Returns the user, or null if no user is logged in
+     * 
+     * @param session - The current http session
+     * @return - The current user (or null)
      */
     @GetMapping("/user/curr")
     public User getCurrentUser(HttpSession session) {
@@ -62,14 +73,15 @@ public class UserController {
     }
 
     /**
-     * Logs in a user with a given username and password and stores the current user
-     * in the session. Returns the user, or null if the login fails
+     * Logs in a user with a given username and password and stores it as the
+     * current user/logged in user of the session. Returns the user, or null if the
+     * login fails
      * Example of use:
      * http://localhost:8080/user/login?username=admin&password=admin
      * 
-     * @param session
-     * @param username
-     * @param password
+     * @param session  - The current http session
+     * @param username - The username of the user logging in
+     * @param password - The password of the user logging in
      * @return the user with the given username or password, or null
      */
     @RequestMapping(value = "/user/login")
@@ -87,9 +99,9 @@ public class UserController {
      * 
      * Example of use: http://localhost:8080/user/signup?username=Sep&password=sep
      * 
-     * @param session
-     * @param username
-     * @param password
+     * @param session  - The current http session
+     * @param username - The username of the user signing up
+     * @param password - The password of the user signing up
      * @return a new user with the given username and password, or null if no user
      *         created
      */

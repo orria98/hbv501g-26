@@ -19,22 +19,32 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 ### Assignment 3
 
 #### Recipe: 
-**Get all:** http://localhost:8080/recipe/all
-
-
+**Get all:** http://localhost:8080/recipe/all \
+**Get Recipe By ID:** http://localhost:8080/recipe/id/1
+**Get total purchase cost of recipe:** http://localhost:8080/recipe/id/1/totalpurch \
+**Get total ingredient cost of recipe:** http://localhost:8080/recipe/id/1/totalIng \
+**Create new recipe:** http://localhost:8080/recipe/new \
+**Add ingredients to recipe** http://localhost:8080/recipe/addIngredients?recipeID=1&units=ML,ML&ingredientIDs=1,2&qty=0.5,1
 
 #### User
-**Get pantry:** http://localhost:8080/user/id/1/pantry\
-**Delete pantry item:** http://localhost:8080/user/pantry/delete?uid=1&iid=1\
-**Add ingredient to pantry:** http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100
-
+**Get pantry:** http://localhost:8080/user/id/1/pantry \
+**Delete pantry item:** http://localhost:8080/user/pantry/delete?uid=1&iid=1 \
+**Add ingredient to pantry:** http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100 \
+**Get User by ID:** http://localhost:8080/user/id/1 \
+**Log in:** http://localhost:8080/user/login?username=admin&password=admin \
+**Sign up:** http://localhost:8080/user/signup?username=admin&password=admin
 
 #### Ingredient
 
 
 ### Others: 
 **Get Ingredient by title:** http://localhost:8080/ingredient/title/hveiti \
-**Initalize some ingredients:** http://localhost:8080/ingredient/init
+**Initalize some ingredients:** http://localhost:8080/ingredient/init \
+**Get all users:** http://localhost:8080/user/all \
+**Initialize some users:** http://localhost:8080/user/init \
+**Initialize some recipes:** http://localhost:8080/recipe/init \
+**Get the current user:** http://localhost:8080/user/curr \
+
 
 ## Current possibilities
 

@@ -50,6 +50,13 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
+    /**
+     * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
+     * has the ID, otherwise it returns null
+     * 
+     * @param id - the id of the requested recipe
+     * @return the recipe with that id, or null
+     */
     @GetMapping("/recipe/id/{id}")
     public Recipe getUserById(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
@@ -68,7 +75,7 @@ public class RecipeController {
         return recipeService.getTotalPurchaseCost(id);
     }
 
-     /**
+    /**
      * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
      * is
      * 
@@ -88,7 +95,7 @@ public class RecipeController {
      * The current user and today's date are added to the recipe. The user is found
      * in the session. The recipe is saved in the database.
      * 
-     * @param session
+     * @param session   - the current http session
      * @param newRecipe - a recipe that is being saved
      * @return the new recipe
      */
@@ -105,10 +112,12 @@ public class RecipeController {
      * ingredientID with index i, unit with index i and qty with index i form one
      * measurement. These are added to the recipe
      * 
-     * @param recipeID - the id of the recipe to which the ingredients are added
-     * @param units - a list with the units of the measurements
-     * @param ingredientIDs - a list with the ids of the ingredients in the measurements
-     * @param qty -  list with the quantities of the measurements
+     * @param recipeID      - the id of the recipe to which the ingredients are
+     *                      added
+     * @param units         - a list with the units of the measurements
+     * @param ingredientIDs - a list with the ids of the ingredients in the
+     *                      measurements
+     * @param qty           - list with the quantities of the measurements
      * @return the recipe with the given recipeID with the measurements added
      */
     @RequestMapping("recipe/addIngredients")

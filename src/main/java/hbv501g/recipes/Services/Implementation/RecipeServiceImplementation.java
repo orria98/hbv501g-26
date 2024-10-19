@@ -38,7 +38,7 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findByID(id);
     }
 
-    //  @Override
+    // @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
@@ -128,17 +128,18 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * @param recipe
-     * @param author
-     * @param creationDate
-     * @return Recipe
+     * Takes in a recipe and author. Adds the author and current date to the recipe
+     * and saves it in the database, and returns the recipe
+     * 
+     * @param recipe - The recipe that is being saved
+     * @param author - The user who made the recipe
+     * @return The recipe with the added information
      */
     @Override
     public Recipe setRecipeAuthorAndDate(Recipe recipe, User author) {
         recipe.setCreatedBy(author);
         recipe.setDateOfCreation(Date.valueOf(LocalDate.now()));
-        save(recipe);
-        return recipe;
+        return save(recipe);
     }
 
 }
