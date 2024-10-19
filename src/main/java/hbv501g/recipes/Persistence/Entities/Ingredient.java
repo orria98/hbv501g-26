@@ -1,8 +1,3 @@
-/**
- * Entity klasi. Getur staðið einn sem java object, en 
- * útgáfa af þessum object fer í gagnagrunninn
- */
-
 package hbv501g.recipes.Persistence.Entities;
 
 import java.util.Date;
@@ -10,6 +5,8 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,13 +18,15 @@ import jakarta.persistence.Table;
 @Table(name = "ingredients")
 public class Ingredient {
 
-    // ID er sjálfkrafa búið til þegar object er gerður
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ID;
 
     private String title;
-    private Enum<Unit> unit;
+
+    @Enumerated(EnumType.STRING)
+    private Unit unit;
+
     private double quantity;
     private double price;
     private String store;
@@ -35,26 +34,18 @@ public class Ingredient {
     private boolean isPrivate;
     private Date dateOfCreation;
 
-    // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = {"id", "username"}) // properties úr user til að birta í json fyrir ingredient
-    private User createdBy; // Bara til að geyma hver gerði ingredientið
+    @JsonIncludeProperties(value = { "id", "username" })
+    private User createdBy;
 
-
-    /**
-     * Constructs an Ingredient object
-     */
-    public Ingredient(String title, Enum<Unit> unit, double quantity, double price) {
+    public Ingredient(String title, Unit unit, double quantity, double price) {
         this.title = title;
         this.unit = unit;
         this.quantity = quantity;
         this.price = price;
     }
 
-    /**
-     * Constructs an Ingredient object
-     */
-    public Ingredient(String title, Enum<Unit> unit, double quantity, double price, String store, String brand) {
+    public Ingredient(String title, Unit unit, double quantity, double price, String store, String brand) {
         this.title = title;
         this.unit = unit;
         this.quantity = quantity;
@@ -63,11 +54,7 @@ public class Ingredient {
         this.brand = brand;
     }
 
-    /**
-     * Constructs an Ingredient object with null values and a non-null id
-     */
     public Ingredient() {
-
     }
 
     // Getters and setters
@@ -80,11 +67,11 @@ public class Ingredient {
         this.title = title;
     }
 
-    public Enum<Unit> getUnit() {
+    public Unit getUnit() {
         return unit;
     }
 
-    public void setUnit(Enum<Unit> unit) {
+    public void setUnit(Unit unit) {
         this.unit = unit;
     }
 
@@ -146,13 +133,10 @@ public class Ingredient {
 
     public long getID() {
         return ID;
-
     }
 
-    // Custom toString aðferð
     @Override
     public String toString() {
         return "Ingredient [id:" + ID + ", title=" + title + ", " + quantity + " " + unit + ", " + price + "kr." + "]";
     }
-
 }
