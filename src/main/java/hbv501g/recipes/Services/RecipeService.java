@@ -6,7 +6,7 @@ import hbv501g.recipes.Persistence.Entities.Recipe;
 
 public interface RecipeService {
     List<Recipe> initRecipes();
-    
+
     List<Recipe> findAll();
 
     Recipe findByID(long id);
@@ -15,7 +15,8 @@ public interface RecipeService {
 
     Recipe update(Recipe recipe);
 
- 
+    int getTotalPurchaseCost(long id);
 
-    
+    double getTotalIngredientCost(long id);
+
 }
