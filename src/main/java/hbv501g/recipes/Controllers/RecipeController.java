@@ -68,7 +68,7 @@ public class RecipeController {
     else{
         User auther = recipeService.findByID(id).getCreatedBy();
         if(auther != null){
-            if(aother.getID() == user.getID()){
+            if(auther.getID() == user.getID()){
 	            recipeService.deleteById(id);
             }
         }
