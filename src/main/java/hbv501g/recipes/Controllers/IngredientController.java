@@ -118,9 +118,20 @@ public class IngredientController {
     @GetMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id)
     {
-	if(ingredientService.findByID(id).getCreatedBy().getID() == ((User) session.getAttribute("LoggedInUser")).getID()){
-	    ingredientService.deleteById(id);
-	}
+    User user = (User) session.getAttribute("LoggedInUser");
+    if (user == null){
+        if(ingredientService.findByID(id).getCreatedBy() == null){
+            ingredientService.deleteById(id);
+        }
+    }
+    else{
+        User auther = ingredientService.findByID(id).getCreatedBy();
+        if(auther != null){
+	        if(auther.getID() == user.getID()){
+	            ingredientService.deleteById(id);
+            }
+        }
+    }
     }
 
     // Ekki hluti af neinum skilum held ég
