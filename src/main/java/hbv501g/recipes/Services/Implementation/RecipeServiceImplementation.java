@@ -147,14 +147,10 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return total cost to purchase this measurement
      */
     private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
-        if (ingredient == null)
-            return 0;
-
-        int packageCount = (quantity % ingredient.getQuantity() == 0 ? 0 : 1)
-                + (int) (quantity / ingredient.getQuantity());
-
-        return ingredient.getPrice() * packageCount;
-
+        if (ingredient!=null && quantity!=0 && ingredient.getQuantity()!=0){
+            return ingredient.getPrice()*Math.ceil(quantity/ingredient.getQuantity());
+        }
+        return 0;
     }
 
 
