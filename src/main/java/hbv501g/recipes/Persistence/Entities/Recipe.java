@@ -1,5 +1,6 @@
 package hbv501g.recipes.Persistence.Entities;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Recipe {
     private String title;
     private String instructions;
     private boolean isPrivate;
-    private Date dateOfCreation;
+    private LocalDate dateOfCreation;
     /** Total price for all groceries bought new */
     private int totalPurchaseCost;
     /** price for quantity of each ingredient used */
@@ -80,11 +81,11 @@ public class Recipe {
         this.createdBy = createdBy;
     }
 
-    public Date getDateOfCreation() {
+    public LocalDate getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public void setDateOfCreation(Date dateOfCreation) {
+    public void setDateOfCreation(LocalDate dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 
