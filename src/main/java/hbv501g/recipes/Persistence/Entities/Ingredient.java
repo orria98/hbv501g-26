@@ -5,7 +5,11 @@
 
 package hbv501g.recipes.Persistence.Entities;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.cglib.core.Local;
+
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,25 +23,30 @@ import jakarta.persistence.Table;
 @Table(name = "ingredients")
 public class Ingredient {
 
+    // ID er sjálfkrafa búið til þegar object er gerður
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private long ID;
 
     private String title;
-    private Enum<Unit> unit;
+    private Unit unit;
     private double quantity;
     private double price;
     private String store;
     private String brand;
     private boolean isPrivate;
+    private LocalDate dateOfCreation;
+
+    // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju
     @ManyToOne(fetch = FetchType.LAZY)
-    private User createdBy;
-    private Date dateOfCreation;
+    @JsonIncludeProperties(value = {"id", "username"}) // properties úr user til að birta í json fyrir ingredient
+    private User createdBy; // Bara til að geyma hver gerði ingredientið
+
 
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String title, Enum<Unit> unit, double quantity, double price) {
+    public Ingredient(String title, Unit unit, double quantity, double price) {
         this.title = title;
         this.unit = unit;
         this.quantity = quantity;
@@ -47,7 +56,7 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String title, Enum<Unit> unit, double quantity, double price, String store, String brand) {
+    public Ingredient(String title, Unit unit, double quantity, double price, String store, String brand) {
         this.title = title;
         this.unit = unit;
         this.quantity = quantity;
@@ -77,7 +86,7 @@ public class Ingredient {
         return unit;
     }
 
-    public void setUnit(Enum<Unit> unit) {
+    public void setUnit(Unit unit) {
         this.unit = unit;
     }
 
@@ -121,6 +130,14 @@ public class Ingredient {
         this.isPrivate = isPrivate;
     }
 
+    public LocalDate getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(LocalDate dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
+    }
+
     public User getCreatedBy() {
         return createdBy;
     }
@@ -129,12 +146,9 @@ public class Ingredient {
         this.createdBy = createdBy;
     }
 
-    public Date getDateOfCreation() {
-        return dateOfCreation;
-    }
+    public long getID() {
+        return ID;
 
-    public void setDateOfCreation(Date dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
     }
 
     // Custom toString aðferð

@@ -6,4 +6,8 @@ import hbv501g.recipes.Persistence.Entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
+    User findByID(long id);
+
+    User findByUsername(String username);
+
 }

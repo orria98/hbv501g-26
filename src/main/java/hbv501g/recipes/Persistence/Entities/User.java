@@ -1,32 +1,65 @@
 package hbv501g.recipes.Persistence.Entities;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-/**
- * A Java object for the user. Pantry has not been implemented.
- * The user entity was created so that the Ingredient entity could be fully made.
- */
+
+
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private long ID;
 
     private String username;
     private String password;
     private String email;
 
-    //@Convert(converter = IngredientMeasurementAttributeConverter.class)
-    //private List<IngredientMeasurement> pantry;
+    @CollectionTable(name = "pantry_contents")
+    @ElementCollection
+    private List<IngredientMeasurement> pantry = new ArrayList<>();
 
-    public User(){
-        //pantry = new ArrayList<IngredientMeasurement>();
+    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    
+    @JsonIncludeProperties(value = {"id", "title"}) // Json fyrir User inniheldur lista af Recipe, en sýnir bara id og title attributes
+    private List<Recipe> recipesByUser = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIncludeProperties(value = {"id", "title"}) // properties úr ingredient til að birta í json fyrir user
+    private List<Ingredient> ingredientsByUser = new ArrayList<>(); // Geymir hver gerði ingredientið
+
+
+
+   
+
+    public User() {
+
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(String username, String password){
+        this.username=username;
+        this.password=password;
     }
 
     public String getUsername() {
@@ -53,7 +86,41 @@ public class User {
         this.email = email;
     }
 
+    public List<IngredientMeasurement> getPantry() {
+        return pantry;
+    }
 
+    public void setPantry(List<IngredientMeasurement> pantry) {
+        this.pantry = pantry;
+    }
+
+    public List<Recipe> getRecipesByUser() {
+        return recipesByUser;
+    }
+
+    public void setRecipesByUser(List<Recipe> recipesByUser) {
+        this.recipesByUser = recipesByUser;
+    }
+
+    public long getID() {
+        return ID;
+    }
+
+    public void addIngredientMeasurement(IngredientMeasurement ingredientMeasurement){
+        pantry.add(ingredientMeasurement);
+    }
+    public void addRecipeByUser(Recipe recipeByUser){
+        recipesByUser.add(recipeByUser);
+    }
+
+    public List<Ingredient> getIngredientsByUser() {
+        return ingredientsByUser;
+    }
+
+    public void setIngredientsByUser(List<Ingredient> ingredientsByUser) {
+        this.ingredientsByUser = ingredientsByUser;
+    }
 
     
+
 }
