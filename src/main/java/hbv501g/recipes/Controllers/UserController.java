@@ -153,14 +153,10 @@ public class UserController {
      */
     @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
     @ResponseBody
-    public IngredientMeasurement addPantryItem(@RequestParam long uid, @RequestParam long iid, @RequestParam Unit unit,
+    public IngredientMeasurement addPantryItem(@RequestParam long iid, @RequestParam Unit unit,
             @RequestParam double qty, HttpSession session) {
 
-        User user = (User) session.getAttribute("LoggedInUser");
-        if (user == null || user.getID() != uid)
-            return null;
-
-        return userService.addPantryItem(uid, iid, unit, qty);
+        return userService.addPantryItem((User) session.getAttribute("LoggedInUser"), iid, unit, qty);
     }
 
 }

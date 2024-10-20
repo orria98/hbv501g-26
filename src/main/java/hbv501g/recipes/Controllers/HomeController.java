@@ -67,7 +67,7 @@ public class HomeController {
 
         for (int i = 0; i < users.size(); i++) {
             user = users.get(i);
-            userService.addPantryItem(user.getID(), ingredient.getID(), Unit.G, 20 + i * 10);
+            userService.addPantryItem(user, ingredient.getID(), Unit.G, 20 + i * 10);
             userService.update(user);
         }
 

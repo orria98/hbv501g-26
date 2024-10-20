@@ -136,23 +136,20 @@ public class UserServiceImplementation implements UserService {
      * pantry.
      * IngredientMeasurement for this ingredient returned
      * 
-     * @param uid       id of user owning pantry
+     * @param user      user owning pantry
      * @param iid       id of ingredient to add to pantry
      * @param unit      unit of measure
      * @param quantityy quantity in pantry
      * @return ingredient measurement with the ingredient
      */
-    public IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity) {
-        User user = findByID(uid);
-        if (user == null)
+    public IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity) {
+        Ingredient ingredient = ingredientService.findByID(iid);
+        if (ingredient == null || ingredient.isPrivate() && ingredient.getCreatedBy() != user || user == null)
             return null;
+
         List<IngredientMeasurement> pantry = user.getPantry();
         int index = indexOf(iid, pantry);
         IngredientMeasurement ingredientMeasurement;
-
-        Ingredient ingredient = ingredientService.findByID(iid);
-        User ingredientOwner = ingredient.getCreatedBy();
-        if(ingredient != null && ingredientOwner != null && ingredient.isPrivate() && ingredientOwner.getID() != uid ) return null;
 
         if (index == -1) {
             ingredientMeasurement = new IngredientMeasurement(ingredient, unit, quantity);

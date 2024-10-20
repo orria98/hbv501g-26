@@ -27,7 +27,7 @@ public interface UserService {
 
     void deletePantryItem(long uid, long iid);
 
-    IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity);
+    IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity);
 
     IngredientMeasurement findItemInPantry(List<IngredientMeasurement> pantry, Ingredient ingredient);
 
