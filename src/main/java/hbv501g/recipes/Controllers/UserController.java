@@ -113,33 +113,29 @@ public class UserController {
     }
 
     /**
-     * Endpoint to get the pantry of a user with the specified id
+     * Endpoint to get the pantry of the current user
      * 
-     * @param id : user id
+     * @param session - The current http session
      * @return pantry contents for user
      */
-    @GetMapping("/user/id/{id}/pantry")
-    public List<IngredientMeasurement> getUserPantry(@PathVariable(value = "id") long id) {
-        return userService.findUserPantry(id);
+    @GetMapping("/user/pantry")
+    public List<IngredientMeasurement> getUserPantry(HttpSession session) {
+        return userService.findUserPantry((User) session.getAttribute("LoggedInUser"));
     }
 
     /**
-     * Deletes a pantry item for specified user, where the pantry item uses the
+     * Deletes a pantry item for current user, where the pantry item uses the
      * specified ingredient. Assumes only one item for each ingredient
      * 
-     * @param uid id of user owning pantry
-     * @param iid id of ingredient in pantry item to delete
+     * @param iid     - id of ingredient in pantry item to delete
+     * @param session - the current session
      */
     @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET, RequestMethod.PUT })
-    public void deletePantryItem(@RequestParam long uid, @RequestParam long iid) {
-        userService.deletePantryItem(uid, iid);
+    public void deletePantryItem(@RequestParam long iid, HttpSession session) {
+        userService.deletePantryItem((User) session.getAttribute("LoggedInUser"), iid);
     }
 
     /**
-     * Adds to pantry, get if using url such as
-     * http://localhost:8080/user/pantry/add?uid=1&iid=1&unit=G&qty=100
-     * put if using put request on postman.
-     * 
      * If the ingredient is already in the pantry, that item is returned and not
      * added to pantry
      * 
@@ -147,14 +143,14 @@ public class UserController {
      * @param iid  ingredient id
      * @param unit - t.d. G, ML...
      * @param qty  quantity
-     * @return
+     * @return the ingredient measurement for the ingredient
      */
     @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
     @ResponseBody
-    public IngredientMeasurement addPantryItem(@RequestParam long uid, @RequestParam long iid, @RequestParam Unit unit,
-            @RequestParam double qty) {
+    public IngredientMeasurement addPantryItem(@RequestParam long iid, @RequestParam Unit unit,
+            @RequestParam double qty, HttpSession session) {
 
-        return userService.addPantryItem(uid, iid, unit, qty);
+        return userService.addPantryItem((User) session.getAttribute("LoggedInUser"), iid, unit, qty);
     }
 
 }

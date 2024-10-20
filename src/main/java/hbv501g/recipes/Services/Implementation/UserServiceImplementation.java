@@ -120,11 +120,10 @@ public class UserServiceImplementation implements UserService {
     /**
      * finds pantry of a user, and returns the contents
      * 
-     * @param userId id of user owning pantry
+     * @param user - user owning pantry
      * @return pantry contents for the user
      */
-    public List<IngredientMeasurement> findUserPantry(long userId) {
-        User user = findByID(userId);
+    public List<IngredientMeasurement> findUserPantry(User user) {
         if (user == null)
             return null;
 
@@ -134,24 +133,24 @@ public class UserServiceImplementation implements UserService {
     /**
      * Adds ingredientMeasurement to pantry, if the ingredient isn't already in the
      * pantry.
-     * IngredientMeasurement for this ingredient returned
      * 
-     * @param uid       id of user owning pantry
+     * @param user      user owning pantry
      * @param iid       id of ingredient to add to pantry
      * @param unit      unit of measure
      * @param quantityy quantity in pantry
      * @return ingredient measurement with the ingredient
      */
-    public IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity) {
-        User user = findByID(uid);
-        if (user == null)
+    public IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity) {
+        Ingredient ingredient = ingredientService.findByID(iid);
+        if (ingredient == null || ingredient.isPrivate() && ingredient.getCreatedBy() != user || user == null)
             return null;
+
         List<IngredientMeasurement> pantry = user.getPantry();
         int index = indexOf(iid, pantry);
         IngredientMeasurement ingredientMeasurement;
 
         if (index == -1) {
-            ingredientMeasurement = new IngredientMeasurement(ingredientService.findByID(iid), unit, quantity);
+            ingredientMeasurement = new IngredientMeasurement(ingredient, unit, quantity);
             user.addIngredientMeasurement(ingredientMeasurement);
             update(user);
         } else {
@@ -164,11 +163,10 @@ public class UserServiceImplementation implements UserService {
     /**
      * Deletes this ingredient from the user's pantry, and updates the user
      * 
-     * @param uid id of user owning pantry
-     * @param iid id of ingredient in the pantry item
+     * @param user - user owning pantry
+     * @param iid  - id of ingredient in the pantry item
      */
-    public void deletePantryItem(long uid, long iid) {
-        User user = findByID(uid);
+    public void deletePantryItem(User user, long iid) {
         if (user == null)
             return;
 
