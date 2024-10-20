@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
+import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.RecipeService;
+import jakarta.servlet.http.HttpSession;
+
 
 @RestController
 public class RecipeController {
@@ -60,7 +63,7 @@ public class RecipeController {
         return recipeService.getTotalPurchaseCost(id);
     }
 
-     /**
+    /**
      * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
      * is
      * 
@@ -71,6 +74,12 @@ public class RecipeController {
     @ResponseBody
     public double getTotalIngredientCost(@PathVariable(value = "id") long id) {
         return recipeService.getTotalIngredientCost(id);
+    }
+
+    @GetMapping("/recipe/id/{id}/personal")
+    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.getPersonalizedPurchaseCost(user, id);
     }
 
 }
