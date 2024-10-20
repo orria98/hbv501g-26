@@ -99,11 +99,16 @@ public class IngredientController {
             @RequestParam double quantity,
             @RequestParam double price,
             @RequestParam String store,
-            @RequestParam String brand) {
-        Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
-        ingredient.setCreatedBy((User) session.getAttribute("LoggedInUser"));
-        ingredient.setDateOfCreation(LocalDate.now());
-        return ingredientService.save(ingredient);
+            @RequestParam String brand){
+        User user = (User) session.getAttribute("LoggedInUser");
+        
+        if(user != null){
+            Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
+            ingredient.setCreatedBy(user);
+            ingredient.setDateOfCreation(LocalDate.now());
+            return ingredientService.save(ingredient);
+        }
+        return null;
     }
 
     /**
