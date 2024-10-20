@@ -32,7 +32,6 @@ public class Recipe {
     /** price for quantity of each ingredient used */
     private double totalIngredientCost;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIncludeProperties(value = { "id", "username" }) // properties úr user til að birta í json fyrir recipe
     private User createdBy;
@@ -95,10 +94,33 @@ public class Recipe {
 
     public void setIngredientMeasurements(List<IngredientMeasurement> ingredientMeasurements) {
         this.ingredientMeasurements = ingredientMeasurements;
+
+        totalPurchaseCost = 0;
+        totalIngredientCost = 0;
+        for (IngredientMeasurement item : ingredientMeasurements) {
+            addMeasurementToCost(item);
+        }
+    }
+
+    /**
+     * Adds cost of an ingredient measurement to the cost of a recipe.
+     * TotalIngredientCost margfaldar heildarverð með hlutfalli
+     * 
+     * @param item Ingredient measurement
+     */
+    private void addMeasurementToCost(IngredientMeasurement item) {
+        Ingredient ingredient = item.getIngredient();
+        if(ingredient == null) return;
+        double ingredientPrice = ingredient.getPrice();
+
+        totalPurchaseCost += ingredientPrice;
+        totalIngredientCost += ingredientPrice * (double) item.getQuantity() / ingredient.getQuantity();
     }
 
     public void addIngredientMeasurement(IngredientMeasurement ingredientMeasurement) {
         ingredientMeasurements.add(ingredientMeasurement);
+        addMeasurementToCost(ingredientMeasurement);
+
     }
 
     public long getID() {

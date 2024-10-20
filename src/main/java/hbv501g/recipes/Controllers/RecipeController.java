@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.RecipeService;
+import jakarta.servlet.http.HttpSession;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -51,6 +53,7 @@ public class RecipeController {
     }
 
     /**
+
      * Endpoint that finds an recipe by id and
      * removes it form the database if the uesr
      * own the recipe.
@@ -74,4 +77,37 @@ public class RecipeController {
         }
     }
     }
+
+     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
+     * is
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("/recipe/id/{id}/totalpurch")
+    @ResponseBody
+    public int getTotalPurchaseCost(@PathVariable(value = "id") long id) {
+        return recipeService.getTotalPurchaseCost(id);
+    }
+
+    /**
+     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
+     * is
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("/recipe/id/{id}/totalIng")
+    @ResponseBody
+    public double getTotalIngredientCost(@PathVariable(value = "id") long id) {
+        return recipeService.getTotalIngredientCost(id);
+    }
+
+    @GetMapping("/recipe/id/{id}/personal")
+    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.getPersonalizedPurchaseCost(user, id);
+    }
+
+
 }
