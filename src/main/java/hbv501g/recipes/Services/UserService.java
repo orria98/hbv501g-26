@@ -23,11 +23,11 @@ public interface UserService {
     User login(String username, String password);
     User update(User user);
 
-    List<IngredientMeasurement> findUserPantry(long userId);
+    List<IngredientMeasurement> findUserPantry(User user);
 
-    void deletePantryItem(long uid, long iid);
+    void deletePantryItem(User user, long iid);
 
-    IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity);
+    IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity);
 
     IngredientMeasurement findItemInPantry(List<IngredientMeasurement> pantry, Ingredient ingredient);
 

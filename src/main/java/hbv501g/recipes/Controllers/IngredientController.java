@@ -99,9 +99,14 @@ public class IngredientController {
             @RequestParam double quantity,
             @RequestParam double price,
             @RequestParam String store,
-            @RequestParam String brand) {
+            @RequestParam String brand){
+        User user = (User) session.getAttribute("LoggedInUser");
+        
+        if(user == null){
+            return null;
+        }
         Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
-        ingredient.setCreatedBy((User) session.getAttribute("LoggedInUser"));
+        ingredient.setCreatedBy(user);
         ingredient.setDateOfCreation(LocalDate.now());
         return ingredientService.save(ingredient);
     }
@@ -114,15 +119,13 @@ public class IngredientController {
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
-    @GetMapping("ingredient/delete/{id}")
+    @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
         User user = (User) session.getAttribute("LoggedInUser");
-        if (user == null) {
-            if (ingredientService.findByID(id).getCreatedBy() == null) {
-                ingredientService.deleteById(id);
-            }
-        } else {
+        
+        if (user != null) {
             User author = ingredientService.findByID(id).getCreatedBy();
+            
             if (author != null) {
                 if (author.getID() == user.getID()) {
                     ingredientService.deleteById(id);
@@ -131,7 +134,7 @@ public class IngredientController {
         }
     }
 
-    // Ekki hluti af neinum skilum held ég
+    // Ekki hluti af neinum skilum 
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
