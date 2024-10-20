@@ -23,9 +23,9 @@ public interface UserService {
     User login(String username, String password);
     User update(User user);
 
-    List<IngredientMeasurement> findUserPantry(long userId);
+    List<IngredientMeasurement> findUserPantry(User user);
 
-    void deletePantryItem(long uid, long iid);
+    void deletePantryItem(User user, long iid);
 
     IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity);
 
