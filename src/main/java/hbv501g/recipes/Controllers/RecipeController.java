@@ -70,13 +70,13 @@ public class RecipeController {
      * @param session : is the current session
      * @param id      : ID number of the recipe
      */
-    @GetMapping("/recipe/delete/{id}")
+    @RequestMapping("/recipe/delete/{id}")
     public void deleteRecipeById(HttpSession session, @PathVariable(value = "id") long id) {
         User user = (User) session.getAttribute("LoggedInUser");
-        
+
         if (user != null) {
             User author = recipeService.findByID(id).getCreatedBy();
-            
+
             if (author != null) {
                 if (author.getID() == user.getID()) {
                     recipeService.deleteById(id);
@@ -86,11 +86,10 @@ public class RecipeController {
     }
 
     /**
-     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
-     * is
+     * gets the total cost to purchase all ingredients needed for a recipe
      * 
-     * @param id
-     * @return
+     * @param id - recipe id
+     * @return total purchase cost
      */
     @GetMapping("/recipe/id/{id}/totalpurch")
     @ResponseBody
@@ -99,11 +98,11 @@ public class RecipeController {
     }
 
     /**
-     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
-     * is
+     * Gets the total ingredient cost for a given recipe, that is the exact cost for
+     * the quantity used
      * 
-     * @param id
-     * @return
+     * @param id - recipe id
+     * @return total ingredient cost
      */
     @GetMapping("/recipe/id/{id}/totalIng")
     @ResponseBody
@@ -111,6 +110,14 @@ public class RecipeController {
         return recipeService.getTotalIngredientCost(id);
     }
 
+    /**
+     * Gets the total cost of ingredients the current user doesn't have in the
+     * pantry for the recipe specified
+     * 
+     * @param id      - recipe id
+     * @param session - current session
+     * @return personalized purchase cost
+     */
     @GetMapping("/recipe/id/{id}/personal")
     public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
         User user = (User) session.getAttribute("LoggedInUser");
@@ -132,7 +139,7 @@ public class RecipeController {
     @PostMapping("/recipe/new")
     public Recipe newRecipe(HttpSession session, @RequestBody Recipe newRecipe) {
         User author = (User) session.getAttribute("LoggedInUser");
-        if(author!= null){
+        if (author != null) {
             return recipeService.setRecipeAuthorAndDate(newRecipe, author);
         }
         return null;
@@ -143,7 +150,7 @@ public class RecipeController {
      * quantities. Calls a method in the RecipeService to make make
      * IngredientMeasurements from the Lists, where the ingredient with the
      * ingredientID with index i, unit with index i and qty with index i form one
-     * measurement. These are added to the recipe. Users can only add ingredients 
+     * measurement. These are added to the recipe. Users can only add ingredients
      * to their own recipes, and have to be logged in to do so
      * 
      * @param recipeID      - the id of the recipe to which the ingredients are
@@ -159,10 +166,10 @@ public class RecipeController {
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
             @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, HttpSession session) {
         Recipe recipe = recipeService.findByID(recipeID);
-        User currUser = (User)session.getAttribute("LoggedInUser");
-    
-        if(recipe!=null &&currUser!=null&& currUser.getID()==recipe.getCreatedBy().getID()){
-            return recipeService.addIngredients(currUser.getID(),recipeID, ingredientIDs, qty, units);
+        User currUser = (User) session.getAttribute("LoggedInUser");
+
+        if (recipe != null && currUser != null && currUser.getID() == recipe.getCreatedBy().getID()) {
+            return recipeService.addIngredients(currUser.getID(), recipeID, ingredientIDs, qty, units);
         }
         return null;
     }

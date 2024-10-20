@@ -29,7 +29,7 @@ public class Ingredient {
     private long ID;
 
     private String title;
-    private Enum<Unit> unit;
+    private Unit unit;
     private double quantity;
     private double price;
     private String store;
@@ -46,7 +46,7 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String title, Enum<Unit> unit, double quantity, double price) {
+    public Ingredient(String title, Unit unit, double quantity, double price) {
         this.title = title;
         this.unit = unit;
         this.quantity = quantity;
@@ -56,7 +56,7 @@ public class Ingredient {
     /**
      * Constructs an Ingredient object
      */
-    public Ingredient(String title, Enum<Unit> unit, double quantity, double price, String store, String brand) {
+    public Ingredient(String title, Unit unit, double quantity, double price, String store, String brand) {
         this.title = title;
         this.unit = unit;
         this.quantity = quantity;
@@ -86,7 +86,7 @@ public class Ingredient {
         return unit;
     }
 
-    public void setUnit(Enum<Unit> unit) {
+    public void setUnit(Unit unit) {
         this.unit = unit;
     }
 
