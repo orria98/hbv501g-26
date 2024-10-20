@@ -102,13 +102,13 @@ public class IngredientController {
             @RequestParam String brand){
         User user = (User) session.getAttribute("LoggedInUser");
         
-        if(user != null){
-            Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
-            ingredient.setCreatedBy(user);
-            ingredient.setDateOfCreation(LocalDate.now());
-            return ingredientService.save(ingredient);
+        if(user == null){
+            return null;
         }
-        return null;
+        Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
+        ingredient.setCreatedBy(user);
+        ingredient.setDateOfCreation(LocalDate.now());
+        return ingredientService.save(ingredient);
     }
 
     /**
@@ -122,12 +122,10 @@ public class IngredientController {
     @GetMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
         User user = (User) session.getAttribute("LoggedInUser");
-        if (user == null) {
-            if (ingredientService.findByID(id).getCreatedBy() == null) {
-                ingredientService.deleteById(id);
-            }
-        } else {
+        
+        if (user != null) {
             User author = ingredientService.findByID(id).getCreatedBy();
+            
             if (author != null) {
                 if (author.getID() == user.getID()) {
                     ingredientService.deleteById(id);
