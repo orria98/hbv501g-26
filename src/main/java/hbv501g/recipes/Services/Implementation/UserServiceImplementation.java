@@ -150,8 +150,12 @@ public class UserServiceImplementation implements UserService {
         int index = indexOf(iid, pantry);
         IngredientMeasurement ingredientMeasurement;
 
+        Ingredient ingredient = ingredientService.findByID(iid);
+        User ingredientOwner = ingredient.getCreatedBy();
+        if(ingredient != null && ingredientOwner != null && ingredient.isPrivate() && ingredientOwner.getID() != uid ) return null;
+
         if (index == -1) {
-            ingredientMeasurement = new IngredientMeasurement(ingredientService.findByID(iid), unit, quantity);
+            ingredientMeasurement = new IngredientMeasurement(ingredient, unit, quantity);
             user.addIngredientMeasurement(ingredientMeasurement);
             update(user);
         } else {

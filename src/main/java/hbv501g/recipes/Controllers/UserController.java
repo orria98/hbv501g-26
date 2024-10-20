@@ -131,8 +131,10 @@ public class UserController {
      * @param iid id of ingredient in pantry item to delete
      */
     @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET, RequestMethod.PUT })
-    public void deletePantryItem(@RequestParam long uid, @RequestParam long iid) {
-        userService.deletePantryItem(uid, iid);
+    public void deletePantryItem(@RequestParam long uid, @RequestParam long iid, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        if (user != null && user.getID() == uid)
+            userService.deletePantryItem(uid, iid);
     }
 
     /**
@@ -152,7 +154,11 @@ public class UserController {
     @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
     @ResponseBody
     public IngredientMeasurement addPantryItem(@RequestParam long uid, @RequestParam long iid, @RequestParam Unit unit,
-            @RequestParam double qty) {
+            @RequestParam double qty, HttpSession session) {
+
+        User user = (User) session.getAttribute("LoggedInUser");
+        if (user == null || user.getID() != uid)
+            return null;
 
         return userService.addPantryItem(uid, iid, unit, qty);
     }

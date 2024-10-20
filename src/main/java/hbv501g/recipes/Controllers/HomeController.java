@@ -123,6 +123,12 @@ public class HomeController {
             ingredient.setCreatedBy(users.get(1));
             ingredientService.save(ingredient);
 
+            ingredient = new Ingredient("Ostur", Unit.G, 500, 1200, "Bónus", "Gotti");
+            ingredient.setCreatedBy(users.get(2));
+            ingredient.setPrivate(true);
+            ingredientService.save(ingredient);
+
+
             ingredients = ingredientService.findAll();
         }
 
@@ -146,6 +152,7 @@ public class HomeController {
             recipe = new Recipe();
             recipe.setTitle("Vatnsglas");
             recipe.setCreatedBy(users.get(0));
+            recipe.setPrivate(true);
             recipe.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(3), Unit.ML, 225));
             recipeService.save(recipe);
 
