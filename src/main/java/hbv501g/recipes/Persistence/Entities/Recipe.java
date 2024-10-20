@@ -114,9 +114,9 @@ public class Recipe {
         if(ingredient == null) return;
         double ingredientPrice = ingredient.getPrice();
 
-        totalPurchaseCost += ingredientPrice;
         if (ingredient.getQuantity()!=0){
-            totalIngredientCost += ingredientPrice * (double) item.getQuantity() / ingredient.getQuantity();
+            totalPurchaseCost +=ingredientPrice* Math.ceil(item.getQuantity()/ingredient.getQuantity());
+            totalIngredientCost += ingredientPrice * item.getQuantity() / ingredient.getQuantity();
         }
     }
 
