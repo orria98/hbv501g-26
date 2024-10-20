@@ -1,5 +1,7 @@
 package hbv501g.recipes.Services.Implementation;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +10,10 @@ import org.springframework.stereotype.Service;
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Recipe;
+import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Persistence.Repositories.RecipeRepository;
-
+import hbv501g.recipes.Services.IngredientService;
 import hbv501g.recipes.Services.RecipeService;
 import hbv501g.recipes.Services.UserService;
 
@@ -18,11 +21,13 @@ import hbv501g.recipes.Services.UserService;
 public class RecipeServiceImplementation implements RecipeService {
     private RecipeRepository recipeRepository;
     private UserService userService;
+    private IngredientService ingredientService;
 
     @Autowired
-    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.userService = userService;
+        this.ingredientService = ingredientService;
     }
 
     @Override
@@ -52,7 +57,7 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public void deleteById(long id){
-	recipeRepository.deleteById(id);
+        recipeRepository.deleteById(id);
     }
     
      /* Initializes a few recipes, if none are found in the db
@@ -150,6 +155,53 @@ public class RecipeServiceImplementation implements RecipeService {
 
         return ingredient.getPrice() * packageCount;
 
+    }
+
+
+    /**
+     * Adds IngredientMeasurements to a recipe with the given recipeID. Also takes
+     * in lists of units, ingredient ids and quantities. Makes
+     * IngredientMeasurements from the Lists, where the ingredient with the
+     * ingredientID with index i, unit with index i and qty with index i form one
+     * measurement. These are added to the recipe. If the lists don't all have the
+     * same size, the recipe is returned without adding any ingredientMEasuremetns
+     * 
+     * @param recipeID      - the id of the recipe to which the ingredients are
+     *                      added
+     * @param ingredientIDs -a list with the ids of the ingredients in the
+     *                      measurements
+     * @param qty           - list with the quantities of the measurements
+     * @param units         - a list with the units of the measurements
+     * @return Recipe - the recipe with the given recipeID with the measurements
+     *         added
+     */
+    public Recipe addIngredients(long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+        Recipe recipe = findByID(recipeID);
+        List<IngredientMeasurement> measurements = new ArrayList<>();
+        if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
+            return recipe;
+        }
+        for (int i = 0; i < units.size(); i++) {
+            Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
+            measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
+        }
+        recipe.setIngredientMeasurements(measurements);
+        return recipe;
+    }
+
+    /**
+     * Takes in a recipe and author. Adds the author and current date to the recipe
+     * and saves it in the database, and returns the recipe
+     * 
+     * @param recipe - The recipe that is being saved
+     * @param author - The user who made the recipe
+     * @return The recipe with the added information
+     */
+    @Override
+    public Recipe setRecipeAuthorAndDate(Recipe recipe, User author) {
+        recipe.setCreatedBy(author);
+        recipe.setDateOfCreation(LocalDate.now());
+        return save(recipe);
     }
 
 }

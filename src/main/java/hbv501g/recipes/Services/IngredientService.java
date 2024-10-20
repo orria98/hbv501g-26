@@ -14,17 +14,15 @@ public interface IngredientService {
 
     Ingredient save(Ingredient ingredient);
 
+    Ingredient update(Ingredient updatedIngredient);
+
+    void deleteById (long id);
 
     // Ekki hluti af skilum
     List<Ingredient> initIngredients();
     
     Ingredient findByTitle(String title);
 
-    Ingredient update(Ingredient updatedIngredient);
-
     List<Ingredient> findOrderedIngredients();
-
-    void deleteById (long id);
-
 
 }

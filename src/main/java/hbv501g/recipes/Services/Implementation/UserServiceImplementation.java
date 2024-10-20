@@ -21,16 +21,35 @@ public class UserServiceImplementation implements UserService {
         this.ingredientService = ingredientService;
     }
 
+    /**
+     * Takes in a username and finds a user with that username in the database.
+     * Returns the user, or null if no user with that username exists
+     * 
+     * @param username - The username of the requested user
+     * @return The requested user, or null
+     */
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Takes in a username and password. If neither is null, it checks whether there
+     * is a user with both the given username and password in the database. if one
+     * exists, the method returns the user, otherwise it returns null
+     * 
+     * @param username - The username of the user signing in
+     * @param password - The password of the user signing in
+     * @return User - The user who was signed in, or null
+     */
     @Override
-    public User login(User user) {
-        User doesExist = findByUsername(user.getUsername());
+    public User login(String username, String password) {
+        if (username == null || password == null) {
+            return null;
+        }
+        User doesExist = findByUsername(username);
         if (doesExist != null) {
-            if (doesExist.getPassword().equals(user.getPassword())) {
+            if (doesExist.getPassword().equals(password)) {
                 return doesExist;
             }
         }
@@ -75,6 +94,27 @@ public class UserServiceImplementation implements UserService {
 
     public User update(User updatedUser) {
         return userRepository.save(updatedUser);
+    }
+
+    /**
+     * Takes in a username and password. If neither is null, and the username does
+     * not belong to a user in the database, a new user is created. The user is
+     * returned, if no user was made, the method returns null
+     * 
+     * @param username - the username of the user being created
+     * @param password - the password of the user being created
+     * @return the new user, or null
+     */
+    public User signup(String username, String password) {
+        if (username == null || password == null) {
+            return null;
+        }
+        if (findByUsername(username) == null) {
+            User newUser = new User(username, password);
+            save(newUser);
+            return newUser;
+        }
+        return null;
     }
 
     /**

@@ -83,55 +83,52 @@ public class IngredientController {
     /**
      * Endpoint createds new idgrediet for the database
      *
-     * @param session : is the current session
-     * @param title : String value
-     * @param unit : is a Enum of unit
+     * @param session  : is the current session
+     * @param title    : String value
+     * @param unit     : is a Enum of unit
      * @param quantity : double value
-     * @param price : double value
-     * @param store : String value
-     * @param brand : Stirng value
+     * @param price    : double value
+     * @param store    : String value
+     * @param brand    : Stirng value
      */
     @RequestMapping("ingredient/created")
     public Ingredient saveIngredient(
-                    HttpSession session,
-				    @RequestParam String title,
-				    @RequestParam Unit unit,
-				    @RequestParam double quantity,
-				    @RequestParam double price,
-				    @RequestParam String store,
-				    @RequestParam String brand
-				    )
-    {
-	Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
-    ingredient.setCreatedBy((User)session.getAttribute("LoggedInUser"));
-    ingredient.setDateOfCreation(LocalDate.now());
-	return ingredientService.save(ingredient);
+            HttpSession session,
+            @RequestParam String title,
+            @RequestParam Unit unit,
+            @RequestParam double quantity,
+            @RequestParam double price,
+            @RequestParam String store,
+            @RequestParam String brand) {
+        Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
+        ingredient.setCreatedBy((User) session.getAttribute("LoggedInUser"));
+        ingredient.setDateOfCreation(LocalDate.now());
+        return ingredientService.save(ingredient);
     }
-    
+
     /**
      * Endpoint that finds an ingredient by id and
      * removes it form the database if the uesr
      * own the ingredient.
+     * 
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
     @GetMapping("ingredient/delete/{id}")
-    public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id)
-    {
-    User user = (User) session.getAttribute("LoggedInUser");
-    if (user == null){
-        if(ingredientService.findByID(id).getCreatedBy() == null){
-            ingredientService.deleteById(id);
-        }
-    }
-    else{
-        User auther = ingredientService.findByID(id).getCreatedBy();
-        if(auther != null){
-	        if(auther.getID() == user.getID()){
-	            ingredientService.deleteById(id);
+    public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        if (user == null) {
+            if (ingredientService.findByID(id).getCreatedBy() == null) {
+                ingredientService.deleteById(id);
+            }
+        } else {
+            User author = ingredientService.findByID(id).getCreatedBy();
+            if (author != null) {
+                if (author.getID() == user.getID()) {
+                    ingredientService.deleteById(id);
+                }
             }
         }
-    }
     }
 
     // Ekki hluti af neinum skilum held ég
@@ -139,8 +136,5 @@ public class IngredientController {
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
     }
-
-
-
 
 }

@@ -19,8 +19,8 @@ public interface UserService {
     User save(User user);
 
     List<User> initUsers();
-
-    User login(User user);
+    User signup(String username, String password);
+    User login(String username, String password);
     User update(User user);
 
     List<IngredientMeasurement> findUserPantry(long userId);
