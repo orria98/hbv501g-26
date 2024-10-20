@@ -177,6 +177,10 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     public Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
         Recipe recipe = findByID(recipeID);
+        User currUser = userService.findByID(userID);
+        if(recipe==null || currUser==null || userID!=recipe.getCreatedBy().getID()){
+            return null;
+        } 
         List<IngredientMeasurement> measurements = new ArrayList<>();
         if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
             return recipe;

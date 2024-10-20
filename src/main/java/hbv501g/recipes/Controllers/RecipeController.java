@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * A controller containing endpoints relating to recipes
+ */
 @RestController
 public class RecipeController {
     private RecipeService recipeService;
@@ -160,12 +163,7 @@ public class RecipeController {
     @RequestMapping("recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
             @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, HttpSession session) {
-        Recipe recipe = recipeService.findByID(recipeID);
         User currUser = (User)session.getAttribute("LoggedInUser");
-    
-        if(recipe!=null &&currUser!=null&& currUser.getID()==recipe.getCreatedBy().getID()){
-            return recipeService.addIngredients(currUser.getID(),recipeID, ingredientIDs, qty, units);
-        }
-        return null;
+        return recipeService.addIngredients(currUser.getID(),recipeID, ingredientIDs, qty, units);
     }
 }
