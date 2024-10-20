@@ -125,15 +125,19 @@ public class RecipeController {
      * corresponding endpoint.
      * The current user and today's date are added to the recipe. The user is found
      * in the session. The recipe is saved in the database.
+     * If no user is logged in, null is returned
      * 
      * @param session   - the current http session
      * @param newRecipe - a recipe that is being saved
-     * @return the new recipe
+     * @return the new recipe, or null
      */
     @PostMapping("/recipe/new")
     public Recipe newRecipe(HttpSession session, @RequestBody Recipe newRecipe) {
         User author = (User) session.getAttribute("LoggedInUser");
-        return recipeService.setRecipeAuthorAndDate(newRecipe, author);
+        if(author!= null){
+            return recipeService.setRecipeAuthorAndDate(newRecipe, author);
+        }
+        return null;
     }
 
     /**
@@ -141,7 +145,8 @@ public class RecipeController {
      * quantities. Calls a method in the RecipeService to make make
      * IngredientMeasurements from the Lists, where the ingredient with the
      * ingredientID with index i, unit with index i and qty with index i form one
-     * measurement. These are added to the recipe
+     * measurement. These are added to the recipe. Users can only add ingredients 
+     * to their own recipes, and have to be logged in to do so
      * 
      * @param recipeID      - the id of the recipe to which the ingredients are
      *                      added
@@ -149,11 +154,18 @@ public class RecipeController {
      * @param ingredientIDs - a list with the ids of the ingredients in the
      *                      measurements
      * @param qty           - list with the quantities of the measurements
+     * @param session       - The current http session
      * @return the recipe with the given recipeID with the measurements added
      */
     @RequestMapping("recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
-            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty) {
-        return recipeService.addIngredients(recipeID, ingredientIDs, qty, units);
+            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, HttpSession session) {
+        Recipe recipe = recipeService.findByID(recipeID);
+        User currUser = (User)session.getAttribute("LoggedInUser");
+    
+        if(recipe!=null &&currUser!=null&& currUser.getID()==recipe.getCreatedBy().getID()){
+            return recipeService.addIngredients(currUser.getID(),recipeID, ingredientIDs, qty, units);
+        }
+        return null;
     }
 }

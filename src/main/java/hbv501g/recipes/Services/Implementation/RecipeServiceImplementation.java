@@ -175,7 +175,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return Recipe - the recipe with the given recipeID with the measurements
      *         added
      */
-    public Recipe addIngredients(long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+    public Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
         Recipe recipe = findByID(recipeID);
         List<IngredientMeasurement> measurements = new ArrayList<>();
         if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
@@ -183,10 +183,12 @@ public class RecipeServiceImplementation implements RecipeService {
         }
         for (int i = 0; i < units.size(); i++) {
             Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
-            measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
+            if(ingredient!=null && (!ingredient.isPrivate()||(ingredient.getCreatedBy()!=null&& ingredient.getCreatedBy().getID()== userID))){
+                measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
+            }
         }
         recipe.setIngredientMeasurements(measurements);
-        return recipe;
+        return save(recipe);
     }
 
     /**
