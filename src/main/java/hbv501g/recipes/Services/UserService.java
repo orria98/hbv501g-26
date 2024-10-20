@@ -5,6 +5,7 @@ package hbv501g.recipes.Services;
 
 import java.util.List;
 
+import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
@@ -27,4 +28,7 @@ public interface UserService {
     void deletePantryItem(long uid, long iid);
 
     IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity);
+
+    IngredientMeasurement findItemInPantry(List<IngredientMeasurement> pantry, Ingredient ingredient);
+
 }

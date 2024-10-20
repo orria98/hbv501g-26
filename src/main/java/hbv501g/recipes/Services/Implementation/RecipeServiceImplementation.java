@@ -15,15 +15,18 @@ import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Persistence.Repositories.RecipeRepository;
 import hbv501g.recipes.Services.IngredientService;
 import hbv501g.recipes.Services.RecipeService;
+import hbv501g.recipes.Services.UserService;
 
 @Service
 public class RecipeServiceImplementation implements RecipeService {
     private RecipeRepository recipeRepository;
+    private UserService userService;
     private IngredientService ingredientService;
 
     @Autowired
-    public RecipeServiceImplementation(RecipeRepository recipeRepository, IngredientService ingredientService) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
+        this.userService = userService;
         this.ingredientService = ingredientService;
     }
 
@@ -94,6 +97,56 @@ public class RecipeServiceImplementation implements RecipeService {
 
         return recipe.getTotalIngredientCost();
     }
+
+    /**
+     * If the units in pantry and recipe do not match, the ingredient will not be
+     * found in pantry
+     * 
+     * @param user     - the user owning the pantry
+     * @param recipeId - the id of the recipe to calculate for
+     */
+    public double getPersonalizedPurchaseCost(User user, long recipeId) {
+        Recipe recipe = findByID(recipeId);
+
+        if (user == null || recipe == null)
+            return 0;
+
+        int total = 0;
+        List<IngredientMeasurement> pantry = user.getPantry();
+
+        for (IngredientMeasurement recipeIngredient : recipe.getIngredientMeasurements()) {
+            IngredientMeasurement pantryItem = userService.findItemInPantry(pantry, recipeIngredient.getIngredient());
+
+            // TODO: passa að unit passi
+            double qty = recipeIngredient.getQuantity();
+            if (pantryItem != null && recipeIngredient.getUnit() == pantryItem.getUnit())
+                qty -= pantryItem.getQuantity();
+            if (qty > 0)
+                total += calculateTotalPurchaseCost(recipeIngredient.getIngredient(), qty);
+        }
+
+        return total;
+    }
+
+    /**
+     * Purchase cost based on how many packages are needed. Assumes both ingredient
+     * and measurement have the same unit
+     * 
+     * @param ingredient - the ingredient as a package
+     * @param quantity   - quantity to calculate for
+     * @return total cost to purchase this measurement
+     */
+    private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
+        if (ingredient == null)
+            return 0;
+
+        int packageCount = (quantity % ingredient.getQuantity() == 0 ? 0 : 1)
+                + (int) (quantity / ingredient.getQuantity());
+
+        return ingredient.getPrice() * packageCount;
+
+    }
+
 
     /**
      * Adds IngredientMeasurements to a recipe with the given recipeID. Also takes

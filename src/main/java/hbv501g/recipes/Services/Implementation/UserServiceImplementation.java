@@ -193,11 +193,26 @@ public class UserServiceImplementation implements UserService {
     private int indexOf(long ingredientId, List<IngredientMeasurement> pantry) {
         int index = 0;
         for (IngredientMeasurement item : pantry) {
-            if (item.getIngredient().getID() == ingredientId)
+            if (item.getIngredient() != null && item.getIngredient().getID() == ingredientId)
                 return index;
             index++;
         }
         return -1;
+    }
+
+    /**
+     * Gets the first instance of an ingredient measurement containing the specified
+     * ingredient from a given pantry
+     * 
+     * @param pantry     - the pantry to search
+     * @param ingredient - the ingredient to search for
+     * @return an ingredient measurement from pantry
+     */
+    public IngredientMeasurement findItemInPantry(List<IngredientMeasurement> pantry, Ingredient ingredient) {
+        int index = indexOf(ingredient.getID(), pantry);
+        if (index == -1)
+            return null;
+        return pantry.get(index);
     }
 
 }

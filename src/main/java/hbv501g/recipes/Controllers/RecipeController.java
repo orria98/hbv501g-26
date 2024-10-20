@@ -88,6 +88,12 @@ public class RecipeController {
         return recipeService.getTotalIngredientCost(id);
     }
 
+    @GetMapping("/recipe/id/{id}/personal")
+    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.getPersonalizedPurchaseCost(user, id);
+    }
+
     /**
      * Takes in a recipe. It can contain IngredientMeasurements already, but the
      * ingredients can also be added later, with the addIngredients method and

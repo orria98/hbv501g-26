@@ -111,9 +111,11 @@ public class Recipe {
      */
     private void addMeasurementToCost(IngredientMeasurement item) {
         Ingredient ingredient = item.getIngredient();
-        double ingredientPrice = ingredient==null?0:ingredient.getPrice();
+        if(ingredient == null) return;
+        double ingredientPrice = ingredient.getPrice();
+
         totalPurchaseCost += ingredientPrice;
-        if (ingredient != null  &&  ingredient.getQuantity()!=0){
+        if (ingredient.getQuantity()!=0){
             totalIngredientCost += ingredientPrice * (double) item.getQuantity() / ingredient.getQuantity();
         }
     }
