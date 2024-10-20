@@ -14,6 +14,8 @@ import hbv501g.recipes.Services.RecipeService;
 import jakarta.servlet.http.HttpSession;
 
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 public class RecipeController {
     private RecipeService recipeService;
@@ -46,11 +48,36 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/id/{id}")
-    public Recipe getUserById(@PathVariable(value = "id") long id) {
+    public Recipe getRecipeById(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
     }
 
     /**
+
+     * Endpoint that finds an recipe by id and
+     * removes it form the database if the uesr
+     * own the recipe.
+     * @param session : is the current session
+     * @param id      : ID number of the recipe
+     */
+    @GetMapping("/recipe/delete/{id}")
+    public void deleteRecipeById(HttpSession session, @PathVariable(value = "id")long id){
+    User user = (User) session.getAttribute("LoggedInUser");
+    if (user == null){
+        if(recipeService.findByID(id).getCreatedBy() == null){
+            recipeService.deleteById(id);
+       }
+   }
+    else{
+        User auther = recipeService.findByID(id).getCreatedBy();
+        if(auther != null){
+            if(auther.getID() == user.getID()){
+	            recipeService.deleteById(id);
+            }
+        }
+    }
+    }
+
      * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
      * is
      * 
@@ -81,5 +108,6 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.getPersonalizedPurchaseCost(user, id);
     }
+
 
 }

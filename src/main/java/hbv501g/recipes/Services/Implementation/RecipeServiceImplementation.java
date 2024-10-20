@@ -45,7 +45,17 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Initializes a few recipes, if none are found in the db
+     * Find and delet the rescipe with maching id.
+     *
+     * @param id : is a 8 byte integer and is the id
+     * 		   of the precipe.
+     */
+    @Override
+    public void deleteById(long id){
+	recipeRepository.deleteById(id);
+    }
+    
+     /* Initializes a few recipes, if none are found in the db
      */
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();

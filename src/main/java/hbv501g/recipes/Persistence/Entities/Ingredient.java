@@ -5,7 +5,9 @@
 
 package hbv501g.recipes.Persistence.Entities;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.cglib.core.Local;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
@@ -33,7 +35,7 @@ public class Ingredient {
     private String store;
     private String brand;
     private boolean isPrivate;
-    private Date dateOfCreation;
+    private LocalDate dateOfCreation;
 
     // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju
     @ManyToOne(fetch = FetchType.LAZY)
@@ -128,11 +130,11 @@ public class Ingredient {
         this.isPrivate = isPrivate;
     }
 
-    public Date getDateOfCreation() {
+    public LocalDate getDateOfCreation() {
         return dateOfCreation;
     }
 
-    public void setDateOfCreation(Date dateOfCreation) {
+    public void setDateOfCreation(LocalDate dateOfCreation) {
         this.dateOfCreation = dateOfCreation;
     }
 
