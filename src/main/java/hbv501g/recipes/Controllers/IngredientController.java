@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.Unit;
@@ -84,31 +85,19 @@ public class IngredientController {
      * Endpoint createds new idgrediet for the database
      *
      * @param session  : is the current session
-     * @param title    : String value
-     * @param unit     : is a Enum of unit
-     * @param quantity : double value
-     * @param price    : double value
-     * @param store    : String value
-     * @param brand    : Stirng value
+     * @param newIngredient - a Ingredient that is being saved
+     * @return the new Ingredient
      */
     @RequestMapping("ingredient/created")
-    public Ingredient saveIngredient(
-            HttpSession session,
-            @RequestParam String title,
-            @RequestParam Unit unit,
-            @RequestParam double quantity,
-            @RequestParam double price,
-            @RequestParam String store,
-            @RequestParam String brand){
-        User user = (User) session.getAttribute("LoggedInUser");
+    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
+        User author = (User) session.getAttribute("LoggedInUser");
         
-        if(user == null){
+        if(author == null){
             return null;
         }
-        Ingredient ingredient = new Ingredient(title, unit, quantity, price, store, brand);
-        ingredient.setCreatedBy(user);
-        ingredient.setDateOfCreation(LocalDate.now());
-        return ingredientService.save(ingredient);
+        newIngredient.setCreatedBy(author);
+        newIngredient.setDateOfCreation(LocalDate.now());
+        return ingredientService.save(newIngredient);
     }
 
     /**
