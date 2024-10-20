@@ -20,6 +20,8 @@ public interface RecipeService {
 
     Recipe update(Recipe recipe);
 
+    void deleteById(long id);
+
     int getTotalPurchaseCost(long id);
 
     double getTotalIngredientCost(long id);

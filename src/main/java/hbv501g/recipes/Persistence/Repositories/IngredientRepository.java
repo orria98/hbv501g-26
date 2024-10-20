@@ -19,12 +19,10 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     Ingredient findByID(long id);
 
-    // Ingredient save(Ingredient ingredient);
-
     // Ekki hluti af skilum
     List<Ingredient> findByTitle(String title);
 
     List<Ingredient> findAllByOrderByPrice();
 
-
+    void deleteById(long id);
 }
