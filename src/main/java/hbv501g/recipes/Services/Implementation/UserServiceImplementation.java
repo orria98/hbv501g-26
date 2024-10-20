@@ -207,6 +207,8 @@ public class UserServiceImplementation implements UserService {
      * @return an ingredient measurement from pantry
      */
     public IngredientMeasurement findItemInPantry(List<IngredientMeasurement> pantry, Ingredient ingredient) {
+        if (ingredient == null)
+            return null;
         int index = indexOf(ingredient.getID(), pantry);
         if (index == -1)
             return null;
