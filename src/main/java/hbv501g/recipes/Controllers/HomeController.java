@@ -1,5 +1,6 @@
 package hbv501g.recipes.Controllers;
 
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +17,11 @@ import hbv501g.recipes.Services.UserService;
 import java.util.List;
 
 /**
- * Klasi sem upphafsstillir gagnagrunn með gögnum sem tengjast
+ * Klasi sem upphafsstillir gagnagrunn með gögnum sem tengjast. Tímabundið, ekki
+ * hluti af lokaskilum
  */
 @RestController
+@Remove
 public class HomeController {
     private IngredientService ingredientService;
     private RecipeService recipeService;
@@ -35,8 +38,13 @@ public class HomeController {
      * Upphafsstillir töflu með einhverjum gildum, með tengingum á milli mismunandi
      * entity
      */
+    @Remove
     @GetMapping("/init")
     public String initAll() {
+        if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
+                || !userService.findAll().isEmpty())
+            return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
+
         List<Ingredient> ingredients = ingredientService.initIngredients();
         List<Recipe> recipes = recipeService.initRecipes();
         List<User> users = userService.initUsers();
@@ -79,8 +87,13 @@ public class HomeController {
     /**
      * Initialize fall sem gerir fallegri gögn
      */
+    @Remove
     @GetMapping("/initialize")
     public String initializeData() {
+        if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
+                || !userService.findAll().isEmpty())
+            return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
+
         List<User> users;
         List<Ingredient> ingredients;
         List<Recipe> recipes;
@@ -128,7 +141,6 @@ public class HomeController {
             ingredient.setPrivate(true);
             ingredientService.save(ingredient);
 
-
             ingredients = ingredientService.findAll();
         }
 
@@ -159,8 +171,6 @@ public class HomeController {
             recipes = recipeService.findAll();
         }
 
-
-
         users = userService.findAll();
 
         user = users.get(0);
@@ -174,7 +184,6 @@ public class HomeController {
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(3), Unit.ML, 10000));
         user.addIngredientMeasurement(new IngredientMeasurement());
         userService.update(user);
-
 
         return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
                 ingredients.size(), recipes.size());
