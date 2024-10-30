@@ -40,6 +40,15 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findByID(id);
     }
 
+    @Override
+    public List<Recipe>(long id){
+	User user = userService.findByID(id);
+	if(user == null) return;
+
+	return user.getRecipesByUser();
+    }
+
+
     // @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
@@ -58,6 +67,46 @@ public class RecipeServiceImplementation implements RecipeService {
     @Override
     public void deleteById(long id){
         recipeRepository.deleteById(id);
+    }
+
+    /**
+     * Find and delet the rescipe list that a user owns.
+     *
+     * @param id : is a 8 byte integer and is the id
+     * 		   of the user.
+     */
+    @Override
+    public void deleteList(long id){
+	User user = userService.findByID(id);
+	if(user == null) return;
+
+	user.setRecipesByUser(user.getRecipesByUser().clear());
+	userService.update(user);
+    }
+
+    /**
+     * Find and revmove the rescipe from a rescipe list
+     * that a user owns.
+     *
+     * @param userID : is a 8 byte integer and is the id
+     * 		       of the user.
+     * @param id     : is a 8 byte integer and is the id
+     * 		       of the precipe.
+     * @return         Recipe list with the ricspei whth
+     *		       the id number of resID has been
+     *		       removed
+     */
+    @Override
+    list<Recipe> removeRecipesListByID(long userID, long resID){
+	User user = userService.findByID(userID);
+	Recipe res = findByID(resID);
+	if(user == null || res == null) return;
+
+	list<Recipe> list = user.getRecipesByUser();
+	user.setRecipesByUser(list.remove(res));
+	userService.update(user);
+
+	return list;
     }
     
      /* Initializes a few recipes, if none are found in the db
