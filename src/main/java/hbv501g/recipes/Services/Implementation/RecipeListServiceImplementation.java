@@ -43,7 +43,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     *              that he ownds
      */
     @Override
-    public List<RecipeList> getAllRecipeLists(User user){
+    public List<RecipeList> getAllRecipeListsForUser(User user){
         return recipeListRepository.findByCreatedBy(user);
     }
 
@@ -57,7 +57,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     public List<RecipeList> findAllUserRecipeList(long id){
         User user = userService.findByID(id);
         
-        List<RecipeList> src = getAllRecipeLists(user);
+        List<RecipeList> src = getAllRecipeListsForUser(user);
         List<RecipeList> out = new ArrayList<>();
 
         for (RecipeList recipeList : src) {
