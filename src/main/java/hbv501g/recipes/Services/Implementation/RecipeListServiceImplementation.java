@@ -3,7 +3,6 @@ package hbv501g.recipes.Services.Implementation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Remove;
 import org.springframework.stereotype.Service;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
@@ -118,11 +117,11 @@ public class RecipeListServiceImplementation implements RecipeListService {
         Recipe recipe = recipeService.findByID(recipeID);
         RecipeList list = findByID(user, listID);
 
+        System.err.println("here");
         if (user == null || recipe == null || list == null)
             return null;
 
-        if (list.getCreatedBy().getID() != user.getID()
-                || recipe.isPrivate() && recipe.getCreatedBy().getID() != user.getID())
+        if (recipe.isPrivate() && recipe.getCreatedBy().getID() != user.getID())
             return null;
 
         if (list.getRecipes().contains(recipe))
@@ -130,6 +129,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
 
         list.addRecipe(recipe);
 
+        
         // TODO: finna hvort það átti að nota update
         return recipeListRepository.save(list);
     }

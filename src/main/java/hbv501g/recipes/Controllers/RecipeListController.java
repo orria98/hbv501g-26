@@ -91,7 +91,7 @@ public class RecipeListController {
      * @param session  - the current HTTP session
      * @return the updated recipe
      */
-    @PutMapping("/list/addRecipe")
+    @GetMapping("/list/addRecipe")
     public RecipeList addRecipeToList(@RequestParam long recipeID, @RequestParam long listID, HttpSession session) {
         return recipeListService.addRecipe(recipeID, listID, (User) session.getAttribute("LoggedInUser"));
     }
@@ -109,8 +109,8 @@ public class RecipeListController {
     @GetMapping("/list/id/{listID}/recipie/{recipeID}")
     public Recipe getRecipeFormList(
 				    HttpSession session,
-				    @RequestParam long listID,
-				    @RequestParam long recipeID
+				    @PathVariable(value = "listID") long listID,
+				    @PathVariable(value = "recipeID") long recipeID
 				   )
     {
 	return recipeListService.getRecipeFromID(
