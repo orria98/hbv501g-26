@@ -50,6 +50,16 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
+     * finds all recipes with a given search term in the title
+     * 
+     * @param searchTerm - the string that should be in the title
+     * @return A list of all recipes with the search term in the title
+     */
+    public List<Recipe> findByTitleContaining(String searchTerm){
+        return recipeRepository.findByTitleContaining(searchTerm);
+    }
+
+    /**
      * Find and delet the rescipe with maching id.
      *
      * @param id : is a 8 byte integer and is the id
@@ -149,7 +159,8 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Calculates and returns the quantity of the ingredient used in the IngredientMeasurement, in the unit of the Ingredient used. Returns 0 if the measurement, its unit og ingredient is null
+     * Calculates and returns the quantity of the ingredient used in the IngredientMeasurement, 
+     * in the unit of the Ingredient used. Returns 0 if the measurement, its unit og ingredient is null
      * 
      * @param measurement - ingredientmeasurement item
      * @return the quantity of the ingredient, in the same unit

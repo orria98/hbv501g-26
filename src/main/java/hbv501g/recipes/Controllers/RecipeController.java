@@ -53,6 +53,19 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
+
+    /**
+     * Gets all recipes that contain the search term in the title
+     * 
+     * @param term - the term the titles should include
+     * @return list of all recipes with the search term in the title
+     */
+    @GetMapping("/recipe/search/{term}")
+    public List<Recipe> findRecipesByTitle(@PathVariable(value = "term") String term) {
+        return recipeService.findByTitleContaining(term);
+    }
+    
+
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
      * has the ID, otherwise it returns null

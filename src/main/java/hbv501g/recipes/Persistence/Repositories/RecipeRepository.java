@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAll();
+
+    List<Recipe> findByTitleContaining(String searchTerm);
     
     void deleteById(long id);
     

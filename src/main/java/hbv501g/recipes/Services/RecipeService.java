@@ -13,6 +13,8 @@ public interface RecipeService {
 
     Recipe findByID(long id);
 
+    List<Recipe> findByTitleContaining(String searchTerm);
+
     Recipe save(Recipe recipe);
 
     Recipe update(Recipe recipe);
