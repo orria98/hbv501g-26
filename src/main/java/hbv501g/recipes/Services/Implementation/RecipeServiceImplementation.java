@@ -201,14 +201,10 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return total cost to purchase this measurement
      */
     private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
-        if (ingredient == null)
-            return 0;
-
-        int packageCount = (quantity % ingredient.getQuantity() == 0 ? 0 : 1)
-                + (int) (quantity / ingredient.getQuantity());
-
-        return ingredient.getPrice() * packageCount;
-
+        if (ingredient!=null && quantity!=0 && ingredient.getQuantity()!=0){
+            return ingredient.getPrice()*Math.ceil(quantity/ingredient.getQuantity());
+        }
+        return 0;
     }
 
 
@@ -229,18 +225,24 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return Recipe - the recipe with the given recipeID with the measurements
      *         added
      */
-    public Recipe addIngredients(long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+    public Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
         Recipe recipe = findByID(recipeID);
+        User currUser = userService.findByID(userID);
+        if(recipe==null || currUser==null || userID!=recipe.getCreatedBy().getID()){
+            return null;
+        } 
         List<IngredientMeasurement> measurements = new ArrayList<>();
         if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
             return recipe;
         }
         for (int i = 0; i < units.size(); i++) {
             Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
-            measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
+            if(ingredient!=null && (!ingredient.isPrivate()||(ingredient.getCreatedBy()!=null&& ingredient.getCreatedBy().getID()== userID))){
+                measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
+            }
         }
         recipe.setIngredientMeasurements(measurements);
-        return recipe;
+        return save(recipe);
     }
 
     /**

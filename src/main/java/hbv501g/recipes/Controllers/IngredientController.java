@@ -106,7 +106,7 @@ public class IngredientController {
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
-    @GetMapping("ingredient/delete/{id}")
+    @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
         User user = (User) session.getAttribute("LoggedInUser");
         
@@ -121,7 +121,7 @@ public class IngredientController {
         }
     }
 
-    // Ekki hluti af neinum skilum held ég
+    // Ekki hluti af neinum skilum 
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
