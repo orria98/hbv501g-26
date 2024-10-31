@@ -1,12 +1,9 @@
 package hbv501g.recipes.Services;
 
 import java.util.List;
-import java.util.Date;
 
-import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.Unit;
-import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeService {

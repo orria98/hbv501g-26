@@ -2,7 +2,6 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
