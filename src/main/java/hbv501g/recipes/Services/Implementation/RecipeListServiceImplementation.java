@@ -40,8 +40,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * Get all recipic that the sesson user has
      * 
      * @param user : user is a user that owns a Recipie list
-     * @return      retturn a list of Recipie list
-     *              that he ownds
+     * @return      retturn a list of Recipie list 
+    *              that he ownds
      */
     @Override
     public List<RecipeList> getAllRecipeLists(User user){
@@ -70,6 +70,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
         return out;
     }
 
+    
     /**
      * Find and returns a RecipeList.
      * 
@@ -77,7 +78,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param id   : the id valu of RecipeList
      * @return       the recipeList whit the Id valu
      */
-    public RecipeList listById(User user, long id){
+    public RecipeList findByID(User user, long id){
         RecipeList list = recipeListRepository.findById(id);
         if(list == null){
             return null;
@@ -115,7 +116,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public RecipeList addRecipe(long recipeID, long listID, User user) {
         Recipe recipe = recipeService.findByID(recipeID);
-        RecipeList list = findByID(listID);
+        RecipeList list = findByID(user, listID);
 
         if (user == null || recipe == null || list == null)
             return null;
@@ -134,16 +135,22 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Temporary, exchange for the real deal
+     * Find and get a resipe form a recipeList.
+     *
+     * @param user     - is the user that is the sesson
+     * @param id       - is the ID value of a recipieList
+     * @param recipeID - is the ID value of a recipe
+     * @return The recipe if it is in the recipieList
      */
-    @Remove
-    private RecipeList findByID(long listID) {
-        List<RecipeList> allLists = findAll();
-        for (RecipeList l : allLists) {
-            if (l.getID() == listID)
-                return l;
-        }
-        return null;
+    public Recipe getRecipeFromID(User user, long id, long recipeID){
+	    RecipeList list = findByID(user, id);
+	    Recipe recipe = recipeService.findByID(recipeID);
+
+	    if(list == null || recipe == null) return null;
+
+	    if(list.getRecipes().contains(recipe)) return recipe;
+
+	    return null;
     }
 
 }
