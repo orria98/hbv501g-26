@@ -10,9 +10,9 @@ public interface RecipeListService {
 
     List<RecipeList> getAllRecipeLists(User user);
 
-    List<RecipeList> findAllUserRecipeList(User user);
+    List<RecipeList> findAllUserRecipeList(long id);
     
-    RecipeList listById(long id);
+    RecipeList listById(User user, long id);
 
     RecipeList save(User user, String title, String description, boolean isPrivate);
 

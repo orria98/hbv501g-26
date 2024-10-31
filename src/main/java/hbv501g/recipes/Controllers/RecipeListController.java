@@ -49,20 +49,21 @@ public class RecipeListController {
         if(user != null && user.getID() == id){
             return recipeListService.getAllRecipeLists(user);
         }
-	    return recipeListService.findAllUserRecipeList(user);
+	    return recipeListService.findAllUserRecipeList(id);
     }
     
     /**
      * Find and return the Recipe list that a
      * user has.
      *
-     * @param  id - the id number of a list
-     * @return the list of recipe that the user
-     *	       of the id number owns.
+     * @param session - the current http session
+     * @param  id     - the id number of a list
+     * @return          the list of recipe that the user
+     *	                of the id number owns.
      */
     @GetMapping("list/id/{id}")
-    public RecipeList getRecipesListById(@PathVariable(value = "id") long id){
-	    return recipeListService.listById(id);
+    public RecipeList getRecipesListById(HttpSession session, @PathVariable(value = "id") long id){
+        return recipeListService.listById((User) session.getAttribute("LoggedInUser"), id);
     }
 
     /**

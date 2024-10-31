@@ -12,16 +12,19 @@ import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Persistence.Repositories.RecipeListRepository;
 import hbv501g.recipes.Services.RecipeListService;
 import hbv501g.recipes.Services.RecipeService;
+import hbv501g.recipes.Services.UserService;
 
 @Service
 public class RecipeListServiceImplementation implements RecipeListService {
     private RecipeListRepository recipeListRepository;
     private RecipeService recipeService;
+    private UserService userService;
 
     // @Autowired
-    public RecipeListServiceImplementation(RecipeListRepository recipeListRepository, RecipeService recipeService) {
+    public RecipeListServiceImplementation(RecipeListRepository recipeListRepository, RecipeService recipeService, UserService userService) {
         this.recipeListRepository = recipeListRepository;
         this.recipeService = recipeService;
+        this.userService = userService;
     }
 
     /**
@@ -52,7 +55,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @return      retturn a list of Recipie list
      *              that he ownds
      */
-    public List<RecipeList> findAllUserRecipeList(User user){
+    public List<RecipeList> findAllUserRecipeList(long id){
+        User user = userService.findByID(id);
+        
         List<RecipeList> src = getAllRecipeLists(user);
         List<RecipeList> out = new ArrayList<>();
 
@@ -68,12 +73,17 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Find and returns a RecipeList.
      * 
-     * @param id : the id valu of RecipeList
-     * @return     the recipeList whit the Id valu
+     * @param user : is the user that is loged in.
+     * @param id   : the id valu of RecipeList
+     * @return       the recipeList whit the Id valu
      */
-    public RecipeList listById(long id){
+    public RecipeList listById(User user, long id){
         RecipeList list = recipeListRepository.findById(id);
-        if(list == null || list.isPrivate()){
+        if(list == null){
+            return null;
+        }
+
+        if(list.getCreatedBy().getID() != user.getID() && list.isPrivate()){
             return null;
         }
 
