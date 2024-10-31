@@ -50,6 +50,19 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
+/**
+     * Find and return the Recipe list that a
+     * user has.
+     *
+     * @param  id - the id number of a user
+     * @return the list of recipe that the user
+     *	       of the id number owns.
+     */
+    @GetMapping("/recipe/list/all")
+    public List<Recipe> getAllRecipesList(){
+	    return recipeService.listAll();
+    }
+
     /**
      * Find and return the Recipe list that a
      * user has.

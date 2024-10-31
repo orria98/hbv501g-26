@@ -11,6 +11,8 @@ public interface RecipeService {
 
     List<Recipe> findAll();
 
+    List<Recipe> listAll();
+
     List<Recipe> listById(long id);
 
     Recipe findByID(long id);
