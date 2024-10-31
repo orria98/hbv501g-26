@@ -53,32 +53,6 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
-/**
-     * Find and return the Recipe list that a
-     * user has.
-     *
-     * @param  id - the id number of a user
-     * @return the list of recipe that the user
-     *	       of the id number owns.
-     */
-    @GetMapping("/recipe/list/all")
-    public List<Recipe> getAllRecipesList(){
-	    return recipeService.listAll();
-    }
-
-    /**
-     * Find and return the Recipe list that a
-     * user has.
-     *
-     * @param  id - the id number of a user
-     * @return the list of recipe that the user
-     *	       of the id number owns.
-     */
-    @GetMapping("/recipe/list/id/{id}")
-    public List<Recipe> getRecipesListById(@PathVariable(value = "id") long id){
-	    return recipeService.listById(id);
-    }
-
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
      * has the ID, otherwise it returns null
@@ -115,43 +89,7 @@ public class RecipeController {
     }
 
     /**
-<<<<<<< HEAD
-     * Find and deletes the Recipe list that a
-     * user has.
-     *
-     * @param session : is the current session
-     */
-    @GetMapping("/recipe/list/delete")
-    public void deleteRecipesList(HttpSession session){
-	    User user = (User) session.getAttribute("LoggedInUser");
-        
-        if (user != null) recipeService.deleteList(user.getID());
-    }
-
-    /**
-     * Find and remove the rescipe with maching id form a
-     * recepie list if the user has it in its list.
-     *
-     * @param session : is the current session
-     * @param id : is a 8 byte integer and is the id
-     * 		   of the precipe.
-     */
-    @GetMapping("/recipe/list/remove/id/{id}")
-    public List<Recipe> removeRecipesListByID(HttpSession session, @PathVariable(value = "id") long id){
-	    User user = (User) session.getAttribute("LoggedInUser");
-        
-        if (user != null){
-	        return recipeService.removeRecipesListByID(user.getID(), id);
-	    }
-        return null;
-    }
-
-    /**
-     * Á þetta einu sinni að vera endpoint? Ekki endilega til að birta í viðmóti as
-     * is
-=======
      * gets the total cost to purchase all ingredients needed for a recipe
->>>>>>> develop
      * 
      * @param id - recipe id
      * @return total purchase cost

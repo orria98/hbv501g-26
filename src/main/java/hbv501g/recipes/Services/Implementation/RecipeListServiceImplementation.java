@@ -1,5 +1,6 @@
 package hbv501g.recipes.Services.Implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Remove;
@@ -30,6 +31,53 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public List<RecipeList> findAll() {
         return recipeListRepository.findAll();
+    }
+
+    /**
+     * Get all recipic that the sesson user has
+     * 
+     * @param user : user is a user that owns a Recipie list
+     * @return      retturn a list of Recipie list
+     *              that he ownds
+     */
+    @Override
+    public List<RecipeList> getAllRecipeLists(User user){
+        return recipeListRepository.findByCreatedBy(user);
+    }
+
+    /**
+     * Get all recipic that a user has
+     * 
+     * @param user : user is a user that owns a Recipie list
+     * @return      retturn a list of Recipie list
+     *              that he ownds
+     */
+    public List<RecipeList> findAllUserRecipeList(User user){
+        List<RecipeList> src = getAllRecipeLists(user);
+        List<RecipeList> out = new ArrayList<>();
+
+        for (RecipeList recipeList : src) {
+            if(!recipeList.isPrivate()){
+                out.add(recipeList);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * Find and returns a RecipeList.
+     * 
+     * @param id : the id valu of RecipeList
+     * @return     the recipeList whit the Id valu
+     */
+    public RecipeList listById(long id){
+        RecipeList list = recipeListRepository.findById(id);
+        if(list == null || list.isPrivate()){
+            return null;
+        }
+
+        return list;
     }
 
     /**

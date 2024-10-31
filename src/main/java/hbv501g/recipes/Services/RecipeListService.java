@@ -8,6 +8,12 @@ import hbv501g.recipes.Persistence.Entities.User;
 public interface RecipeListService {
     List<RecipeList> findAll();
 
+    List<RecipeList> getAllRecipeLists(User user);
+
+    List<RecipeList> findAllUserRecipeList(User user);
+    
+    RecipeList listById(long id);
+
     RecipeList save(User user, String title, String description, boolean isPrivate);
 
     RecipeList addRecipe(long recipeID, long listID, User user);
