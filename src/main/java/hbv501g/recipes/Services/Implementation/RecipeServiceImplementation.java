@@ -41,11 +41,11 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     @Override
-    public List<Recipe>(long id){
-	User user = userService.findByID(id);
-	if(user == null) return;
+    public List<Recipe> listById(long id){
+	    User user = userService.findByID(id);
+	    if(user == null) return null;
 
-	return user.getRecipesByUser();
+	    return user.getRecipesByUser();
     }
 
 
@@ -77,11 +77,14 @@ public class RecipeServiceImplementation implements RecipeService {
      */
     @Override
     public void deleteList(long id){
-	User user = userService.findByID(id);
-	if(user == null) return;
+	    User user = userService.findByID(id);
+	    if(user == null) return;
 
-	user.setRecipesByUser(user.getRecipesByUser().clear());
-	userService.update(user);
+        List<Recipe> temp = user.getRecipesByUser();
+        temp.clear();
+	    user.setRecipesByUser(temp);
+
+	    userService.update(user);
     }
 
     /**
@@ -90,23 +93,25 @@ public class RecipeServiceImplementation implements RecipeService {
      *
      * @param userID : is a 8 byte integer and is the id
      * 		       of the user.
-     * @param id     : is a 8 byte integer and is the id
+     * @param resID  : is a 8 byte integer and is the id
      * 		       of the precipe.
      * @return         Recipe list with the ricspei whth
      *		       the id number of resID has been
      *		       removed
      */
     @Override
-    list<Recipe> removeRecipesListByID(long userID, long resID){
-	User user = userService.findByID(userID);
-	Recipe res = findByID(resID);
-	if(user == null || res == null) return;
+    public List<Recipe> removeRecipesListByID(long userID, long resID){
+	    User user = userService.findByID(userID);
+	    Recipe recipe = findByID(resID);
+	    if(user == null || recipe == null) return null;
 
-	list<Recipe> list = user.getRecipesByUser();
-	user.setRecipesByUser(list.remove(res));
-	userService.update(user);
+    	List<Recipe> list = user.getRecipesByUser();
+        if(list.remove(recipe)){
+            user.setRecipesByUser(list);
+            userService.update(user);
+        }
 
-	return list;
+    	return list;
     }
     
      /* Initializes a few recipes, if none are found in the db

@@ -60,7 +60,7 @@ public class RecipeController {
      */
     @GetMapping("/recipe/list/id/{id}")
     public List<Recipe> getRecipesListById(@PathVariable(value = "id") long id){
-	return recipeService.listById();
+	    return recipeService.listById(id);
     }
 
     /**
@@ -102,29 +102,32 @@ public class RecipeController {
      * Find and deletes the Recipe list that a
      * user has.
      *
+     * @param session : is the current session
      * @param  id - the id number of a user
      */
     @GetMapping("/recipe/list/delete")
-    public void deleteRecipesList(@PathVariable(value = "id") long id){
-	User user = (User) session.getAttribute("LoggedInUser");
+    public void deleteRecipesList(HttpSession session, @PathVariable(value = "id") long id){
+	    User user = (User) session.getAttribute("LoggedInUser");
         
-        if (user != null) recipeService.deleteList(user.getID);
+        if (user != null) recipeService.deleteList(user.getID());
     }
 
     /**
      * Find and remove the rescipe with maching id form a
      * recepie list if the user has it in its list.
      *
+     * @param session : is the current session
      * @param id : is a 8 byte integer and is the id
      * 		   of the precipe.
      */
     @GetMapping("/recipe/list/remove/id/{id}")
-    public list<Recipe> removeRecipesListByID(@PathVariable(value = "id") long id){
-	User user = (User) session.getAttribute("LoggedInUser");
+    public List<Recipe> removeRecipesListByID(HttpSession session, @PathVariable(value = "id") long id){
+	    User user = (User) session.getAttribute("LoggedInUser");
         
         if (user != null){
-	    return recipeService.removeRecipesListByID(user.getID, id);
-	}
+	        return recipeService.removeRecipesListByID(user.getID(), id);
+	    }
+        return null;
     }
 
     /**

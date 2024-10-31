@@ -14,7 +14,7 @@ public interface RecipeService {
 
     List<Recipe> findAll();
 
-    list<Recipe> listById(long id);
+    List<Recipe> listById(long id);
 
     Recipe findByID(long id);
 
@@ -26,7 +26,7 @@ public interface RecipeService {
 
     void deleteList(long id);
 
-    list<Recipe> removeRecipesListByID(long userID, long resID);
+    List<Recipe> removeRecipesListByID(long userID, long resID);
 
     int getTotalPurchaseCost(long id);
 
