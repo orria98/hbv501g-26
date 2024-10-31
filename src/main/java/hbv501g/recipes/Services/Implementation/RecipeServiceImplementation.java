@@ -103,9 +103,9 @@ public class RecipeServiceImplementation implements RecipeService {
     public List<Recipe> removeRecipesListByID(long userID, long resID){
 	    User user = userService.findByID(userID);
 	    Recipe recipe = findByID(resID);
-	    if(user == null || recipe == null) return null;
+        List<Recipe> list = user.getRecipesByUser();
+	    if(user == null || recipe == null) return list;
 
-    	List<Recipe> list = user.getRecipesByUser();
         if(list.remove(recipe)){
             user.setRecipesByUser(list);
             userService.update(user);

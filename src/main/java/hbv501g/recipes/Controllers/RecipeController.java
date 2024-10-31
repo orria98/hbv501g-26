@@ -103,10 +103,9 @@ public class RecipeController {
      * user has.
      *
      * @param session : is the current session
-     * @param  id - the id number of a user
      */
     @GetMapping("/recipe/list/delete")
-    public void deleteRecipesList(HttpSession session, @PathVariable(value = "id") long id){
+    public void deleteRecipesList(HttpSession session){
 	    User user = (User) session.getAttribute("LoggedInUser");
         
         if (user != null) recipeService.deleteList(user.getID());
