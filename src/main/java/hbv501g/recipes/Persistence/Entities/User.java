@@ -16,8 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -33,19 +31,17 @@ public class User {
     @ElementCollection
     private List<IngredientMeasurement> pantry = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    
-    @JsonIncludeProperties(value = {"id", "title"}) // Json fyrir User inniheldur lista af Recipe, en sýnir bara id og title attributes
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIncludeProperties(value = { "id", "title" })
     private List<Recipe> recipesByUser = new ArrayList<>();
 
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIncludeProperties(value = { "id", "title" })
+    private List<Ingredient> ingredientsByUser = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = {"id", "title"}) // properties úr ingredient til að birta í json fyrir user
-    private List<Ingredient> ingredientsByUser = new ArrayList<>(); // Geymir hver gerði ingredientið
-
-
-
-   
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIncludeProperties(value = { "id", "title" })
+    private List<RecipeList> recipeLists = new ArrayList<>();
 
     public User() {
 
@@ -57,9 +53,9 @@ public class User {
         this.email = email;
     }
 
-    public User(String username, String password){
-        this.username=username;
-        this.password=password;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public String getUsername() {
@@ -106,10 +102,11 @@ public class User {
         return ID;
     }
 
-    public void addIngredientMeasurement(IngredientMeasurement ingredientMeasurement){
+    public void addIngredientMeasurement(IngredientMeasurement ingredientMeasurement) {
         pantry.add(ingredientMeasurement);
     }
-    public void addRecipeByUser(Recipe recipeByUser){
+
+    public void addRecipeByUser(Recipe recipeByUser) {
         recipesByUser.add(recipeByUser);
     }
 
@@ -121,6 +118,12 @@ public class User {
         this.ingredientsByUser = ingredientsByUser;
     }
 
-    
+    public List<RecipeList> getRecipeLists() {
+        return recipeLists;
+    }
+
+    public void setRecipeLists(List<RecipeList> recipeLists) {
+        this.recipeLists = recipeLists;
+    }
 
 }
