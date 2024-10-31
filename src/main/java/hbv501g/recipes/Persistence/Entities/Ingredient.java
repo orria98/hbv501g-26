@@ -82,7 +82,7 @@ public class Ingredient {
         this.title = title;
     }
 
-    public Enum<Unit> getUnit() {
+    public Unit getUnit() {
         return unit;
     }
 

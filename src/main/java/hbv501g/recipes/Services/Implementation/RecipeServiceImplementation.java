@@ -127,15 +127,38 @@ public class RecipeServiceImplementation implements RecipeService {
         for (IngredientMeasurement recipeIngredient : recipe.getIngredientMeasurements()) {
             IngredientMeasurement pantryItem = userService.findItemInPantry(pantry, recipeIngredient.getIngredient());
 
-            // TODO: passa að unit passi
-            double qty = recipeIngredient.getQuantity();
-            if (pantryItem != null && recipeIngredient.getUnit() == pantryItem.getUnit())
-                qty -= pantryItem.getQuantity();
-            if (qty > 0)
-                total += calculateTotalPurchaseCost(recipeIngredient.getIngredient(), qty);
+            if(recipeIngredient!=null&&recipeIngredient.getIngredient()!=null&&recipeIngredient.getUnit()!=null){
+                Ingredient ingredient = recipeIngredient.getIngredient();
+
+                //the quantity used in the recipe, in the unit of the ingredient
+                double quantity=getQuantityInIngredientUnit(recipeIngredient);
+
+                //The quantity of the ingredient which is in the pantry, in the unit of the ingredient
+                double quantityInPantry = getQuantityInIngredientUnit(pantryItem);
+                
+                quantity-=quantityInPantry;
+
+                if (quantity > 0){
+                    total += calculateTotalPurchaseCost(ingredient, quantity);
+                }
+            }
         }
 
+
         return total;
+    }
+
+    /**
+     * Calculates and returns the quantity of the ingredient used in the IngredientMeasurement, in the unit of the Ingredient used. Returns 0 if the measurement, its unit og ingredient is null
+     * 
+     * @param measurement - ingredientmeasurement item
+     * @return the quantity of the ingredient, in the same unit
+     */
+    private double getQuantityInIngredientUnit(IngredientMeasurement measurement){
+        if (measurement==null || measurement.getIngredient()==null || measurement.getUnit()==null){
+            return 0;
+        }
+        return (measurement.getQuantity()*measurement.getUnit().getMlInUnit())/(measurement.getUnit().getMlInUnit());
     }
 
     /**
