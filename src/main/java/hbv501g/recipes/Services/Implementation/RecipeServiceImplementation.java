@@ -24,7 +24,8 @@ public class RecipeServiceImplementation implements RecipeService {
     private IngredientService ingredientService;
 
     @Autowired
-    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService, IngredientService ingredientService) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService,
+            IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.userService = userService;
         this.ingredientService = ingredientService;
@@ -53,14 +54,15 @@ public class RecipeServiceImplementation implements RecipeService {
      * Find and delet the rescipe with maching id.
      *
      * @param id : is a 8 byte integer and is the id
-     * 		   of the precipe.
+     *           of the precipe.
      */
     @Override
-    public void deleteById(long id){
+    public void deleteById(long id) {
         recipeRepository.deleteById(id);
     }
-    
-     /* Initializes a few recipes, if none are found in the db
+
+    /*
+     * Initializes a few recipes, if none are found in the db
      */
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
@@ -147,12 +149,11 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return total cost to purchase this measurement
      */
     private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
-        if (ingredient!=null && quantity!=0 && ingredient.getQuantity()!=0){
-            return ingredient.getPrice()*Math.ceil(quantity/ingredient.getQuantity());
+        if (ingredient != null && quantity != 0 && ingredient.getQuantity() != 0) {
+            return ingredient.getPrice() * Math.ceil(quantity / ingredient.getQuantity());
         }
         return 0;
     }
-
 
     /**
      * Adds IngredientMeasurements to a recipe with the given recipeID. Also takes
@@ -171,19 +172,21 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return Recipe - the recipe with the given recipeID with the measurements
      *         added
      */
-    public Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+    public Recipe addIngredients(long userID, long recipeID, List<Long> ingredientIDs, List<Double> qty,
+            List<Unit> units) {
         Recipe recipe = findByID(recipeID);
         User currUser = userService.findByID(userID);
-        if(recipe==null || currUser==null || userID!=recipe.getCreatedBy().getID()){
+        if (recipe == null || currUser == null || userID != recipe.getCreatedBy().getID()) {
             return null;
-        } 
+        }
         List<IngredientMeasurement> measurements = new ArrayList<>();
         if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
             return recipe;
         }
         for (int i = 0; i < units.size(); i++) {
             Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
-            if(ingredient!=null && (!ingredient.isPrivate()||(ingredient.getCreatedBy()!=null&& ingredient.getCreatedBy().getID()== userID))){
+            if (ingredient != null && (!ingredient.isPrivate()
+                    || (ingredient.getCreatedBy() != null && ingredient.getCreatedBy().getID() == userID))) {
                 measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
             }
         }
@@ -204,6 +207,19 @@ public class RecipeServiceImplementation implements RecipeService {
         recipe.setCreatedBy(author);
         recipe.setDateOfCreation(LocalDate.now());
         return save(recipe);
+    }
+
+    @Override
+    public Recipe updateRecipeDetails(long id, Recipe updatedRecipe) {
+        Recipe recipe = findByID(id);
+        if (recipe == null) {
+            return null;
+        }
+        recipe.setTitle(updatedRecipe.getTitle());
+        recipe.setInstructions(updatedRecipe.getInstructions());
+        recipe.setPrivate(updatedRecipe.isPrivate());
+
+        return update(recipe);
     }
 
 }
