@@ -56,8 +56,13 @@ public class RecipeServiceImplementation implements RecipeService {
      * 		   of the precipe.
      */
     @Override
-    public void deleteById(long id){
-        recipeRepository.deleteById(id);
+    public void deleteById(User user, long id){
+	if (user != null) {
+
+	    if (findByID(id).getCreatedBy().getID() == user.getID()) {
+		recipeRepository.deleteById(id);
+	    }
+	}       
     }
     
      /* Initializes a few recipes, if none are found in the db

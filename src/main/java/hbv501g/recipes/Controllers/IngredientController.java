@@ -88,14 +88,7 @@ public class IngredientController {
      */
     @RequestMapping("ingredient/created")
     public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
-        User author = (User) session.getAttribute("LoggedInUser");
-        
-        if(author == null){
-            return null;
-        }
-        newIngredient.setCreatedBy(author);
-        newIngredient.setDateOfCreation(LocalDate.now());
-        return ingredientService.save(newIngredient);
+	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
     }
 
     /**
@@ -108,17 +101,7 @@ public class IngredientController {
      */
     @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        
-        if (user != null) {
-            User author = ingredientService.findByID(id).getCreatedBy();
-            
-            if (author != null) {
-                if (author.getID() == user.getID()) {
-                    ingredientService.deleteById(id);
-                }
-            }
-        }
+	ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
     // Ekki hluti af neinum skilum 
