@@ -79,14 +79,18 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public RecipeList findByID(User user, long id){
         RecipeList list = recipeListRepository.findById(id);
-        if(list == null){
+        if(list == null ){
             return null;
         }
-
-        if(list.getCreatedBy().getID() != user.getID() && list.isPrivate()){
+        if(user != null){
+            if(list.getCreatedBy().getID() != user.getID() && list.isPrivate()){
+                return null;
+            }    
+        }
+        else if (list.isPrivate()){
             return null;
         }
-
+        
         return list;
     }
 
