@@ -183,7 +183,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public void deletByID(User user, long id){
 	    RecipeList list = findByID(user, id);
-	    if(list == null) return;
+	    if(list == null || user == null) return;
 
 	    if(list.getCreatedBy().getID() == user.getID()){
 	        recipeListRepository.delete(list);
