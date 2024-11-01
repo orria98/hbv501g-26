@@ -36,7 +36,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Get all recipic that the sesson user has
+     * Get all recipicList that the sesson user has
      * 
      * @param user : user is a user that owns a Recipie list
      * @return      retturn a list of Recipie list 
@@ -48,7 +48,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Get all recipic that a user has
+     * Get all the recipicList that a user has.
      * 
      * @param user : user is a user that owns a Recipie list
      * @return      retturn a list of Recipie list
@@ -83,6 +83,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
             return null;
         }
 
+	if(list.getCreatedBy() == null) return null;
+
         if(list.getCreatedBy().getID() != user.getID() && list.isPrivate()){
             return null;
         }
@@ -116,8 +118,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     public RecipeList addRecipe(long recipeID, long listID, User user) {
         Recipe recipe = recipeService.findByID(recipeID);
         RecipeList list = findByID(user, listID);
-
-        System.err.println("here");
+	
         if (user == null || recipe == null || list == null)
             return null;
 
