@@ -20,4 +20,6 @@ public interface RecipeListService {
     RecipeList addRecipe(long recipeID, long listID, User user);
 
     Recipe getRecipeFromID(User user, long id, long recipeID);
+
+    RecipeList removeRecipeFromID(User user, long id, long recipeID);
 }

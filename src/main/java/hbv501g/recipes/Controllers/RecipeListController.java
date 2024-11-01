@@ -120,4 +120,29 @@ public class RecipeListController {
 						  );
     }
 
+    /**
+     * Endpoint finds a Recipe form resiplist and
+     * removes it from it.
+     *
+     * @param session  - the current HTTP session
+     * @param listID   - the id of the recipe
+     * @param recipeID - the id of the list
+     * @return The recipe that has the recipeID and
+     *	       is in the recipeList that has the id
+     *	       value of listID.
+     */
+    @GetMapping("/list/id/{listID}/recipie/{recipeID}/remove")
+    public RecipeList removeRecipeFormList(
+					   HttpSession session,
+					   @PathVariable(value = "listID") long listID,
+					   @PathVariable(value = "recipeID") long recipeID
+					   )
+    {
+	return recipeListService.removeRecipeFromID(
+					      (User) session.getAttribute("LoggedInUser"),
+						   listID,
+						   recipeID
+					      );
+    }
+
 }

@@ -153,4 +153,43 @@ public class RecipeListServiceImplementation implements RecipeListService {
 	    return null;
     }
 
+    /**
+     * Helper funsion find and get a resipe form a
+     * recipeList.
+     * 
+     * @param list     - is a recipieList.
+     * @param recipeID - is the ID value of a recipe
+     * @return The recipe if it is in the recipieList
+     */
+    private Recipe getRecipeFromRecipeList(RecipeList list, long recipeID){
+	    Recipe recipe = recipeService.findByID(recipeID);
+
+	    if(list == null || recipe == null) return null;
+
+	    if(list.getRecipes().contains(recipe)) return recipe;
+
+	    return null;
+    }
+
+    /**
+     * Find and removes a resipe form a recipeList.
+     *
+     * @param user     - is the user that is the sesson
+     * @param id       - is the ID value of a recipieList
+     * @param recipeID - is the ID value of a recipe
+     * @return The Recipelist with out the recipe.
+     */
+    public RecipeList removeRecipeFromID(User user, long id, long recipeID){
+    	RecipeList list = findByID(user, id);
+    	if(list == null) return list;
+        
+        Recipe recipe = getRecipeFromRecipeList(list, recipeID);
+        if(recipe == null) return list;
+
+        list.getRecipes().remove(recipe);
+        recipeListRepository.save(list);
+
+    	return list;
+    }
+
 }
