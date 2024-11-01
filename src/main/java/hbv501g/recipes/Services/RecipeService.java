@@ -15,6 +15,8 @@ public interface RecipeService {
 
     List<Recipe> findByTitleContaining(String searchTerm);
 
+    List<Recipe> findAccessibleToUser(User user);
+
     Recipe save(Recipe recipe);
 
     Recipe update(Recipe recipe);

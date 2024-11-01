@@ -60,6 +60,22 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
+     * Finds all recipes that are accessible to the given user.
+     * This includes all public recipes, and private recipes by the user
+     * If the user us null, only public recipes are returned
+     * 
+     * @param user - the user to find recipes for
+     * @return all recipes available to the user
+     */
+    public List<Recipe> findAccessibleToUser(User user){
+        if (user == null){
+            return recipeRepository.findByIsPrivateFalse();
+        }
+        return recipeRepository.findByIsPrivateFalseOrCreatedBy(user);
+    }
+
+
+    /**
      * Find and delet the rescipe with maching id.
      *
      * @param id : is a 8 byte integer and is the id

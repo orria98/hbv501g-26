@@ -53,6 +53,21 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
+    /**
+     * Gets all recipes available to the user who is 
+     * currently logged in. This includes all public recipes, and private recipes by the user
+     * If there is no user currently logged in, only public recipes are returned
+     * 
+     * @param session - The current httpsession
+     * @return all available recipes
+     */
+    @GetMapping("/recipe/allAccessible")
+    @ResponseBody
+    public List<Recipe> getAllRecipesAccessible(HttpSession session) {
+        User user = (User)session.getAttribute("LoggedInUser");
+        return recipeService.findAccessibleToUser(user);
+    }
+
 
     /**
      * Gets all recipes that contain the search term in the title
