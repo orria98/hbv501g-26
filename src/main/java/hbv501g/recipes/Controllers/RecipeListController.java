@@ -114,10 +114,24 @@ public class RecipeListController {
 				   )
     {
 	return recipeListService.getRecipeFromID(
-						   (User) session.getAttribute("LoggedInUser"),
-						   listID,
-						   recipeID
-						  );
+						 (User) session.getAttribute("LoggedInUser"),
+						 listID,
+						 recipeID
+						);
+    }
+
+    /**
+     * Find a Recipelist by it ID number and delets it
+     *
+     * @param session  - the current HTTP session
+     * @param listID   - the id of the recipe
+     */
+    @GetMapping("list/id/{id}/delete")
+    public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id){
+	    recipeListService.deletByID(
+	    			    (User) session.getAttribute("LoggedInUser"),
+	    			    id
+	    			   );
     }
 
     /**

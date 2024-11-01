@@ -21,5 +21,7 @@ public interface RecipeListService {
 
     Recipe getRecipeFromID(User user, long id, long recipeID);
 
+    void deletByID(User user, long id);
+
     RecipeList removeRecipeFromID(User user, long id, long recipeID);
 }

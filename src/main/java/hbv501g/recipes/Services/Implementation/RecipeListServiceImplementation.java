@@ -172,6 +172,21 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
+     * Find and delete RecipeList by it ID number. 
+     * 
+     * @param user : is the user that is loged in.
+     * @param id   : the id valu of RecipeList
+     */
+    public void deletByID(User user, long id){
+	    RecipeList list = findByID(user, id);
+	    if(list == null) return;
+
+	    if(list.getCreatedBy().getID() == user.getID()){
+	        recipeListRepository.delete(list);
+	    }
+    }
+
+    /**
      * Find and removes a resipe form a recipeList.
      *
      * @param user     - is the user that is the sesson
