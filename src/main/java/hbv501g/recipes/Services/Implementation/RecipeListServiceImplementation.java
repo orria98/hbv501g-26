@@ -183,13 +183,16 @@ public class RecipeListServiceImplementation implements RecipeListService {
     	RecipeList list = findByID(user, id);
     	if(list == null) return list;
         
-        Recipe recipe = getRecipeFromRecipeList(list, recipeID);
-        if(recipe == null) return list;
+        if(user.getID() == list.getCreatedBy().getID()){
+            Recipe recipe = getRecipeFromRecipeList(list, recipeID);
+            if(recipe == null) return list;
 
-        list.getRecipes().remove(recipe);
-        recipeListRepository.save(list);
+            list.getRecipes().remove(recipe);
+            recipeListRepository.save(list);
 
-    	return list;
+    	    return list;
+        }
+        return null;
     }
 
 }
