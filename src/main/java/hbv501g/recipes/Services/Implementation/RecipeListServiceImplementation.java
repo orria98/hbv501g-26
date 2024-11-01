@@ -181,7 +181,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public RecipeList removeRecipeFromID(User user, long id, long recipeID){
     	RecipeList list = findByID(user, id);
-    	if(list == null) return list;
+    	if(list == null || user == null) return list;
         
         if(user.getID() == list.getCreatedBy().getID()){
             Recipe recipe = getRecipeFromRecipeList(list, recipeID);
