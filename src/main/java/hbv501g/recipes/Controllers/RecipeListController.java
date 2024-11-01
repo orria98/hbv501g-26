@@ -26,13 +26,15 @@ public class RecipeListController {
     /**
      * Endpoint to get all recipe lists. Not needed for any assignment, but helpful
      * for testing
-     * 
-     * @return all RecipeList objects in db
+     *
+     * @param session - the current http session
+     * @return all RecipeList objects that are not privite unless the
+     *	       curet user own the list.
      */
     @GetMapping("/list/all")
     @ResponseBody
-    public List<RecipeList> getAllRecipeLists() {
-        return recipeListService.findAll();
+    public List<RecipeList> getAllRecipeLists(HttpSession session) {
+        return recipeListService.findAll((User) session.getAttribute("LoggedInUser"));
     }
 
     /**

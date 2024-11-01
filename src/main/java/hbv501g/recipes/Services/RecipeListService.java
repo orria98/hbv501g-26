@@ -7,7 +7,7 @@ import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeListService {
-    List<RecipeList> findAll();
+    List<RecipeList> findAll(User user);
 
     List<RecipeList> getAllRecipeListsForUser(User user);
 
