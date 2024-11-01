@@ -58,9 +58,11 @@ public class RecipeServiceImplementation implements RecipeService {
     @Override
     public void deleteById(User user, long id){
 	if (user != null) {
-
-	    if (findByID(id).getCreatedBy().getID() == user.getID()) {
-		recipeRepository.deleteById(id);
+	    User author = findByID(id).getCreatedBy();
+	    if(author != null){
+		if (author.getID() == user.getID()) {
+		    recipeRepository.deleteById(id);
+		}
 	    }
 	}       
     }

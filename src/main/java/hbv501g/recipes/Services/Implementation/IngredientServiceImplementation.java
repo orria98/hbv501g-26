@@ -53,13 +53,13 @@ public class IngredientServiceImplementation implements IngredientService {
      */
     @Override
     public Ingredient save(User author, Ingredient ingredient) {
-	    if(author == null){
+	if(author == null){
             return null;
         }
         ingredient.setCreatedBy(author);
         ingredient.setDateOfCreation(LocalDate.now());
 	
-	    return ingredientRepository.save(ingredient);
+	return ingredientRepository.save(ingredient);
     }
 
     /**
@@ -115,10 +115,13 @@ public class IngredientServiceImplementation implements IngredientService {
      */
     @Override
     public void deleteById(User user, long id){
-	    if (user != null) {
-	        if (findByID(id).getCreatedBy().getID() == user.getID()) {
-	    	    ingredientRepository.deleteById(id);            
-	        }
+	if (user != null) {
+	    User author = findByID(id).getCreatedBy();
+	    if(author != null){
+		if (author.getID() == user.getID()) {
+		    ingredientRepository.deleteById(id);
+		}
 	    }
+	}
     }
 }
