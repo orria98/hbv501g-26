@@ -36,4 +36,8 @@ public interface RecipeService {
     Recipe setRecipeAuthorAndDate(Recipe recipe, User author);
 
     Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
+
+    List<Recipe> findUnderTPC(int upperLimit, User user);
+    
+    List<Recipe> findUnderTIC(int upperLimit, User user);
 }

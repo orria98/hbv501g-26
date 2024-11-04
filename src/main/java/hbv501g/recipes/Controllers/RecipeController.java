@@ -57,8 +57,9 @@ public class RecipeController {
     }
 
     /**
-     * Gets all recipes available to the user who is 
-     * currently logged in. This includes all public recipes, and private recipes by the user
+     * Gets all recipes available to the user who is
+     * currently logged in. This includes all public recipes, and private recipes by
+     * the user
      * If there is no user currently logged in, only public recipes are returned
      * 
      * @param session - The current httpsession
@@ -67,24 +68,50 @@ public class RecipeController {
     @GetMapping("/recipe/all")
     @ResponseBody
     public List<Recipe> getAllRecipes(HttpSession session) {
-        User user = (User)session.getAttribute("LoggedInUser");
+        User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findAccessibleToUser(user);
     }
 
+    /**
+     * Given a maximum price, finds all recipes accessible to the current user which
+     * have a total purchase cost under that price
+     * 
+     * @param tpc - Maximum total purchase cost of recipe
+     * @return all accessible recipes with tpc under the given value
+     */
+    @GetMapping("/recipe/underTPC/{tpc}")
+    public List<Recipe> getAllRecipesUnderTPC(@PathVariable(value = "tpc") int tpc, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findUnderTPC(tpc, user);
+    }
 
     /**
-     * Gets all recipes that contain the search term in the title, which are accessible 
+     * Given a maximum price, finds all recipes accessible to the current user which
+     * have a total ingredient cost under that price
+     * 
+     * @param tic - Maximum total ingredient cost of recipe
+     * @return all accessible recipes with tic under the given value
+     */
+    @GetMapping("/recipe/underTIC/{tic}")
+    public List<Recipe> getAllRecipesUnderTIC(@PathVariable(value = "tic") int tic, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findUnderTIC(tic, user);
+    }
+    
+
+    /**
+     * Gets all recipes that contain the search term in the title, which are
+     * accessible
      * to the current user
      * 
      * @param term - the term the titles should include
      * @return list of all recipes with the search term in the title
      */
     @GetMapping("/recipe/search/{term}")
-    public List<Recipe> findRecipesByTitle(HttpSession session,@PathVariable(value = "term") String term) {
-        User user = (User)session.getAttribute("LoggedInUser");
-        return recipeService.findByTitleContaining(user,term);
+    public List<Recipe> findRecipesByTitle(HttpSession session, @PathVariable(value = "term") String term) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findByTitleContaining(user, term);
     }
-    
 
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
@@ -103,7 +130,7 @@ public class RecipeController {
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
      * has the ID, and the current user has access to it, otherwise it returns null
      * 
-     * @param id - the id of the requested recipe
+     * @param id      - the id of the requested recipe
      * @param session - the current http session
      * @return the recipe with that id, or null
      */
@@ -112,7 +139,6 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findAccessibleByID(id, user);
     }
-    
 
     /**
      * Endpoint that finds an recipe by id and

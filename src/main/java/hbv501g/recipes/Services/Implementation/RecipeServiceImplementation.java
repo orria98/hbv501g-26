@@ -292,4 +292,34 @@ public class RecipeServiceImplementation implements RecipeService {
         return update(recipe);
     }
 
+    /**
+     * Finds all recipes which are accessible to the given user and have a total
+     * purchase cost under the given limit. If the user is null, then only public
+     * recipes are searched
+     * @param upperLimit - the upper limit of the total purchase cost
+     * @param user - the user making the request
+     * @return all accessible recipes under that price
+     */
+    public List<Recipe> findUnderTPC(int upperLimit, User user) {
+        if (user == null){
+            return recipeRepository.findPublicUnderTPC(upperLimit);
+        }
+        return recipeRepository.findAccessibleUnderTPC(user, upperLimit);
+    }
+
+    /**
+     * Finds all recipes which are accessible to the given user and have a total
+     * ingredient cost under the given limit. If the user is null, then only public
+     * recipes are searched
+     * @param upperLimit - the upper limit of the total ingredient cost
+     * @param user - the user making the request
+     * @return all accessible recipes under that price
+     */
+    public List<Recipe> findUnderTIC(int upperLimit, User user) {
+        if (user == null){
+            return recipeRepository.findPublicUnderTIC(upperLimit);
+        }
+        return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
+    }
+
 }

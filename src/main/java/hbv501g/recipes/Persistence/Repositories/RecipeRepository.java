@@ -17,6 +17,18 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) and r.id = ?2")
     Recipe findAccessibleByID(User user, long id);
 
+    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) and r.totalPurchaseCost < ?2")
+    List<Recipe> findAccessibleUnderTPC(User user, int tpc);
+
+    @Query("select r from Recipe r where not r.isPrivate  and r.totalPurchaseCost < ?1")
+    List<Recipe> findPublicUnderTPC(int tpc);
+
+    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) and r.totalIngredientCost < ?2")
+    List<Recipe> findAccessibleUnderTIC(User user, int tic);
+
+    @Query("select r from Recipe r where not r.isPrivate  and r.totalIngredientCost < ?1")
+    List<Recipe> findPublicUnderTIC(int tic);
+
     Recipe findByIsPrivateFalseAndID(long id);
 
     List<Recipe> findByIsPrivateFalseAndTitleContaining(String searchTerm);
