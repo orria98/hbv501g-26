@@ -3,10 +3,12 @@ package hbv501g.recipes.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.Unit;
@@ -15,6 +17,7 @@ import hbv501g.recipes.Services.RecipeService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -168,7 +171,20 @@ public class RecipeController {
     @RequestMapping("recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
             @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, HttpSession session) {
-        User currUser = (User)session.getAttribute("LoggedInUser");
-        return recipeService.addIngredients(currUser.getID(),recipeID, ingredientIDs, qty, units);
+        User currUser = (User) session.getAttribute("LoggedInUser");
+        return recipeService.addIngredients(currUser.getID(), recipeID, ingredientIDs, qty, units);
+    }
+
+    @PutMapping("/recipe/{id}/update")
+    public Recipe updateRecipeDetails(@PathVariable(value = "id") long id, @RequestBody Recipe updatedRecipe,
+            HttpSession session) {
+        User currUser = (User) session.getAttribute("LoggedInUser");
+        if (currUser == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
+        }
+
+        Recipe recipe = recipeService.updateRecipeDetails(id, updatedRecipe);
+        return recipe;
+
     }
 }
