@@ -43,13 +43,13 @@ public class RecipeController {
     }
 
     /**
-     * Gets all recipes from the database
+     * Gets all recipes from the database. Not part of any assignment
      * 
      * @return all recipes
      */
-    @GetMapping("/recipe/all")
+    @GetMapping("/recipe/test/all")
     @ResponseBody
-    public List<Recipe> getAllRecipes() {
+    public List<Recipe> getAllRecipesWithPrivate() {
         return recipeService.findAll();
     }
 
@@ -61,9 +61,9 @@ public class RecipeController {
      * @param session - The current httpsession
      * @return all available recipes
      */
-    @GetMapping("/recipe/allAccessible")
+    @GetMapping("/recipe/all")
     @ResponseBody
-    public List<Recipe> getAllRecipesAccessible(HttpSession session) {
+    public List<Recipe> getAllRecipes(HttpSession session) {
         User user = (User)session.getAttribute("LoggedInUser");
         return recipeService.findAccessibleToUser(user);
     }
@@ -90,10 +90,26 @@ public class RecipeController {
      * @param id - the id of the requested recipe
      * @return the recipe with that id, or null
      */
-    @GetMapping("/recipe/id/{id}")
-    public Recipe getRecipeById(@PathVariable(value = "id") long id) {
+    @Deprecated
+    @GetMapping("/recipe/test/id/{id}")
+    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
     }
+
+    /**
+     * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
+     * has the ID, and the current user has access to it, otherwise it returns null
+     * 
+     * @param id - the id of the requested recipe
+     * @param session - the current http session
+     * @return the recipe with that id, or null
+     */
+    @GetMapping("/recipe/id/{id}")
+    public Recipe getRecipeById(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findAccessibleByID(id, user);
+    }
+    
 
     /**
      * Endpoint that finds an recipe by id and
