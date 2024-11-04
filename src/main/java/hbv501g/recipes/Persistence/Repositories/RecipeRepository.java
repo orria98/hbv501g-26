@@ -11,10 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAll();
 
-    List<Recipe> findByTitleContaining(String searchTerm);
-
-    List<Recipe> findByIsPrivateFalseOrCreatedByAndTitleContaining(User user, String searchTerm);
-
     @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) and r.title like ?2")
     List<Recipe> searchAccessibleRecipes(User user,String searchTerm);
 
