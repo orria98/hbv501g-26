@@ -70,14 +70,16 @@ public class RecipeController {
 
 
     /**
-     * Gets all recipes that contain the search term in the title
+     * Gets all recipes that contain the search term in the title, which are accessible 
+     * to the current user
      * 
      * @param term - the term the titles should include
      * @return list of all recipes with the search term in the title
      */
     @GetMapping("/recipe/search/{term}")
-    public List<Recipe> findRecipesByTitle(@PathVariable(value = "term") String term) {
-        return recipeService.findByTitleContaining(term);
+    public List<Recipe> findRecipesByTitle(HttpSession session,@PathVariable(value = "term") String term) {
+        User user = (User)session.getAttribute("LoggedInUser");
+        return recipeService.findByTitleContaining(user,term);
     }
     
 

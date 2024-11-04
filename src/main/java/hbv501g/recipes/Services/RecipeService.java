@@ -13,7 +13,8 @@ public interface RecipeService {
 
     Recipe findByID(long id);
 
-    List<Recipe> findByTitleContaining(String searchTerm);
+    List<Recipe> findByTitleContaining(User user, String searchTerm);
+
 
     List<Recipe> findAccessibleToUser(User user);
 

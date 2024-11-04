@@ -50,13 +50,18 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * finds all recipes with a given search term in the title
+     * finds all recipes which are accessible to the given user, which have a given search 
+     * term in the title
      * 
+     * @param user - the user who is searching 
      * @param searchTerm - the string that should be in the title
      * @return A list of all recipes with the search term in the title
      */
-    public List<Recipe> findByTitleContaining(String searchTerm){
-        return recipeRepository.findByTitleContaining(searchTerm);
+    public List<Recipe> findByTitleContaining(User user, String searchTerm){
+        if (user == null){
+            return recipeRepository.findByIsPrivateFalseAndTitleContaining(searchTerm);
+        }
+        return recipeRepository.searchAccessibleRecipes(user,"%"+searchTerm+"%");
     }
 
     /**
