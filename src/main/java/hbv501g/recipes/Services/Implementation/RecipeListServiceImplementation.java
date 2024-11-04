@@ -38,9 +38,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Get all recipicList that the sesson user has
      * 
-     * @param user : user is a user that owns a Recipie list
+     * @param user : user is a user the sessons user.
      * @return      retturn a list of Recipie list 
-    *              that he ownds
+    *              that the seson user owns
      */
     @Override
     public List<RecipeList> getAllRecipeListsForUser(User user){
@@ -50,9 +50,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Get all the recipicList that a user has.
      * 
-     * @param user : user is a user that owns a Recipie list
+     * @param user : user is a user of the system.
      * @return      retturn a list of Recipie list
-     *              that he ownds
+     *              that user owns that is not privat
      */
     public List<RecipeList> findAllUserRecipeList(long id){
         User user = userService.findByID(id);
