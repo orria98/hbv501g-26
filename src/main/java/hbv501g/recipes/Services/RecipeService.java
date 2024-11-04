@@ -31,7 +31,9 @@ public interface RecipeService {
 
     double getPersonalizedPurchaseCost(User user, long recipeId);
 
-    Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty,List<Unit> units );
-    
+    Recipe addIngredients(long userID, long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units);
+
     Recipe setRecipeAuthorAndDate(Recipe recipe, User author);
+
+    Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
 }
