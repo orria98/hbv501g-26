@@ -45,16 +45,6 @@ public class RecipeController {
         return recipeService.initRecipes();
     }
 
-    /**
-     * Gets all recipes from the database. Not part of any assignment
-     * 
-     * @return all recipes
-     */
-    @GetMapping("/recipe/test/all")
-    @ResponseBody
-    public List<Recipe> getAllRecipesWithPrivate() {
-        return recipeService.findAll();
-    }
 
     /**
      * Gets all recipes available to the user who is
@@ -113,18 +103,6 @@ public class RecipeController {
         return recipeService.findByTitleContaining(user, term);
     }
 
-    /**
-     * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
-     * has the ID, otherwise it returns null
-     * 
-     * @param id - the id of the requested recipe
-     * @return the recipe with that id, or null
-     */
-    @Deprecated
-    @GetMapping("/recipe/test/id/{id}")
-    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
-        return recipeService.findByID(id);
-    }
 
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
@@ -258,5 +236,33 @@ public class RecipeController {
         Recipe recipe = recipeService.updateRecipeDetails(id, updatedRecipe);
         return recipe;
 
+    }
+
+    //** Not in any assignment */
+    
+    /**
+     * Gets all recipes from the database. Not part of any assignment
+     * 
+     * @return all recipes
+     */
+    @GetMapping("/recipe/getAll")
+    @ResponseBody
+    @Deprecated
+    public List<Recipe> getAllRecipesWithPrivate() {
+        return recipeService.findAll();
+    }
+
+    
+    /**
+     * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
+     * has the ID, otherwise it returns null
+     * 
+     * @param id - the id of the requested recipe
+     * @return the recipe with that id, or null
+     */
+    @Deprecated
+    @GetMapping("/recipe/getById/{id}")
+    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
+        return recipeService.findByID(id);
     }
 }
