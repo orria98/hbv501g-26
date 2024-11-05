@@ -45,11 +45,7 @@ public class RecipeListController {
      */
     @GetMapping("/list/user/{id}")
     public List<RecipeList> getAllRecipesListByUserId(HttpSession session, @PathVariable(value = "id") long id){
-        User user = (User) session.getAttribute("LoggedInUser");
-        if(user != null && user.getID() == id){
-            return recipeListService.getAllRecipeListsForUser(user);
-        }
-	    return recipeListService.findAllUserRecipeList(id);
+        return recipeListService.findAllUserRecipeList((User) session.getAttribute("LoggedInUser"), id);
     }
     
     /**

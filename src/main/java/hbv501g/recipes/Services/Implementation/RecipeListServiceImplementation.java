@@ -36,28 +36,23 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Get all recipicList that the sesson user has
-     * 
-     * @param user : user is a user the sessons user.
-     * @return      retturn a list of Recipie list 
-    *              that the seson user owns
-     */
-    @Override
-    public List<RecipeList> getAllRecipeListsForUser(User user){
-        return recipeListRepository.findByCreatedBy(user);
-    }
-
-    /**
      * Get all the recipicList that a user has.
      * 
      * @param user : user is a user of the system.
+     * @param id   : is an Id valu of a user
      * @return      retturn a list of Recipie list
      *              that user owns that is not privat
      */
-    public List<RecipeList> findAllUserRecipeList(long id){
-        User user = userService.findByID(id);
+    public List<RecipeList> findAllUserRecipeList(User user, long id){
+        if(user != null){
+            if(user.getID() != id)
+                return recipeListRepository.findByCreatedBy(user);
+        }
         
-        List<RecipeList> src = getAllRecipeListsForUser(user);
+        User author = userService.findByID(id);
+        if(author != null) return null;
+        
+        List<RecipeList> src = recipeListRepository.findByCreatedBy(author);
         List<RecipeList> out = new ArrayList<>();
 
         for (RecipeList recipeList : src) {
