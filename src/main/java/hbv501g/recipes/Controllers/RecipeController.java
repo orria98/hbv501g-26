@@ -177,4 +177,33 @@ public class RecipeController {
         return recipe;
 
     }
+
+     //** Not in any assignment */
+    
+    /**
+     * Gets all recipes from the database. Not part of any assignment
+     * 
+     * @return all recipes
+     */
+    @GetMapping("/recipe/getAll")
+    @ResponseBody
+    @Deprecated
+    public List<Recipe> getAllRecipesWithPrivate() {
+        return recipeService.findAll();
+    }
+
+    
+    /**
+     * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
+     * has the ID, otherwise it returns null
+     * 
+     * @param id - the id of the requested recipe
+     * @return the recipe with that id, or null
+     */
+    @Deprecated
+    @GetMapping("/recipe/getById/{id}")
+    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
+        return recipeService.findByID(id);
+    }
+
 }
