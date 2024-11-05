@@ -78,17 +78,7 @@ public class RecipeController {
      */
     @RequestMapping("/recipe/delete/{id}")
     public void deleteRecipeById(HttpSession session, @PathVariable(value = "id") long id) {
-        User user = (User) session.getAttribute("LoggedInUser");
-
-        if (user != null) {
-            User author = recipeService.findByID(id).getCreatedBy();
-
-            if (author != null) {
-                if (author.getID() == user.getID()) {
-                    recipeService.deleteById(id);
-                }
-            }
-        }
+	recipeService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
     /**

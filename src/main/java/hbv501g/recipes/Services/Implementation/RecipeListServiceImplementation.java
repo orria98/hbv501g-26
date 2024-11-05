@@ -28,11 +28,33 @@ public class RecipeListServiceImplementation implements RecipeListService {
 
     /**
      * Gets and returns all RecipeList objects from DB
-     * 
+     *
+     * @param user : is the user that is loged in.
      * @return all recipe lists
      */
-    public List<RecipeList> findAll() {
-        return recipeListRepository.findAll();
+    public List<RecipeList> findAll(User user) {
+        List<RecipeList> listOfRecipeList = recipeListRepository.findAll();
+	    List<RecipeList> out = new ArrayList<>();
+
+	    if(listOfRecipeList == null) return null;
+
+	    if(user != null){
+	        for(RecipeList list : listOfRecipeList){
+	    	    if(!(list.isPrivate()) || user.getID() == list.getCreatedBy().getID()){
+	    	        out.add(list);
+	    	    }
+	        }
+	    }
+	    else{
+	        for(RecipeList list : listOfRecipeList){
+	    	    if(!(list.isPrivate())){
+	    	        out.add(list);
+	    	    }
+	        }
+	    }
+
+	    return out;
+    
     }
 
     /**
@@ -74,16 +96,20 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public RecipeList findByID(User user, long id){
         RecipeList list = recipeListRepository.findById(id);
-        if(list == null){
+        if(list == null ){
             return null;
         }
 
-	if(list.getCreatedBy() == null) return null;
-
-        if(list.getCreatedBy().getID() != user.getID() && list.isPrivate()){
+        if(user != null){
+            if(list.getCreatedBy().getID() != user.getID() && list.isPrivate()){
+                return null;
+            }    
+        }
+        else if (list.isPrivate()){
+	    
             return null;
         }
-
+        
         return list;
     }
 
@@ -165,6 +191,21 @@ public class RecipeListServiceImplementation implements RecipeListService {
 	    if(list.getRecipes().contains(recipe)) return recipe;
 
 	    return null;
+    }
+
+    /**
+     * Find and delete RecipeList by it ID number. 
+     * 
+     * @param user : is the user that is loged in.
+     * @param id   : the id valu of RecipeList
+     */
+    public void deletByID(User user, long id){
+	    RecipeList list = findByID(user, id);
+	    if(list == null || user == null) return;
+
+	    if(list.getCreatedBy().getID() == user.getID()){
+	        recipeListRepository.delete(list);
+	    }
     }
 
     /**
