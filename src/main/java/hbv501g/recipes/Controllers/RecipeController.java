@@ -178,7 +178,7 @@ public class RecipeController {
 
     }
 
-     //** Not in any assignment */
+    //** Not in any assignment */
     
     /**
      * Gets all recipes from the database. Not part of any assignment
@@ -205,5 +205,4 @@ public class RecipeController {
     public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
     }
-
 }
