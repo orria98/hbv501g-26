@@ -7,8 +7,6 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.time.LocalDate;
 
-import org.springframework.cglib.core.Local;
-
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import jakarta.persistence.Entity;
