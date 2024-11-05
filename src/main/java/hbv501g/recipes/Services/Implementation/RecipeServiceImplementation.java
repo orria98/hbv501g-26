@@ -232,3 +232,17 @@ public class RecipeServiceImplementation implements RecipeService {
         return save(recipe);
     }
 
+    @Override
+    public Recipe updateRecipeDetails(long id, Recipe updatedRecipe) {
+        Recipe recipe = findByID(id);
+        if (recipe == null) {
+            return null;
+        }
+        recipe.setTitle(updatedRecipe.getTitle());
+        recipe.setInstructions(updatedRecipe.getInstructions());
+        recipe.setPrivate(updatedRecipe.isPrivate());
+
+        return update(recipe);
+    }
+}
+
