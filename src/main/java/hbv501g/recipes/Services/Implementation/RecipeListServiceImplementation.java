@@ -43,7 +43,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @return      retturn a list of Recipie list
      *              that user owns that is not privat
      */
-    public List<RecipeList> findAllUserRecipeList(User user, long id){
+    public List<RecipeList> findAllUserRecipeLists(User user, long id){
         if(user != null){
             if(user.getID() != id)
                 return recipeListRepository.findByCreatedBy(user);
