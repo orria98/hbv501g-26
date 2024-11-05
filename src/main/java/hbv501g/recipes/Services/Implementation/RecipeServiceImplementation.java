@@ -41,6 +41,17 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findByID(id);
     }
 
+    /**
+     * Finds the recipe with the given id, if one exists and is accessible to the
+     * user. If the user is null, then only public recipes are accessible
+     */
+    public Recipe findAccessibleByID(long id, User user) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseAndID(id);
+        }
+        return recipeRepository.findAccessibleByID(user, id);
+    }
+
     // @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
@@ -48,6 +59,37 @@ public class RecipeServiceImplementation implements RecipeService {
 
     public Recipe update(Recipe updatedRecipe) {
         return recipeRepository.save(updatedRecipe);
+    }
+
+    /**
+     * finds all recipes which are accessible to the given user, which have a given
+     * search
+     * term in the title
+     * 
+     * @param user       - the user who is searching
+     * @param searchTerm - the string that should be in the title
+     * @return A list of all recipes with the search term in the title
+     */
+    public List<Recipe> findByTitleContaining(User user, String searchTerm) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseAndTitleContaining(searchTerm);
+        }
+        return recipeRepository.searchAccessibleRecipes(user, "%" + searchTerm + "%");
+    }
+
+    /**
+     * Finds all recipes that are accessible to the given user.
+     * This includes all public recipes, and private recipes by the user
+     * If the user us null, only public recipes are returned
+     * 
+     * @param user - the user to find recipes for
+     * @return all recipes available to the user
+     */
+    public List<Recipe> findAccessibleToUser(User user) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalse();
+        }
+        return recipeRepository.findByIsPrivateFalseOrCreatedBy(user);
     }
 
     /**
@@ -129,38 +171,43 @@ public class RecipeServiceImplementation implements RecipeService {
         for (IngredientMeasurement recipeIngredient : recipe.getIngredientMeasurements()) {
             IngredientMeasurement pantryItem = userService.findItemInPantry(pantry, recipeIngredient.getIngredient());
 
-            if(recipeIngredient!=null&&recipeIngredient.getIngredient()!=null&&recipeIngredient.getUnit()!=null){
+            if (recipeIngredient != null && recipeIngredient.getIngredient() != null
+                    && recipeIngredient.getUnit() != null) {
                 Ingredient ingredient = recipeIngredient.getIngredient();
 
-                //the quantity used in the recipe, in the unit of the ingredient
-                double quantity=getQuantityInIngredientUnit(recipeIngredient);
+                // the quantity used in the recipe, in the unit of the ingredient
+                double quantity = getQuantityInIngredientUnit(recipeIngredient);
 
-                //The quantity of the ingredient which is in the pantry, in the unit of the ingredient
+                // The quantity of the ingredient which is in the pantry, in the unit of the
+                // ingredient
                 double quantityInPantry = getQuantityInIngredientUnit(pantryItem);
-                
-                quantity-=quantityInPantry;
 
-                if (quantity > 0){
+                quantity -= quantityInPantry;
+
+                if (quantity > 0) {
                     total += calculateTotalPurchaseCost(ingredient, quantity);
                 }
             }
         }
 
-
         return total;
     }
 
     /**
-     * Calculates and returns the quantity of the ingredient used in the IngredientMeasurement, in the unit of the Ingredient used. Returns 0 if the measurement, its unit og ingredient is null
+     * Calculates and returns the quantity of the ingredient used in the
+     * IngredientMeasurement,
+     * in the unit of the Ingredient used. Returns 0 if the measurement, its unit og
+     * ingredient is null
      * 
      * @param measurement - ingredientmeasurement item
      * @return the quantity of the ingredient, in the same unit
      */
-    private double getQuantityInIngredientUnit(IngredientMeasurement measurement){
-        if (measurement==null || measurement.getIngredient()==null || measurement.getUnit()==null){
+    private double getQuantityInIngredientUnit(IngredientMeasurement measurement) {
+        if (measurement == null || measurement.getIngredient() == null || measurement.getUnit() == null) {
             return 0;
         }
-        return (measurement.getQuantity()*measurement.getUnit().getMlInUnit())/(measurement.getUnit().getMlInUnit());
+        return (measurement.getQuantity() * measurement.getUnit().getMlInUnit())
+                / (measurement.getUnit().getMlInUnit());
     }
 
     /**
@@ -244,5 +291,35 @@ public class RecipeServiceImplementation implements RecipeService {
 
         return update(recipe);
     }
+    /**
+     * Finds all recipes which are accessible to the given user and have a total
+     * purchase cost under the given limit. If the user is null, then only public
+     * recipes are searched
+     * @param upperLimit - the upper limit of the total purchase cost
+     * @param user - the user making the request
+     * @return all accessible recipes under that price
+     */
+    public List<Recipe> findUnderTPC(int upperLimit, User user) {
+        if (user == null){
+            return recipeRepository.findPublicUnderTPC(upperLimit);
+        }
+        return recipeRepository.findAccessibleUnderTPC(user, upperLimit);
+    }
+
+    /**
+     * Finds all recipes which are accessible to the given user and have a total
+     * ingredient cost under the given limit. If the user is null, then only public
+     * recipes are searched
+     * @param upperLimit - the upper limit of the total ingredient cost
+     * @param user - the user making the request
+     * @return all accessible recipes under that price
+     */
+    public List<Recipe> findUnderTIC(int upperLimit, User user) {
+        if (user == null){
+            return recipeRepository.findPublicUnderTIC(upperLimit);
+        }
+        return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
+    }
+
 }
 
