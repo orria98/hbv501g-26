@@ -182,7 +182,7 @@ public class HomeController {
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(1), Unit.G, 300));
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(2), Unit.G, 1200));
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(3), Unit.ML, 10000));
-        user.addIngredientMeasurement(new IngredientMeasurement());
+        //user.addIngredientMeasurement(new IngredientMeasurement());
         userService.update(user);
 
         return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),

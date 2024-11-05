@@ -35,7 +35,7 @@ public class RecipeList {
     private String description;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = { "id", "title" })
+    @JsonIncludeProperties(value = { "id", "title", "instructions", "recipeCreator"})
     private List<Recipe> recipes = new ArrayList<>();
     private boolean isPrivate;
 
