@@ -55,7 +55,7 @@ public class IngredientController {
     }
 
     /**
-     * Initializes a few ingredients. Ekki hluti af skilum, en 
+     * Initializes a few ingredients. Ekki hluti af skilum, en
      * gerir það auðveldara að prófa hvort forritið virki.
      * 
      * @return some ingredients
@@ -67,7 +67,7 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti 
+     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti
      * af endpoints fyrir þetta verkefni.
      *
      * @param title : nafn hráefnis
@@ -82,15 +82,15 @@ public class IngredientController {
     /**
      * Endpoint createds new idgrediet for the database
      *
-     * @param session  : is the current session
+     * @param session       : is the current session
      * @param newIngredient - a Ingredient that is being saved
      * @return the new Ingredient
      */
     @RequestMapping("ingredient/created")
-    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
+    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient) {
         User author = (User) session.getAttribute("LoggedInUser");
-        
-        if(author == null){
+
+        if (author == null) {
             return null;
         }
         newIngredient.setCreatedBy(author);
@@ -109,10 +109,10 @@ public class IngredientController {
     @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
         User user = (User) session.getAttribute("LoggedInUser");
-        
+
         if (user != null) {
             User author = ingredientService.findByID(id).getCreatedBy();
-            
+
             if (author != null) {
                 if (author.getID() == user.getID()) {
                     ingredientService.deleteById(id);
@@ -121,9 +121,9 @@ public class IngredientController {
         }
     }
 
-    // Ekki hluti af neinum skilum 
+    // Ekki hluti af neinum skilum
     @GetMapping("ingredient/all/ordered")
-    public List<Ingredient> getOrderedIngredients(){
+    public List<Ingredient> getOrderedIngredients() {
         return ingredientService.findOrderedIngredients();
     }
 

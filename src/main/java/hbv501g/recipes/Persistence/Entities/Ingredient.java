@@ -37,9 +37,8 @@ public class Ingredient {
 
     // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = {"id", "username"}) // properties úr user til að birta í json fyrir ingredient
+    @JsonIncludeProperties(value = { "id", "username" }) // properties úr user til að birta í json fyrir ingredient
     private User createdBy; // Bara til að geyma hver gerði ingredientið
-
 
     /**
      * Constructs an Ingredient object
@@ -80,7 +79,7 @@ public class Ingredient {
         this.title = title;
     }
 
-    public Enum<Unit> getUnit() {
+    public Unit getUnit() {
         return unit;
     }
 

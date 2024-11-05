@@ -114,9 +114,11 @@ public class Recipe {
             return;
         double ingredientPrice = ingredient.getPrice();
 
-        if (ingredient.getQuantity() != 0) {
-            totalPurchaseCost += ingredientPrice * Math.ceil(item.getQuantity() / ingredient.getQuantity());
-            totalIngredientCost += ingredientPrice * item.getQuantity() / ingredient.getQuantity();
+        if (ingredient.getQuantity()!=0){
+            //find the amount in the unit of the ingredient
+            double measurementAmount = (item.getQuantity() * item.getUnit().getMlInUnit())/(ingredient.getQuantity()*ingredient.getUnit().getMlInUnit());
+            totalPurchaseCost +=ingredientPrice* Math.ceil(measurementAmount);
+            totalIngredientCost += ingredientPrice * measurementAmount;
         }
     }
 

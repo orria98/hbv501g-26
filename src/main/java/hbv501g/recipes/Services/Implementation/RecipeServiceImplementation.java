@@ -24,7 +24,8 @@ public class RecipeServiceImplementation implements RecipeService {
     private IngredientService ingredientService;
 
     @Autowired
-    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService, IngredientService ingredientService) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService,
+            IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.userService = userService;
         this.ingredientService = ingredientService;
@@ -53,14 +54,15 @@ public class RecipeServiceImplementation implements RecipeService {
      * Find and delet the rescipe with maching id.
      *
      * @param id : is a 8 byte integer and is the id
-     * 		   of the precipe.
+     *           of the precipe.
      */
     @Override
-    public void deleteById(long id){
+    public void deleteById(long id) {
         recipeRepository.deleteById(id);
     }
-    
-     /* Initializes a few recipes, if none are found in the db
+
+    /*
+     * Initializes a few recipes, if none are found in the db
      */
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
@@ -127,15 +129,38 @@ public class RecipeServiceImplementation implements RecipeService {
         for (IngredientMeasurement recipeIngredient : recipe.getIngredientMeasurements()) {
             IngredientMeasurement pantryItem = userService.findItemInPantry(pantry, recipeIngredient.getIngredient());
 
-            // TODO: passa að unit passi
-            double qty = recipeIngredient.getQuantity();
-            if (pantryItem != null && recipeIngredient.getUnit() == pantryItem.getUnit())
-                qty -= pantryItem.getQuantity();
-            if (qty > 0)
-                total += calculateTotalPurchaseCost(recipeIngredient.getIngredient(), qty);
+            if(recipeIngredient!=null&&recipeIngredient.getIngredient()!=null&&recipeIngredient.getUnit()!=null){
+                Ingredient ingredient = recipeIngredient.getIngredient();
+
+                //the quantity used in the recipe, in the unit of the ingredient
+                double quantity=getQuantityInIngredientUnit(recipeIngredient);
+
+                //The quantity of the ingredient which is in the pantry, in the unit of the ingredient
+                double quantityInPantry = getQuantityInIngredientUnit(pantryItem);
+                
+                quantity-=quantityInPantry;
+
+                if (quantity > 0){
+                    total += calculateTotalPurchaseCost(ingredient, quantity);
+                }
+            }
         }
 
+
         return total;
+    }
+
+    /**
+     * Calculates and returns the quantity of the ingredient used in the IngredientMeasurement, in the unit of the Ingredient used. Returns 0 if the measurement, its unit og ingredient is null
+     * 
+     * @param measurement - ingredientmeasurement item
+     * @return the quantity of the ingredient, in the same unit
+     */
+    private double getQuantityInIngredientUnit(IngredientMeasurement measurement){
+        if (measurement==null || measurement.getIngredient()==null || measurement.getUnit()==null){
+            return 0;
+        }
+        return (measurement.getQuantity()*measurement.getUnit().getMlInUnit())/(measurement.getUnit().getMlInUnit());
     }
 
     /**
@@ -147,12 +172,11 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return total cost to purchase this measurement
      */
     private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
-        if (ingredient!=null && quantity!=0 && ingredient.getQuantity()!=0){
-            return ingredient.getPrice()*Math.ceil(quantity/ingredient.getQuantity());
+        if (ingredient != null && quantity != 0 && ingredient.getQuantity() != 0) {
+            return ingredient.getPrice() * Math.ceil(quantity / ingredient.getQuantity());
         }
         return 0;
     }
-
 
     /**
      * Adds IngredientMeasurements to a recipe with the given recipeID. Also takes
@@ -171,19 +195,21 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return Recipe - the recipe with the given recipeID with the measurements
      *         added
      */
-    public Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+    public Recipe addIngredients(long userID, long recipeID, List<Long> ingredientIDs, List<Double> qty,
+            List<Unit> units) {
         Recipe recipe = findByID(recipeID);
         User currUser = userService.findByID(userID);
-        if(recipe==null || currUser==null || userID!=recipe.getCreatedBy().getID()){
+        if (recipe == null || currUser == null || userID != recipe.getCreatedBy().getID()) {
             return null;
-        } 
+        }
         List<IngredientMeasurement> measurements = new ArrayList<>();
         if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
             return recipe;
         }
         for (int i = 0; i < units.size(); i++) {
             Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
-            if(ingredient!=null && (!ingredient.isPrivate()||(ingredient.getCreatedBy()!=null&& ingredient.getCreatedBy().getID()== userID))){
+            if (ingredient != null && (!ingredient.isPrivate()
+                    || (ingredient.getCreatedBy() != null && ingredient.getCreatedBy().getID() == userID))) {
                 measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
             }
         }
@@ -206,4 +232,3 @@ public class RecipeServiceImplementation implements RecipeService {
         return save(recipe);
     }
 
-}
