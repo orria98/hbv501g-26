@@ -291,7 +291,6 @@ public class RecipeServiceImplementation implements RecipeService {
 
         return update(recipe);
     }
-
     /**
      * Finds all recipes which are accessible to the given user and have a total
      * purchase cost under the given limit. If the user is null, then only public
@@ -323,3 +322,4 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
 }
+
