@@ -7,6 +7,7 @@ package hbv501g.recipes.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,7 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.Map;
 import java.time.LocalDate;
 
 @RestController
@@ -121,6 +123,22 @@ public class IngredientController {
                 }
             }
         }
+    }
+
+    @PatchMapping("ingredient/updateTitle/{id}")
+    public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
+            @RequestBody Map<String, String> body) {
+        Ingredient ingredient = ingredientService.findByID(id);
+        User user = (User) session.getAttribute("LoggedInUser");
+
+        if (ingredient == null || user == null || ingredient.getCreatedBy().getID() != user.getID()) {
+            return null;
+        }
+
+        String newTitle = body.get("title");
+        System.out.println(newTitle);
+        ingredient.setTitle(newTitle);
+        return ingredientService.save(ingredient);
     }
 
     // Ekki hluti af neinum skilum

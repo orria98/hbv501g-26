@@ -30,4 +30,6 @@ public interface RecipeService {
     Recipe setRecipeAuthorAndDate(Recipe recipe, User author);
 
     Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
+
+    List<Recipe> findOrderedRecipes();
 }

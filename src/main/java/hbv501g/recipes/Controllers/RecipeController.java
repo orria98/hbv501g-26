@@ -187,4 +187,9 @@ public class RecipeController {
         return recipe;
 
     }
+
+    @GetMapping("/recipe/all/ordered")
+    public List<Recipe> getAllOrderedRecipes() {
+        return recipeService.findOrderedRecipes();
+    }
 }

@@ -140,6 +140,10 @@ public class RecipeServiceImplementation implements RecipeService {
         return total;
     }
 
+    public List<Recipe> findOrderedRecipes() {
+        return recipeRepository.findAllByOrderByTotalPurchaseCostAsc();
+    }
+
     /**
      * Purchase cost based on how many packages are needed. Assumes both ingredient
      * and measurement have the same unit
