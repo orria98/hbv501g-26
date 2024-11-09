@@ -89,8 +89,8 @@ public class IngredientController {
      * @return the new Ingredient
      */
     @RequestMapping("ingredient/created")
-    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
-	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
+    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient) {
+        return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
     }
 
     /**
@@ -103,7 +103,7 @@ public class IngredientController {
      */
     @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
-	ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+        ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
     @PatchMapping("ingredient/updateTitle/{id}")
@@ -119,7 +119,7 @@ public class IngredientController {
         String newTitle = body.get("title");
         System.out.println(newTitle);
         ingredient.setTitle(newTitle);
-        return ingredientService.save(ingredient);
+        return ingredientService.save(user, ingredient);
     }
 
     // Ekki hluti af neinum skilum
