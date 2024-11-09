@@ -7,7 +7,7 @@ import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeListService {
-    List<RecipeList> findAll();
+    List<RecipeList> findAll(User user);
 
     List<RecipeList> findAllUserRecipeLists(User user, long id);
     
@@ -18,6 +18,8 @@ public interface RecipeListService {
     RecipeList addRecipe(long recipeID, long listID, User user);
 
     Recipe getRecipeFromID(User user, long id, long recipeID);
+
+    void deletByID(User user, long id);
 
     RecipeList removeRecipeFromID(User user, long id, long recipeID);
 }
