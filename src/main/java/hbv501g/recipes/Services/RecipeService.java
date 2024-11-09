@@ -13,11 +13,17 @@ public interface RecipeService {
 
     Recipe findByID(long id);
 
+    Recipe findAccessibleByID(long id, User user);
+
+    List<Recipe> findByTitleContaining(User user, String searchTerm);
+
+    List<Recipe> findAccessibleToUser(User user);
+
     Recipe save(Recipe recipe);
 
     Recipe update(Recipe recipe);
 
-    void deleteById(long id);
+    void deleteById(User user, long id);
 
     int getTotalPurchaseCost(long id);
 
@@ -30,6 +36,10 @@ public interface RecipeService {
     Recipe setRecipeAuthorAndDate(Recipe recipe, User author);
 
     Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
+
+    List<Recipe> findUnderTPC(int upperLimit, User user);
+
+    List<Recipe> findUnderTIC(int upperLimit, User user);
 
     List<Recipe> findOrderedRecipes();
 }
