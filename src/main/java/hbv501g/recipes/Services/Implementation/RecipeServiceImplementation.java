@@ -24,7 +24,8 @@ public class RecipeServiceImplementation implements RecipeService {
     private IngredientService ingredientService;
 
     @Autowired
-    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService, IngredientService ingredientService) {
+    public RecipeServiceImplementation(RecipeRepository recipeRepository, UserService userService,
+            IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.userService = userService;
         this.ingredientService = ingredientService;
@@ -40,6 +41,17 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findByID(id);
     }
 
+    /**
+     * Finds the recipe with the given id, if one exists and is accessible to the
+     * user. If the user is null, then only public recipes are accessible
+     */
+    public Recipe findAccessibleByID(long id, User user) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseAndID(id);
+        }
+        return recipeRepository.findAccessibleByID(user, id);
+    }
+
     // @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
@@ -50,17 +62,49 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
+     * finds all recipes which are accessible to the given user, which have a given
+     * search
+     * term in the title
+     * 
+     * @param user       - the user who is searching
+     * @param searchTerm - the string that should be in the title
+     * @return A list of all recipes with the search term in the title
+     */
+    public List<Recipe> findByTitleContaining(User user, String searchTerm) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseAndTitleContaining(searchTerm);
+        }
+        return recipeRepository.searchAccessibleRecipes(user, "%" + searchTerm + "%");
+    }
+
+    /**
+     * Finds all recipes that are accessible to the given user.
+     * This includes all public recipes, and private recipes by the user
+     * If the user us null, only public recipes are returned
+     * 
+     * @param user - the user to find recipes for
+     * @return all recipes available to the user
+     */
+    public List<Recipe> findAccessibleToUser(User user) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalse();
+        }
+        return recipeRepository.findByIsPrivateFalseOrCreatedBy(user);
+    }
+
+    /**
      * Find and delet the rescipe with maching id.
      *
      * @param id : is a 8 byte integer and is the id
-     * 		   of the precipe.
+     *           of the precipe.
      */
     @Override
-    public void deleteById(long id){
+    public void deleteById(long id) {
         recipeRepository.deleteById(id);
     }
-    
-     /* Initializes a few recipes, if none are found in the db
+
+    /*
+     * Initializes a few recipes, if none are found in the db
      */
     public List<Recipe> initRecipes() {
         List<Recipe> AllRecipes = findAll();
@@ -127,38 +171,43 @@ public class RecipeServiceImplementation implements RecipeService {
         for (IngredientMeasurement recipeIngredient : recipe.getIngredientMeasurements()) {
             IngredientMeasurement pantryItem = userService.findItemInPantry(pantry, recipeIngredient.getIngredient());
 
-            if(recipeIngredient!=null&&recipeIngredient.getIngredient()!=null&&recipeIngredient.getUnit()!=null){
+            if (recipeIngredient != null && recipeIngredient.getIngredient() != null
+                    && recipeIngredient.getUnit() != null) {
                 Ingredient ingredient = recipeIngredient.getIngredient();
 
-                //the quantity used in the recipe, in the unit of the ingredient
-                double quantity=getQuantityInIngredientUnit(recipeIngredient);
+                // the quantity used in the recipe, in the unit of the ingredient
+                double quantity = getQuantityInIngredientUnit(recipeIngredient);
 
-                //The quantity of the ingredient which is in the pantry, in the unit of the ingredient
+                // The quantity of the ingredient which is in the pantry, in the unit of the
+                // ingredient
                 double quantityInPantry = getQuantityInIngredientUnit(pantryItem);
-                
-                quantity-=quantityInPantry;
 
-                if (quantity > 0){
+                quantity -= quantityInPantry;
+
+                if (quantity > 0) {
                     total += calculateTotalPurchaseCost(ingredient, quantity);
                 }
             }
         }
 
-
         return total;
     }
 
     /**
-     * Calculates and returns the quantity of the ingredient used in the IngredientMeasurement, in the unit of the Ingredient used. Returns 0 if the measurement, its unit og ingredient is null
+     * Calculates and returns the quantity of the ingredient used in the
+     * IngredientMeasurement,
+     * in the unit of the Ingredient used. Returns 0 if the measurement, its unit og
+     * ingredient is null
      * 
      * @param measurement - ingredientmeasurement item
      * @return the quantity of the ingredient, in the same unit
      */
-    private double getQuantityInIngredientUnit(IngredientMeasurement measurement){
-        if (measurement==null || measurement.getIngredient()==null || measurement.getUnit()==null){
+    private double getQuantityInIngredientUnit(IngredientMeasurement measurement) {
+        if (measurement == null || measurement.getIngredient() == null || measurement.getUnit() == null) {
             return 0;
         }
-        return (measurement.getQuantity()*measurement.getUnit().getMlInUnit())/(measurement.getUnit().getMlInUnit());
+        return (measurement.getQuantity() * measurement.getUnit().getMlInUnit())
+                / (measurement.getUnit().getMlInUnit());
     }
 
     /**
@@ -170,12 +219,11 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return total cost to purchase this measurement
      */
     private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
-        if (ingredient!=null && quantity!=0 && ingredient.getQuantity()!=0){
-            return ingredient.getPrice()*Math.ceil(quantity/ingredient.getQuantity());
+        if (ingredient != null && quantity != 0 && ingredient.getQuantity() != 0) {
+            return ingredient.getPrice() * Math.ceil(quantity / ingredient.getQuantity());
         }
         return 0;
     }
-
 
     /**
      * Adds IngredientMeasurements to a recipe with the given recipeID. Also takes
@@ -194,19 +242,21 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return Recipe - the recipe with the given recipeID with the measurements
      *         added
      */
-    public Recipe addIngredients(long userID,long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units) {
+    public Recipe addIngredients(long userID, long recipeID, List<Long> ingredientIDs, List<Double> qty,
+            List<Unit> units) {
         Recipe recipe = findByID(recipeID);
         User currUser = userService.findByID(userID);
-        if(recipe==null || currUser==null || userID!=recipe.getCreatedBy().getID()){
+        if (recipe == null || currUser == null || userID != recipe.getCreatedBy().getID()) {
             return null;
-        } 
+        }
         List<IngredientMeasurement> measurements = new ArrayList<>();
         if (units.size() != qty.size() || units.size() != ingredientIDs.size()) {
             return recipe;
         }
         for (int i = 0; i < units.size(); i++) {
             Ingredient ingredient = ingredientService.findByID(ingredientIDs.get(i));
-            if(ingredient!=null && (!ingredient.isPrivate()||(ingredient.getCreatedBy()!=null&& ingredient.getCreatedBy().getID()== userID))){
+            if (ingredient != null && (!ingredient.isPrivate()
+                    || (ingredient.getCreatedBy() != null && ingredient.getCreatedBy().getID() == userID))) {
                 measurements.add(new IngredientMeasurement(ingredient, units.get(i), qty.get(i)));
             }
         }
@@ -229,4 +279,47 @@ public class RecipeServiceImplementation implements RecipeService {
         return save(recipe);
     }
 
+    @Override
+    public Recipe updateRecipeDetails(long id, Recipe updatedRecipe) {
+        Recipe recipe = findByID(id);
+        if (recipe == null) {
+            return null;
+        }
+        recipe.setTitle(updatedRecipe.getTitle());
+        recipe.setInstructions(updatedRecipe.getInstructions());
+        recipe.setPrivate(updatedRecipe.isPrivate());
+
+        return update(recipe);
+    }
+    /**
+     * Finds all recipes which are accessible to the given user and have a total
+     * purchase cost under the given limit. If the user is null, then only public
+     * recipes are searched
+     * @param upperLimit - the upper limit of the total purchase cost
+     * @param user - the user making the request
+     * @return all accessible recipes under that price
+     */
+    public List<Recipe> findUnderTPC(int upperLimit, User user) {
+        if (user == null){
+            return recipeRepository.findPublicUnderTPC(upperLimit);
+        }
+        return recipeRepository.findAccessibleUnderTPC(user, upperLimit);
+    }
+
+    /**
+     * Finds all recipes which are accessible to the given user and have a total
+     * ingredient cost under the given limit. If the user is null, then only public
+     * recipes are searched
+     * @param upperLimit - the upper limit of the total ingredient cost
+     * @param user - the user making the request
+     * @return all accessible recipes under that price
+     */
+    public List<Recipe> findUnderTIC(int upperLimit, User user) {
+        if (user == null){
+            return recipeRepository.findPublicUnderTIC(upperLimit);
+        }
+        return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
+    }
+
 }
+
