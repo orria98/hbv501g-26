@@ -12,6 +12,10 @@ public interface IngredientService {
     List<Ingredient> findAll();
 
     Ingredient findByID(long id);
+    
+    Ingredient findAccessibleByID(long id, User user);
+
+    List<Ingredient> findAccessibleToUser(User user);
 
     Ingredient save(User author, Ingredient ingredient);
 

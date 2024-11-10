@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
+import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Repositories.IngredientRepository;
 import hbv501g.recipes.Services.IngredientService;
@@ -44,6 +45,35 @@ public class IngredientServiceImplementation implements IngredientService {
     @Override
     public Ingredient findByID(long id) {
         return ingredientRepository.findByID(id);
+    }
+
+    /**
+     * Finds an ingredient with the given id, if one exists and is accessible to the
+     * given user. Otherwise, null is returned
+     * 
+     * @param id   - the id of the ingredient to find
+     * @param user - the user requesting the ingredient
+     * @return an ingredient with the given id, or null
+     */
+    public Ingredient findAccessibleByID(long id, User user) {
+        if (user == null) {
+            return ingredientRepository.findByIsPrivateFalseAndID(id);
+        }
+        return ingredientRepository.findAccessibleByID(user, id);
+    }
+
+    /**
+     * Finds all ingredients that are accessible to the given user. If the user is
+     * null, this is all public ingredients
+     * 
+     * @param user - the user looking for ingredients
+     * @return all ingredients accessible to the given user
+     */
+    public List<Ingredient> findAccessibleToUser(User user) {
+        if (user == null) {
+            return ingredientRepository.findByIsPrivateFalse();
+        }
+        return ingredientRepository.findByIsPrivateFalseOrCreatedBy(user);
     }
 
     /**
