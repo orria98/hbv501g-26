@@ -148,4 +148,12 @@ public class Recipe {
         this.totalIngredientCost = totalIngredientCost;
     }
 
+    /**
+     * Til að hafa aðgang að nafni notanda í framenda, nafn fylgir í json
+     * @return nafn notanda sem gerði uppskrift
+     */
+    public String getRecipeCreator(){
+        return createdBy== null ? "" : createdBy.getUsername();
+    }
+
 }
