@@ -31,11 +31,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/init")
-    @ResponseBody
-    public List<User> initUsers() {
-        return userService.initUsers();
-    }
 
     /**
      * Endpoint to get all users from the db
@@ -153,6 +148,13 @@ public class UserController {
             @RequestParam double qty, HttpSession session) {
 
         return userService.addPantryItem((User) session.getAttribute("LoggedInUser"), iid, unit, qty);
+    }
+
+    /*Not in any assignment */
+    @GetMapping("/user/init")
+    @ResponseBody
+    public List<User> initUsers() {
+        return userService.initUsers();
     }
 
 }

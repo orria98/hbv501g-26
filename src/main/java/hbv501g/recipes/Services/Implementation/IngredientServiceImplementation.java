@@ -20,12 +20,10 @@ import hbv501g.recipes.Persistence.Entities.User;
 public class IngredientServiceImplementation implements IngredientService {
 
     private IngredientRepository ingredientRepository;
-    // private UserService userService;
 
     @Autowired
-    public IngredientServiceImplementation(IngredientRepository ingredientRepository /* , UserService userService */) {
+    public IngredientServiceImplementation(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
-        // this.userService = userService;
     }
 
     /**
@@ -77,10 +75,10 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Adds a given Java object to the database
+     * Saves the given ingredient to the database
      *
-     * @param user       - is the user of the sesson
-     * @param ingredient - the java object
+     * @param author     - the user creating the Ingredient
+     * @param ingredient - the ingredient
      * @return the ingredient saved to db
      */
     @Override
@@ -95,24 +93,46 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Finds the first ingredient with a given title
+     * Updates the title of the ingredient with the given id, if it was made by the
+     * given user, and sets the title as the given title
      * 
-     * @param title - the ingredient title to search for
-     * @return One or no ingredients
+     * @param id       - the id of the ingredient to update
+     * @param newTitle - the new title of the ingredient
+     * @param user     - the user making the change
+     * @return the ingredient with the new title
+     */
+    public Ingredient updateIngredientTitle(long id, String newTitle, User user) {
+        Ingredient ingredient = findByID(id);
+        if (ingredient == null || user == null) {
+            return null;
+        }
+        if (ingredient.getCreatedBy().getID() != user.getID()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not the creator of this ingredient.");
+        }
+        ingredient.setTitle(newTitle);
+        return ingredientRepository.save(ingredient);
+    }
+
+    /**
+     * Find and delet the ingredient with maching id.
+     *
+     * @param User : is the user in the sesion.
+     * @param id   : is a 8 byte integer and is the id
+     *             of the ingredient.
      */
     @Override
-    public Ingredient findByTitle(String title) {
-        return ingredientRepository.findByTitle(title).get(0);
+    public void deleteById(User user, long id) {
+        if (user != null) {
+            User author = findByID(id).getCreatedBy();
+            if (author != null) {
+                if (author.getID() == user.getID()) {
+                    ingredientRepository.deleteById(id);
+                }
+            }
+        }
     }
 
-    @Override
-    public Ingredient update(Ingredient updatedIngredient) {
-        return ingredientRepository.save(updatedIngredient);
-    }
-
-    public List<Ingredient> findOrderedIngredients() {
-        return ingredientRepository.findAllByOrderByPrice();
-    }
+    /** Not in any assignment */
 
     // public List<Ingredient> initIngredients(){
     // List<Ingredient> AllIngredients = findAll();
@@ -137,34 +157,23 @@ public class IngredientServiceImplementation implements IngredientService {
     // return AllIngredients;
     // }
 
-    public Ingredient updateIngredientTitle(long id, String newTitle, User user) {
-        Ingredient ingredient = findByID(id);
-        if (ingredient == null || user == null) {
-            return null;
-        }
-        if (ingredient.getCreatedBy().getID() != user.getID()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not the creator of this ingredient.");
-        }
-        ingredient.setTitle(newTitle);
-        return update(ingredient);
-    }
-
     /**
-     * Find and delet the ingredient with maching id.
-     *
-     * @param User : is the user in the sesion.
-     * @param id   : is a 8 byte integer and is the id
-     *             of the ingredient.
+     * Finds the first ingredient with a given title
+     * 
+     * @param title - the ingredient title to search for
+     * @return One or no ingredients
      */
     @Override
-    public void deleteById(User user, long id) {
-        if (user != null) {
-            User author = findByID(id).getCreatedBy();
-            if (author != null) {
-                if (author.getID() == user.getID()) {
-                    ingredientRepository.deleteById(id);
-                }
-            }
-        }
+    public Ingredient findByTitle(String title) {
+        return ingredientRepository.findByTitle(title).get(0);
+    }
+
+    @Override
+    public Ingredient update(Ingredient updatedIngredient) {
+        return ingredientRepository.save(updatedIngredient);
+    }
+
+    public List<Ingredient> findOrderedIngredients() {
+        return ingredientRepository.findAllByOrderByPrice();
     }
 }

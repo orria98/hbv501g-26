@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
@@ -33,11 +31,19 @@ public class RecipeServiceImplementation implements RecipeService {
         this.ingredientService = ingredientService;
     }
 
+    /**
+     * Finds all Recipes in the system
+     * @return All recipes
+     */
     @Override
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
     }
 
+    /**
+     * Finds the recipe with the given id, if one exists
+     * @return the recipe with the given id, or null if it does not exist
+     */
     @Override
     public Recipe findByID(long id) {
         return recipeRepository.findByID(id);
@@ -46,6 +52,9 @@ public class RecipeServiceImplementation implements RecipeService {
     /**
      * Finds the recipe with the given id, if one exists and is accessible to the
      * user. If the user is null, then only public recipes are accessible
+     * @param id - the id of the recipe
+     * @param user - the user requesting the recipe
+     * @return the recipe with the given id, or null
      */
     public Recipe findAccessibleByID(long id, User user) {
         if (user == null) {
@@ -54,19 +63,28 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findAccessibleByID(user, id);
     }
 
+    /**
+     * Saves a recipe to the database
+     * @param recipe - the recipe to be saved
+     * @return the saved recipe
+     */
     // @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
 
+    /**
+     * Saves an updated version of a recipe to the database
+     * @param updatedRecipe - the updated recipe to save
+     * @return the updated version of the saved recipe
+     */
     public Recipe update(Recipe updatedRecipe) {
         return recipeRepository.save(updatedRecipe);
     }
 
     /**
      * finds all recipes which are accessible to the given user, which have a given
-     * search
-     * term in the title
+     * search term in the title
      * 
      * @param user       - the user who is searching
      * @param searchTerm - the string that should be in the title
@@ -114,26 +132,7 @@ public class RecipeServiceImplementation implements RecipeService {
         }
     }
 
-    /*
-     * Initializes a few recipes, if none are found in the db
-     */
-    public List<Recipe> initRecipes() {
-        List<Recipe> AllRecipes = findAll();
-
-        if (AllRecipes.size() == 0) {
-            Recipe recipe = new Recipe();
-            recipe.setTitle("uppskrift 1");
-            save(recipe);
-
-            recipe = new Recipe();
-            recipe.setTitle("uppskrift 2");
-            save(recipe);
-
-            AllRecipes = findAll();
-        }
-
-        return AllRecipes;
-    }
+   
 
     /**
      * Gets the total purchase cost for a recipe specified by an id, if the recipe
@@ -208,6 +207,11 @@ public class RecipeServiceImplementation implements RecipeService {
         return total;
     }
 
+    /**
+     * Finds all recipes accessible to the given user and returns them ordered by their total purchase cost ascending
+     * @param user - the user requesting the recipes
+     * @return all accessible recipes, ordered
+     */
     public List<Recipe> findOrderedRecipes(User user) {
         if (user == null) {
             return recipeRepository.findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
@@ -301,6 +305,12 @@ public class RecipeServiceImplementation implements RecipeService {
         return save(recipe);
     }
 
+    /**
+     * updates the details of the recipe with the given id, sets the title, instructions and privacy status as they are in the updatedRecipe
+     * @param id - the id of the recipe to update
+     * @param updatedRecipe - a recipe with the updated information
+     * @return a recipe with updated information
+     */
     @Override
     public Recipe updateRecipeDetails(long id, Recipe updatedRecipe) {
         Recipe recipe = findByID(id);
@@ -346,4 +356,24 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
     }
 
+     /*
+     * Initializes a few recipes, if none are found in the db
+     */
+    public List<Recipe> initRecipes() {
+        List<Recipe> AllRecipes = findAll();
+
+        if (AllRecipes.size() == 0) {
+            Recipe recipe = new Recipe();
+            recipe.setTitle("uppskrift 1");
+            save(recipe);
+
+            recipe = new Recipe();
+            recipe.setTitle("uppskrift 2");
+            save(recipe);
+
+            AllRecipes = findAll();
+        }
+
+        return AllRecipes;
+    }
 }

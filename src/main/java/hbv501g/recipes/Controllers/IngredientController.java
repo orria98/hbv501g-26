@@ -35,7 +35,8 @@ public class IngredientController {
     }
 
     /**
-     * Finds an ingredient with the given id, if one exists and is accessible to the
+     * Endpoint to find an ingredient with the given id, if one exists and is
+     * accessible to the
      * current user
      * 
      * @param session - the current http session
@@ -64,10 +65,11 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint createds new idgrediet for the database
+     * Endpoint to create a new ingredient for the current user. No ingredient is
+     * created if no user is logged in
      *
-     * @param session  : is the current session
-     * @param newIngredient - a Ingredient that is being saved
+     * @param session       - The current http session
+     * @param newIngredient - an Ingredient that is being saved
      * @return the new Ingredient
      */
     @PostMapping("ingredient/created")
@@ -77,9 +79,8 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint that finds an ingredient by id and
-     * removes it form the database if the uesr
-     * own the ingredient.
+     * Deletes an ingredient with the given id, if one exists and it belongs to the
+     * current user
      * 
      * @param session : is the current session
      * @param id      : ID number of the ingredient
@@ -105,7 +106,7 @@ public class IngredientController {
         return ingredientService.updateIngredientTitle(id, newTitle, user);
     }
 
-    // Ekki hluti af neinum skilum 
+    /** Not part of any assignment */
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
@@ -136,7 +137,7 @@ public class IngredientController {
         return ingredientService.findAll();
     }
 
-        /**
+    /**
      * Endpoint sem nær í hráefni eftir nafni. Ekki hluti
      * af endpoints fyrir þetta verkefni.
      *

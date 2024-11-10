@@ -36,23 +36,12 @@ public class RecipeController {
     }
 
     /**
-     * Initializes a few recipes
-     * 
-     * @return all recipes from db
-     */
-    @GetMapping("/recipe/init")
-    @ResponseBody
-    public List<Recipe> initRecipes() {
-        return recipeService.initRecipes();
-    }
-
-    /**
      * Gets all recipes available to the user who is
      * currently logged in. This includes all public recipes, and private recipes by
      * the user
      * If there is no user currently logged in, only public recipes are returned
      * 
-     * @param session - The current httpsession
+     * @param session - The current http session
      * @return all available recipes
      */
     @GetMapping("/recipe/all")
@@ -66,7 +55,8 @@ public class RecipeController {
      * Given a maximum price, finds all recipes accessible to the current user which
      * have a total purchase cost under that price
      * 
-     * @param tpc - Maximum total purchase cost of recipe
+     * @param tpc     - Maximum total purchase cost of recipe
+     * @param session - The current httpsession
      * @return all accessible recipes with tpc under the given value
      */
     @GetMapping("/recipe/underTPC/{tpc}")
@@ -79,7 +69,8 @@ public class RecipeController {
      * Given a maximum price, finds all recipes accessible to the current user which
      * have a total ingredient cost under that price
      * 
-     * @param tic - Maximum total ingredient cost of recipe
+     * @param tic     - Maximum total ingredient cost of recipe
+     * @param session - The current httpsession
      * @return all accessible recipes with tic under the given value
      */
     @GetMapping("/recipe/underTIC/{tic}")
@@ -90,10 +81,10 @@ public class RecipeController {
 
     /**
      * Gets all recipes that contain the search term in the title, which are
-     * accessible
-     * to the current user
+     * accessible to the current user
      * 
-     * @param term - the term the titles should include
+     * @param session - The current httpsession
+     * @param term    - the term the titles should include
      * @return list of all recipes with the search term in the title
      */
     @GetMapping("/recipe/search/{term}")
@@ -219,6 +210,15 @@ public class RecipeController {
         return recipeService.addIngredients(currUser.getID(), recipeID, ingredientIDs, qty, units);
     }
 
+    /**
+     * Endpoint to update the details of a recipe with the given id, if a user is
+     * logged in and the recipe was made by them
+     * 
+     * @param id            - the id of the recipe that should be updated
+     * @param updatedRecipe - a recipe with the updated information
+     * @param session       - the current http session
+     * @return the original recipe after being updated
+     */
     @PutMapping("/recipe/{id}/update")
     public Recipe updateRecipeDetails(@PathVariable(value = "id") long id, @RequestBody Recipe updatedRecipe,
             HttpSession session) {
@@ -233,6 +233,17 @@ public class RecipeController {
     }
 
     // ** Not in any assignment */
+
+    /**
+     * Initializes a few recipes
+     * 
+     * @return all recipes from db
+     */
+    @GetMapping("/recipe/init")
+    @ResponseBody
+    public List<Recipe> initRecipes() {
+        return recipeService.initRecipes();
+    }
 
     /**
      * Gets all recipes from the database. Not part of any assignment

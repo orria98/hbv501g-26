@@ -35,65 +35,17 @@ public class HomeController {
     }
 
     /**
-     * Upphafsstillir töflu með einhverjum gildum, með tengingum á milli mismunandi
-     * entity
-     */
-    // @Remove
-    // @GetMapping("/init")
-    // public String initAll() {
-    //     if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
-    //             || !userService.findAll().isEmpty())
-    //         return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
-
-    //     List<Ingredient> ingredients = ingredientService.initIngredients();
-    //     List<Recipe> recipes = recipeService.initRecipes();
-    //     List<User> users = userService.initUsers();
-
-    //     Ingredient ingredient;
-    //     Recipe recipe;
-    //     User user;
-
-    //     for (int i = 0; i < recipes.size(); i++) {
-    //         recipe = recipes.get(i);
-    //         ingredient = ingredients.get(i % (ingredients.size() - 1));
-    //         recipe.setCreatedBy(users.get(1));
-    //         recipe.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.ML, (i + 1) * 1000));
-    //         recipeService.update(recipe);
-    //     }
-
-    //     users = userService.findAll();
-
-    //     for (int i = 0; i < ingredients.size(); i++) {
-    //         ingredient = ingredients.get(i);
-    //         ingredient.setCreatedBy(users.get(1));
-    //         ingredientService.update(ingredient);
-    //     }
-
-    //     users = userService.findAll();
-    //     ingredients = ingredientService.findAll();
-    //     ingredient = ingredients.get(0);
-
-    //     for (int i = 0; i < users.size(); i++) {
-    //         user = users.get(i);
-    //         userService.addPantryItem(user, ingredient.getID(), Unit.G, 20 + i * 10);
-    //         userService.update(user);
-    //     }
-
-    //     return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
-    //             ingredients.size(), recipes.size());
-
-    // }
-
-    /**
-     * Initialize fall sem gerir fallegri gögn
+     * Endpoint to initialize the database with some basic data
+     * 
+     * @return String with a message about the success of the initialization
      */
     @Remove
     @GetMapping("/initialize")
     public String initializeData() {
         if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
-                || !userService.findAll().isEmpty())
+                || !userService.findAll().isEmpty()) {
             return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
-
+        }
         List<User> users;
         List<Ingredient> ingredients;
         List<Recipe> recipes;
@@ -177,7 +129,7 @@ public class HomeController {
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(1), Unit.G, 300));
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(2), Unit.G, 1200));
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(3), Unit.ML, 10000));
-        //user.addIngredientMeasurement(new IngredientMeasurement());
+        // user.addIngredientMeasurement(new IngredientMeasurement());
         userService.update(user);
 
         return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
