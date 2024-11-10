@@ -12,8 +12,7 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
     @Query("select r from RecipeList r where r.createdBy = ?1 or not r.isPrivate")
     List<RecipeList> findAllAccessible(User user);
 
-    @Query("select r from RecipeList r where not r.isPrivate")
-    List<RecipeList>findAllAccessibleUserNull();
+    List<RecipeList> findByIsPrivateFalse();
     
     List<RecipeList> findByCreatedBy(User user);
     

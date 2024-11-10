@@ -35,7 +35,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public List<RecipeList> findAll(User user) {
         if(user == null){
-            return recipeListRepository.findAllAccessibleUserNull();
+            return recipeListRepository.findByIsPrivateFalse();
         }
 	    return recipeListRepository.findAllAccessible(user);
     
