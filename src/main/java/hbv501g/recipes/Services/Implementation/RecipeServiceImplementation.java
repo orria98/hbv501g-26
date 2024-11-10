@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
@@ -202,6 +204,13 @@ public class RecipeServiceImplementation implements RecipeService {
         }
 
         return total;
+    }
+
+    public List<Recipe> findOrderedRecipes(User user) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
+        }
+        return recipeRepository.findRecipesOrderedByTotalPurchasePriceAscending(user);
     }
 
     /**

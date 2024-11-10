@@ -7,12 +7,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAll();
 
     @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) and r.title like ?2")
-    List<Recipe> searchAccessibleRecipes(User user,String searchTerm);
+    List<Recipe> searchAccessibleRecipes(User user, String searchTerm);
 
     @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) and r.id = ?2")
     Recipe findAccessibleByID(User user, long id);
@@ -36,9 +35,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findByIsPrivateFalseOrCreatedBy(User user);
 
     List<Recipe> findByIsPrivateFalse();
-    
+
     void deleteById(long id);
-    
+
     Recipe findByID(long iD);
-    
-} 
+
+    List<Recipe> findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
+
+    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) order by r.totalPurchaseCost asc")
+    List<Recipe> findRecipesOrderedByTotalPurchasePriceAscending(User user);
+}

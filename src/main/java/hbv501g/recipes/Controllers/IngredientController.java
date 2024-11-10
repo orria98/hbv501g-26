@@ -7,6 +7,7 @@ package hbv501g.recipes.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,7 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.Map;
 import java.time.LocalDate;
 
 @RestController
@@ -86,21 +88,23 @@ public class IngredientController {
         ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
-    /** Not part of any assignment**/
-
     /**
-     * Initializes a few ingredients. Ekki hluti af skilum, en
-     * gerir það auðveldara að prófa hvort forritið virki.
+     * Endpoint for updating the title of an ingredient
      * 
-     * @return some ingredients
+     * @param session : Current session
+     * @param id      : ID of the ingredient
+     * @param body    : Request body containing the new title
+     * @return : The updated ingredient
      */
-    // @GetMapping("/ingredient/init")
-    // @ResponseBody
-    // public List<Ingredient> InitIngredients() {
-    // return ingredientService.initIngredients();
-    // }
+    @PatchMapping("ingredient/updateTitle/{id}")
+    public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
+            @RequestBody Map<String, String> body) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        String newTitle = body.get("title");
+        return ingredientService.updateIngredientTitle(id, newTitle, user);
+    }
 
-    
+    // Ekki hluti af neinum skilum
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients() {
         return ingredientService.findOrderedIngredients();
@@ -143,4 +147,16 @@ public class IngredientController {
     public Ingredient getIngredientByTitle(@PathVariable(value = "title") String title) {
         return ingredientService.findByTitle(title);
     }
+
+    /**
+     * Initializes a few ingredients. Ekki hluti af skilum, en
+     * gerir það auðveldara að prófa hvort forritið virki.
+     * 
+     * @return some ingredients
+     */
+    // @GetMapping("/ingredient/init")
+    // @ResponseBody
+    // public List<Ingredient> InitIngredients() {
+    // return ingredientService.initIngredients();
+    // }
 }

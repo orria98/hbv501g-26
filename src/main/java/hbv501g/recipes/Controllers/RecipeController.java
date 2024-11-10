@@ -257,4 +257,10 @@ public class RecipeController {
     public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
     }
+
+    @GetMapping("/recipe/all/ordered")
+    public List<Recipe> getAllOrderedRecipes(HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findOrderedRecipes(user);
+    }
 }

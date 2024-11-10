@@ -4,7 +4,9 @@ import java.util.List;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.Recipe;
@@ -134,6 +136,18 @@ public class IngredientServiceImplementation implements IngredientService {
 
     // return AllIngredients;
     // }
+
+    public Ingredient updateIngredientTitle(long id, String newTitle, User user) {
+        Ingredient ingredient = findByID(id);
+        if (ingredient == null || user == null) {
+            return null;
+        }
+        if (ingredient.getCreatedBy().getID() != user.getID()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not the creator of this ingredient.");
+        }
+        ingredient.setTitle(newTitle);
+        return update(ingredient);
+    }
 
     /**
      * Find and delet the ingredient with maching id.
