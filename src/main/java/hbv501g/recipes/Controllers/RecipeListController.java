@@ -76,7 +76,7 @@ public class RecipeListController {
      * @param isPrivate   - optionally decides if the list is private
      * @return the new list
      */
-    @RequestMapping("/list/new")
+    @PostMapping("/list/new")
     @ResponseBody
     public RecipeList newRecipeList(HttpSession session, @RequestParam String title,
             @RequestParam(required = false) String description, @RequestParam(required = false) boolean isPrivate) {

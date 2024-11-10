@@ -6,8 +6,10 @@
 package hbv501g.recipes.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +22,6 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
-import java.time.LocalDate;
 
 @RestController
 public class IngredientController {
@@ -86,7 +87,8 @@ public class IngredientController {
      * @param newIngredient - a Ingredient that is being saved
      * @return the new Ingredient
      */
-    @RequestMapping("ingredient/created")
+    @PostMapping("ingredient/created")
+    @ResponseBody
     public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
 	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
     }
@@ -99,7 +101,7 @@ public class IngredientController {
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
-    @RequestMapping("ingredient/delete/{id}")
+    @DeleteMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
 	ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
