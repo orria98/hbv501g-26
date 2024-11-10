@@ -95,19 +95,18 @@ public class RecipeListController {
     }
 
     /**
-     * Endpoint gets a Recipe form resiplist.
+     * Endpoint gets all Recipe form resiplist.
      *
      * @param session  - the current HTTP session
      * @param listID   - the id of the recipe
      * @param recipeID - the id of the list
-     * @return The recipe that has the recipeID and
-     *         is in the recipeList that has the id
-     *         value of listID.
+     * @return All of the recipe that are int the 
+     *         recipeList that has the id value of 
+     *         listID.
      */
-    @GetMapping("/list/id/{listID}/recipe/{recipeID}")
-    public Recipe getRecipeFormList(HttpSession session, @PathVariable(value = "listID") long listID,
-            @PathVariable(value = "recipeID") long recipeID) {
-        return recipeListService.getRecipeFromID((User) session.getAttribute("LoggedInUser"), listID, recipeID);
+    @GetMapping("/list/id/{listID}/recipe")
+    public List<Recipe> getAllRecipeFormList(HttpSession session, @PathVariable(value = "listID") long listID) {
+        return recipeListService.getAllRecipeFromID((User) session.getAttribute("LoggedInUser"), listID);
     }
 
     /**
