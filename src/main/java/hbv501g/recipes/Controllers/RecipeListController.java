@@ -26,13 +26,15 @@ public class RecipeListController {
     /**
      * Endpoint to get all recipe lists. Not needed for any assignment, but helpful
      * for testing
-     * 
-     * @return all RecipeList objects in db
+     *
+     * @param session - the current http session
+     * @return all RecipeList objects that are not privite unless the
+     *	       curet user own the list.
      */
     @GetMapping("/list/all")
     @ResponseBody
-    public List<RecipeList> getAllRecipeLists() {
-        return recipeListService.findAll();
+    public List<RecipeList> getAllRecipeLists(HttpSession session) {
+        return recipeListService.findAll((User) session.getAttribute("LoggedInUser"));
     }
 
     /**
@@ -112,6 +114,21 @@ public class RecipeListController {
     }
 
     /**
+     * Find a Recipelist by it ID number and delets it
+     *
+     * @param session  - the current HTTP session
+     * @param listID   - the id of the recipe
+     */
+    @GetMapping("list/id/{id}/delete")
+    public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id){
+	    recipeListService.deletByID(
+	    			    (User) session.getAttribute("LoggedInUser"),
+	    			    id
+	    			   );
+
+    }
+
+    /**
      * Endpoint finds a Recipe form resiplist and
      * removes it from it.
      *
@@ -122,8 +139,7 @@ public class RecipeListController {
      *         is in the recipeList that has the id
      *         value of listID.
      */
-    @ResponseBody
-    @RequestMapping("/list/id/{listID}/recipe/{recipeID}/remove")
+    @GetMapping("/list/id/{listID}/recipe/{recipeID}/remove")
     public RecipeList removeRecipeFromList(HttpSession session, @PathVariable(value = "listID") long listID,
             @PathVariable(value = "recipeID") long recipeID) {
         return recipeListService.removeRecipeFromID((User) session.getAttribute("LoggedInUser"), listID, recipeID);

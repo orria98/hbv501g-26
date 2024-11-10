@@ -23,7 +23,7 @@ public interface RecipeService {
 
     Recipe update(Recipe recipe);
 
-    void deleteById(long id);
+    void deleteById(User user, long id);
 
     int getTotalPurchaseCost(long id);
 

@@ -99,8 +99,15 @@ public class RecipeServiceImplementation implements RecipeService {
      *           of the precipe.
      */
     @Override
-    public void deleteById(long id) {
-        recipeRepository.deleteById(id);
+    public void deleteById(User user, long id){
+	if (user != null) {
+	    User author = findByID(id).getCreatedBy();
+	    if(author != null){
+		if (author.getID() == user.getID()) {
+		    recipeRepository.deleteById(id);
+		}
+	    }
+	}       
     }
 
     /*
