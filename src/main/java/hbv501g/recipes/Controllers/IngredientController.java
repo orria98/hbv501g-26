@@ -20,7 +20,6 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
-import java.time.LocalDate;
 
 @RestController
 public class IngredientController {
@@ -55,7 +54,7 @@ public class IngredientController {
     }
 
     /**
-     * Initializes a few ingredients. Ekki hluti af skilum, en
+     * Initializes a few ingredients. Ekki hluti af skilum, en 
      * gerir það auðveldara að prófa hvort forritið virki.
      * 
      * @return some ingredients
@@ -67,7 +66,7 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti
+     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti 
      * af endpoints fyrir þetta verkefni.
      *
      * @param title : nafn hráefnis
@@ -82,7 +81,7 @@ public class IngredientController {
     /**
      * Endpoint createds new idgrediet for the database
      *
-     * @param session       : is the current session
+     * @param session  : is the current session
      * @param newIngredient - a Ingredient that is being saved
      * @return the new Ingredient
      */
@@ -104,9 +103,9 @@ public class IngredientController {
 	ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
-    // Ekki hluti af neinum skilum
+    // Ekki hluti af neinum skilum 
     @GetMapping("ingredient/all/ordered")
-    public List<Ingredient> getOrderedIngredients() {
+    public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
     }
 

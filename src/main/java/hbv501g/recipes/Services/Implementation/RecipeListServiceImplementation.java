@@ -27,33 +27,14 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Gets and returns all RecipeList objects from DB
+     * Get all RecipeList from the database that are not
+     * privat unless the user owns them.
      *
      * @param user : is the user that is loged in.
-     * @return all recipe lists
+     * @return a list of RcipeList.
      */
     public List<RecipeList> findAll(User user) {
-        List<RecipeList> listOfRecipeList = recipeListRepository.findAll();
-	    List<RecipeList> out = new ArrayList<>();
-
-	    if(listOfRecipeList == null) return null;
-
-	    if(user != null){
-	        for(RecipeList list : listOfRecipeList){
-	    	    if(!(list.isPrivate()) || user.getID() == list.getCreatedBy().getID()){
-	    	        out.add(list);
-	    	    }
-	        }
-	    }
-	    else{
-	        for(RecipeList list : listOfRecipeList){
-	    	    if(!(list.isPrivate())){
-	    	        out.add(list);
-	    	    }
-	        }
-	    }
-
-	    return out;
+	    return recipeListRepository.findAll(user);
     
     }
 
