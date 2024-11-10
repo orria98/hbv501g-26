@@ -113,6 +113,25 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
+     * Updates the title of a recipeList, if it belongs to the given user
+     * @param user - the user who is changing the title
+     * @param newTitle - the new title  
+     * @param id - the id of the recipelist to be changed
+     * @return the updated recipelist, if the change was successful, otherwise null
+     */
+    public  RecipeList updateTitle(User user, String newTitle,long id){
+        RecipeList recipeList = findByID(user, id);
+        if(recipeList==null ||user==null||recipeList.getCreatedBy()==null||recipeList.getCreatedBy().getID()!=user.getID()){
+            return null;
+        }
+
+        recipeList.setTitle(newTitle);
+        
+        return recipeListRepository.save(recipeList);
+    }
+
+
+    /**
      * Adds the recipe specified to the given list, if both exists, the list
      * owner is logged in and can access the recipe
      * 

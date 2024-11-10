@@ -2,6 +2,7 @@ package hbv501g.recipes.Controllers;
 
 import java.util.List;
 
+import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.RecipeList;
 import hbv501g.recipes.Persistence.Entities.User;
@@ -9,6 +10,8 @@ import hbv501g.recipes.Services.RecipeListService;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Controller for the RecipeList entity, with endpoints directly accessing the
@@ -138,6 +141,21 @@ public class RecipeListController {
     public RecipeList removeRecipeFromList(HttpSession session, @PathVariable(value = "listID") long listID,
             @PathVariable(value = "recipeID") long recipeID) {
         return recipeListService.removeRecipeFromID((User) session.getAttribute("LoggedInUser"), listID, recipeID);
+    }
+    
+    /**
+     * Updates the title of a recipe list
+     * 
+     * @param session - the current http session
+     * @param id - the id of the recipe list
+     * @param body - a RequestBody containing a mapping with the new title
+     * @return  the updated recipelist
+     */
+    @PatchMapping("/list/updateTitle/{id}")
+    public RecipeList updatetitle(HttpSession session, @PathVariable(value = "id") long id, @RequestBody Map<String,String> body) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        String newTitle = body.get("title");
+        return recipeListService.updateTitle(user,newTitle, id);
     }
 
 }

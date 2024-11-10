@@ -12,18 +12,24 @@ public interface IngredientService {
     List<Ingredient> findAll();
 
     Ingredient findByID(long id);
+    
+    Ingredient findAccessibleByID(long id, User user);
+
+    List<Ingredient> findAccessibleToUser(User user);
 
     Ingredient save(User author, Ingredient ingredient);
 
     Ingredient update(Ingredient updatedIngredient);
 
-    void deleteById (User user, long id);
+    void deleteById(User user, long id);
 
     // Ekki hluti af skilum
-    List<Ingredient> initIngredients();
+    // List<Ingredient> initIngredients();
     
     Ingredient findByTitle(String title);
 
     List<Ingredient> findOrderedIngredients();
+
+    Ingredient updateIngredientTitle(long id, String newTitle, User user);
 
 }

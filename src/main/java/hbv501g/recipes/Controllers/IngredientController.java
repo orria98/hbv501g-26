@@ -7,6 +7,7 @@ package hbv501g.recipes.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +22,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
+import java.util.Map;
+import java.time.LocalDate;
+
 @RestController
 public class IngredientController {
     private IngredientService ingredientService;
@@ -31,51 +35,32 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint sem nær í hráefni með gefið id.
+     * Finds an ingredient with the given id, if one exists and is accessible to the
+     * current user
      * 
-     * @param id
-     * @return Ingredient með það id
+     * @param session - the current http session
+     * @param id      - the id of the ingredient
+     * @return the requested ingredient, or null
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable(value = "id") long id) {
-        return ingredientService.findByID(id);
+    public Ingredient getIngredientById(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return ingredientService.findAccessibleByID(id, user);
     }
 
     /**
-     * Endpoint sem skilar öllum ingredients í töflunni
+     * Finds all ingredients that are accessible to the current user. If no user is
+     * logged in, this is only the public ingredients
      * 
-     * @return all ingredients in db
+     * @param session - the current http session
+     * @return all ingredients accessible to the current user
      */
     @GetMapping("/ingredient/all")
     @ResponseBody
-    public List<Ingredient> getAllIngredients() {
-        return ingredientService.findAll();
-    }
-
-    /**
-     * Initializes a few ingredients. Ekki hluti af skilum, en 
-     * gerir það auðveldara að prófa hvort forritið virki.
-     * 
-     * @return some ingredients
-     */
-    @GetMapping("/ingredient/init")
-    @ResponseBody
-    public List<Ingredient> InitIngredients() {
-        return ingredientService.initIngredients();
-    }
-
-    /**
-     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti 
-     * af endpoints fyrir þetta verkefni.
-     *
-     * @param title : nafn hráefnis
-     * @return one or no ingredient
-     */
-    @GetMapping("/ingredient/title/{title}")
-    @ResponseBody
-    public Ingredient getIngredientByTitle(@PathVariable(value = "title") String title) {
-        return ingredientService.findByTitle(title);
+    public List<Ingredient> getAllIngredients(HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return ingredientService.findAccessibleToUser(user);
     }
 
     /**
@@ -86,8 +71,8 @@ public class IngredientController {
      * @return the new Ingredient
      */
     @RequestMapping("ingredient/created")
-    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
-	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
+    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient) {
+        return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
     }
 
     /**
@@ -100,7 +85,23 @@ public class IngredientController {
      */
     @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
-	ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+        ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+    }
+
+    /**
+     * Endpoint for updating the title of an ingredient
+     * 
+     * @param session : Current session
+     * @param id      : ID of the ingredient
+     * @param body    : Request body containing the new title
+     * @return : The updated ingredient
+     */
+    @PatchMapping("ingredient/updateTitle/{id}")
+    public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
+            @RequestBody Map<String, String> body) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        String newTitle = body.get("title");
+        return ingredientService.updateIngredientTitle(id, newTitle, user);
     }
 
     // Ekki hluti af neinum skilum 
@@ -109,4 +110,53 @@ public class IngredientController {
         return ingredientService.findOrderedIngredients();
     }
 
+    /**
+     * Endpoint sem nær í hráefni með gefið id.
+     * 
+     * @param id
+     * @return Ingredient með það id
+     */
+    @Deprecated
+    @GetMapping("/ingredient/allId/{id}")
+    @ResponseBody
+    public Ingredient oldGetIngredientById(@PathVariable(value = "id") long id) {
+        return ingredientService.findByID(id);
+    }
+
+    /**
+     * Endpoint sem skilar öllum ingredients í töflunni
+     * 
+     * @return all ingredients in db
+     */
+    @Deprecated
+    @GetMapping("/ingredient/oldAll")
+    @ResponseBody
+    public List<Ingredient> oldGetAllIngredients() {
+        return ingredientService.findAll();
+    }
+
+        /**
+     * Endpoint sem nær í hráefni eftir nafni. Ekki hluti
+     * af endpoints fyrir þetta verkefni.
+     *
+     * @param title : nafn hráefnis
+     * @return one or no ingredient
+     */
+    @GetMapping("/ingredient/title/{title}")
+    @ResponseBody
+    public Ingredient getIngredientByTitle(@PathVariable(value = "title") String title) {
+        return ingredientService.findByTitle(title);
+    }
+
+    /**
+     * Initializes a few ingredients. Ekki hluti af skilum, en
+     * gerir það auðveldara að prófa hvort forritið virki.
+     * 
+     * @return some ingredients
+     */
+    // @GetMapping("/ingredient/init")
+    // @ResponseBody
+    // public List<Ingredient> InitIngredients() {
+    // return ingredientService.initIngredients();
+    // }
 }

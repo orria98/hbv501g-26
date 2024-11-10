@@ -25,9 +25,9 @@ public interface RecipeService {
 
     void deleteById(User user, long id);
 
-    int getTotalPurchaseCost(long id);
+    int getTotalPurchaseCost(User user, long id);
 
-    double getTotalIngredientCost(long id);
+    double getTotalIngredientCost(User user,long id);
 
     double getPersonalizedPurchaseCost(User user, long recipeId);
 
@@ -38,6 +38,8 @@ public interface RecipeService {
     Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
 
     List<Recipe> findUnderTPC(int upperLimit, User user);
-    
+
     List<Recipe> findUnderTIC(int upperLimit, User user);
+
+    List<Recipe> findOrderedRecipes(User user);
 }
