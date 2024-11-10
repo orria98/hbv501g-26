@@ -19,7 +19,7 @@ public interface RecipeListService {
 
     RecipeList addRecipe(long recipeID, long listID, User user);
 
-    Recipe getRecipeFromID(User user, long id, long recipeID);
+    List<Recipe> getAllRecipeFromID(User user, long id);
 
     void deletByID(User user, long id);
 

@@ -21,6 +21,7 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
+
 import java.util.Map;
 import java.time.LocalDate;
 
@@ -59,14 +60,13 @@ public class IngredientController {
     @ResponseBody
     public List<Ingredient> getAllIngredients(HttpSession session) {
         User user = (User) session.getAttribute("LoggedInUser");
-
         return ingredientService.findAccessibleToUser(user);
     }
 
     /**
      * Endpoint createds new idgrediet for the database
      *
-     * @param session       : is the current session
+     * @param session  : is the current session
      * @param newIngredient - a Ingredient that is being saved
      * @return the new Ingredient
      */
@@ -104,9 +104,9 @@ public class IngredientController {
         return ingredientService.updateIngredientTitle(id, newTitle, user);
     }
 
-    // Ekki hluti af neinum skilum
+    // Ekki hluti af neinum skilum 
     @GetMapping("ingredient/all/ordered")
-    public List<Ingredient> getOrderedIngredients() {
+    public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
     }
 
