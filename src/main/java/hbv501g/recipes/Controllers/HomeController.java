@@ -127,7 +127,7 @@ public class HomeController {
             ingredientService.save(users.get(2), ingredient);
 
             ingredient = new Ingredient("sykur", Unit.G, 1000, 400, "Costco", "Kirkland");
-            ingredientService.save(users.get(0),ingredient);
+            ingredientService.save(users.get(0), ingredient);
 
             ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
             ingredientService.save(users.get(1), ingredient);
