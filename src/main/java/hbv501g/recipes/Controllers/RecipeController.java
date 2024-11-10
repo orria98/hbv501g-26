@@ -45,7 +45,6 @@ public class RecipeController {
         return recipeService.initRecipes();
     }
 
-
     /**
      * Gets all recipes available to the user who is
      * currently logged in. This includes all public recipes, and private recipes by
@@ -87,7 +86,6 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findUnderTIC(tic, user);
     }
-    
 
     /**
      * Gets all recipes that contain the search term in the title, which are
@@ -102,7 +100,6 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findByTitleContaining(user, term);
     }
-
 
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
@@ -128,37 +125,43 @@ public class RecipeController {
      */
     @RequestMapping("/recipe/delete/{id}")
     public void deleteRecipeById(HttpSession session, @PathVariable(value = "id") long id) {
-	recipeService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+        recipeService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
     /**
-     * gets the total cost to purchase all ingredients needed for a recipe
+     * gets the total cost to purchase all ingredients needed for a recipe, if the
+     * recipe exists and is accessible to the current user
      * 
-     * @param id - recipe id
+     * @param id      - recipe id
+     * @param session - the current http session
      * @return total purchase cost
      */
     @GetMapping("/recipe/id/{id}/totalpurch")
     @ResponseBody
-    public int getTotalPurchaseCost(@PathVariable(value = "id") long id) {
-        return recipeService.getTotalPurchaseCost(id);
+    public int getTotalPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.getTotalPurchaseCost(user, id);
     }
 
     /**
      * Gets the total ingredient cost for a given recipe, that is the exact cost for
-     * the quantity used
+     * the quantity used, if the recipe exists and is accessible to the current user
      * 
-     * @param id - recipe id
+     * @param id      - recipe id
+     * @param session - the current http session
      * @return total ingredient cost
      */
     @GetMapping("/recipe/id/{id}/totalIng")
     @ResponseBody
-    public double getTotalIngredientCost(@PathVariable(value = "id") long id) {
-        return recipeService.getTotalIngredientCost(id);
+    public double getTotalIngredientCost(@PathVariable(value = "id") long id, HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.getTotalIngredientCost(user, id);
     }
 
     /**
      * Gets the total cost of ingredients the current user doesn't have in the
-     * pantry for the recipe specified
+     * pantry for the recipe specified, if the recipe exists and is accessible to
+     * the current user
      * 
      * @param id      - recipe id
      * @param session - current session
@@ -228,8 +231,8 @@ public class RecipeController {
 
     }
 
-    //** Not in any assignment */
-    
+    // ** Not in any assignment */
+
     /**
      * Gets all recipes from the database. Not part of any assignment
      * 
@@ -242,7 +245,6 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
-    
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
      * has the ID, otherwise it returns null
