@@ -19,12 +19,12 @@ import hbv501g.recipes.Persistence.Entities.User;
 public class IngredientServiceImplementation implements IngredientService {
 
     private IngredientRepository ingredientRepository;
-    private UserService userService;
+    // private UserService userService;
 
     @Autowired
-    public IngredientServiceImplementation(IngredientRepository ingredientRepository, UserService userService) {
+    public IngredientServiceImplementation(IngredientRepository ingredientRepository /* , UserService userService */) {
         this.ingredientRepository = ingredientRepository;
-        this.userService = userService;
+        // this.userService = userService;
     }
 
     /**
@@ -84,28 +84,28 @@ public class IngredientServiceImplementation implements IngredientService {
         return ingredientRepository.findAllByOrderByPrice();
     }
 
-    public List<Ingredient> initIngredients() {
-        List<Ingredient> AllIngredients = findAll();
-        User user = userService.findByID(1);
+    // public List<Ingredient> initIngredients(){
+    // List<Ingredient> AllIngredients = findAll();
+    // User user = userService.findByID(1);
 
-        if (AllIngredients.size() == 0) {
-            Ingredient ingredient = new Ingredient("ger", Unit.G, 25, 250);
-            save(user, ingredient);
+    // if (AllIngredients.size() == 0) {
+    // Ingredient ingredient = new Ingredient("ger", Unit.G, 25, 250);
+    // save(user, ingredient);
 
-            ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
-            save(user, ingredient);
+    // ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
+    // save(user, ingredient);
 
-            ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
-            save(user, ingredient);
+    // ingredient = new Ingredient("sykur", Unit.G, 1000, 400);
+    // save(user, ingredient);
 
-            ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
-            save(user, ingredient);
+    // ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
+    // save(user, ingredient);
 
-            AllIngredients = findAll();
-        }
+    // AllIngredients = findAll();
+    // }
 
-        return AllIngredients;
-    }
+    // return AllIngredients;
+    // }
 
     public Ingredient updateIngredientTitle(long id, String newTitle, User user) {
         Ingredient ingredient = findByID(id);

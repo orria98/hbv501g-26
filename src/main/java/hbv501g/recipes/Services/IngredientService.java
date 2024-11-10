@@ -20,8 +20,8 @@ public interface IngredientService {
     void deleteById(User user, long id);
 
     // Ekki hluti af skilum
-    List<Ingredient> initIngredients();
-
+    // List<Ingredient> initIngredients();
+    
     Ingredient findByTitle(String title);
 
     List<Ingredient> findOrderedIngredients();

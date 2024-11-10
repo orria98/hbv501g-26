@@ -38,51 +38,51 @@ public class HomeController {
      * Upphafsstillir töflu með einhverjum gildum, með tengingum á milli mismunandi
      * entity
      */
-    @Remove
-    @GetMapping("/init")
-    public String initAll() {
-        if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
-                || !userService.findAll().isEmpty())
-            return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
+    // @Remove
+    // @GetMapping("/init")
+    // public String initAll() {
+    //     if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
+    //             || !userService.findAll().isEmpty())
+    //         return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
 
-        List<Ingredient> ingredients = ingredientService.initIngredients();
-        List<Recipe> recipes = recipeService.initRecipes();
-        List<User> users = userService.initUsers();
+    //     List<Ingredient> ingredients = ingredientService.initIngredients();
+    //     List<Recipe> recipes = recipeService.initRecipes();
+    //     List<User> users = userService.initUsers();
 
-        Ingredient ingredient;
-        Recipe recipe;
-        User user;
+    //     Ingredient ingredient;
+    //     Recipe recipe;
+    //     User user;
 
-        for (int i = 0; i < recipes.size(); i++) {
-            recipe = recipes.get(i);
-            ingredient = ingredients.get(i % (ingredients.size() - 1));
-            recipe.setCreatedBy(users.get(1));
-            recipe.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.ML, (i + 1) * 1000));
-            recipeService.update(recipe);
-        }
+    //     for (int i = 0; i < recipes.size(); i++) {
+    //         recipe = recipes.get(i);
+    //         ingredient = ingredients.get(i % (ingredients.size() - 1));
+    //         recipe.setCreatedBy(users.get(1));
+    //         recipe.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.ML, (i + 1) * 1000));
+    //         recipeService.update(recipe);
+    //     }
 
-        users = userService.findAll();
+    //     users = userService.findAll();
 
-        for (int i = 0; i < ingredients.size(); i++) {
-            ingredient = ingredients.get(i);
-            ingredient.setCreatedBy(users.get(1));
-            ingredientService.update(ingredient);
-        }
+    //     for (int i = 0; i < ingredients.size(); i++) {
+    //         ingredient = ingredients.get(i);
+    //         ingredient.setCreatedBy(users.get(1));
+    //         ingredientService.update(ingredient);
+    //     }
 
-        users = userService.findAll();
-        ingredients = ingredientService.findAll();
-        ingredient = ingredients.get(0);
+    //     users = userService.findAll();
+    //     ingredients = ingredientService.findAll();
+    //     ingredient = ingredients.get(0);
 
-        for (int i = 0; i < users.size(); i++) {
-            user = users.get(i);
-            userService.addPantryItem(user, ingredient.getID(), Unit.G, 20 + i * 10);
-            userService.update(user);
-        }
+    //     for (int i = 0; i < users.size(); i++) {
+    //         user = users.get(i);
+    //         userService.addPantryItem(user, ingredient.getID(), Unit.G, 20 + i * 10);
+    //         userService.update(user);
+    //     }
 
-        return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
-                ingredients.size(), recipes.size());
+    //     return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
+    //             ingredients.size(), recipes.size());
 
-    }
+    // }
 
     /**
      * Initialize fall sem gerir fallegri gögn
