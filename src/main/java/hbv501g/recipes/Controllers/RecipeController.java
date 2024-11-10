@@ -2,6 +2,7 @@ package hbv501g.recipes.Controllers;
 
 import java.util.List;
 
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * A controller containing endpoints relating to recipes
@@ -45,7 +45,6 @@ public class RecipeController {
     public List<Recipe> initRecipes() {
         return recipeService.initRecipes();
     }
-
 
     /**
      * Gets all recipes available to the user who is
@@ -88,7 +87,6 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findUnderTIC(tic, user);
     }
-    
 
     /**
      * Gets all recipes that contain the search term in the title, which are
@@ -103,7 +101,6 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findByTitleContaining(user, term);
     }
-
 
     /**
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
@@ -209,7 +206,7 @@ public class RecipeController {
      * @param session       - The current http session
      * @return the recipe with the given recipeID with the measurements added
      */
-    @RequestMapping("recipe/addIngredients")
+    @PutMapping("recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
             @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, HttpSession session) {
         User currUser = (User) session.getAttribute("LoggedInUser");
@@ -256,6 +253,7 @@ public class RecipeController {
         return recipeService.findByID(id);
     }
 
+    @Remove
     @GetMapping("/recipe/all/ordered")
     public List<Recipe> getAllOrderedRecipes(HttpSession session) {
         User user = (User) session.getAttribute("LoggedInUser");
