@@ -45,6 +45,28 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 **Initialize some recipes:** http://localhost:8080/recipe/init \
 **Get the current user:** http://localhost:8080/user/curr \
 
+### Assignment 4
+
+### Recipe List
+**Create recipe list:** http://localhost:8080/list/new \
+**Add recipe to list:** http://localhost:8080/list/addRecipe \
+**Retrieve recipe list by ID:** http://localhost:8080/list/id/{id} \
+**Delete recipe list:** http://localhost:8080/ \
+**Retrieve recipes from list:**
+**Retrieve all recipe lists for user:**
+**Remove recipe from list:**
+**Update recipe list name:**
+
+### Ingredient
+**Update ingredient name:**
+
+### Recipe
+**Retrieve all recipes under a certain price:** \
+**Retrieve all recipes that include a certain string in the title:** \
+**Retrieve all recipes sorted by total purchase cost ascending:** \
+
+
+
 
 ## Current possibilities
 
