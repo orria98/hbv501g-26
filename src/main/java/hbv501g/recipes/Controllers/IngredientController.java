@@ -7,6 +7,7 @@ package hbv501g.recipes.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,7 @@ import hbv501g.recipes.Services.IngredientService;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.Map;
 import java.time.LocalDate;
 
 @RestController
@@ -87,8 +89,8 @@ public class IngredientController {
      * @return the new Ingredient
      */
     @RequestMapping("ingredient/created")
-    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
-	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
+    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient) {
+        return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
     }
 
     /**
@@ -101,7 +103,23 @@ public class IngredientController {
      */
     @RequestMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
-	ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+        ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+    }
+
+    /**
+     * Endpoint for updating the title of an ingredient
+     * 
+     * @param session : Current session
+     * @param id      : ID of the ingredient
+     * @param body    : Request body containing the new title
+     * @return : The updated ingredient
+     */
+    @PatchMapping("ingredient/updateTitle/{id}")
+    public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
+            @RequestBody Map<String, String> body) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        String newTitle = body.get("title");
+        return ingredientService.updateIngredientTitle(id, newTitle, user);
     }
 
     // Ekki hluti af neinum skilum

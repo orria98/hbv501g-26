@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
@@ -99,15 +101,15 @@ public class RecipeServiceImplementation implements RecipeService {
      *           of the precipe.
      */
     @Override
-    public void deleteById(User user, long id){
-	if (user != null) {
-	    User author = findByID(id).getCreatedBy();
-	    if(author != null){
-		if (author.getID() == user.getID()) {
-		    recipeRepository.deleteById(id);
-		}
-	    }
-	}       
+    public void deleteById(User user, long id) {
+        if (user != null) {
+            User author = findByID(id).getCreatedBy();
+            if (author != null) {
+                if (author.getID() == user.getID()) {
+                    recipeRepository.deleteById(id);
+                }
+            }
+        }
     }
 
     /*
@@ -198,6 +200,13 @@ public class RecipeServiceImplementation implements RecipeService {
         }
 
         return total;
+    }
+
+    public List<Recipe> findOrderedRecipes(User user) {
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
+        }
+        return recipeRepository.findRecipesOrderedByTotalPurchasePriceAscending(user);
     }
 
     /**
@@ -298,16 +307,18 @@ public class RecipeServiceImplementation implements RecipeService {
 
         return update(recipe);
     }
+
     /**
      * Finds all recipes which are accessible to the given user and have a total
      * purchase cost under the given limit. If the user is null, then only public
      * recipes are searched
+     * 
      * @param upperLimit - the upper limit of the total purchase cost
-     * @param user - the user making the request
+     * @param user       - the user making the request
      * @return all accessible recipes under that price
      */
     public List<Recipe> findUnderTPC(int upperLimit, User user) {
-        if (user == null){
+        if (user == null) {
             return recipeRepository.findPublicUnderTPC(upperLimit);
         }
         return recipeRepository.findAccessibleUnderTPC(user, upperLimit);
@@ -317,16 +328,16 @@ public class RecipeServiceImplementation implements RecipeService {
      * Finds all recipes which are accessible to the given user and have a total
      * ingredient cost under the given limit. If the user is null, then only public
      * recipes are searched
+     * 
      * @param upperLimit - the upper limit of the total ingredient cost
-     * @param user - the user making the request
+     * @param user       - the user making the request
      * @return all accessible recipes under that price
      */
     public List<Recipe> findUnderTIC(int upperLimit, User user) {
-        if (user == null){
+        if (user == null) {
             return recipeRepository.findPublicUnderTIC(upperLimit);
         }
         return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
     }
 
 }
-

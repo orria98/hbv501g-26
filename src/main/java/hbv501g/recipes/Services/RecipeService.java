@@ -38,6 +38,8 @@ public interface RecipeService {
     Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
 
     List<Recipe> findUnderTPC(int upperLimit, User user);
-    
+
     List<Recipe> findUnderTIC(int upperLimit, User user);
+
+    List<Recipe> findOrderedRecipes(User user);
 }
