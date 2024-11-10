@@ -253,7 +253,8 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/all/ordered")
-    public List<Recipe> getAllOrderedRecipes() {
-        return recipeService.findOrderedRecipes();
+    public List<Recipe> getAllOrderedRecipes(HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findOrderedRecipes(user);
     }
 }

@@ -106,20 +106,20 @@ public class IngredientController {
         ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
 
+    /**
+     * Endpoint for updating the title of an ingredient
+     * 
+     * @param session : Current session
+     * @param id      : ID of the ingredient
+     * @param body    : Request body containing the new title
+     * @return : The updated ingredient
+     */
     @PatchMapping("ingredient/updateTitle/{id}")
     public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
-        Ingredient ingredient = ingredientService.findByID(id);
         User user = (User) session.getAttribute("LoggedInUser");
-
-        if (ingredient == null || user == null || ingredient.getCreatedBy().getID() != user.getID()) {
-            return null;
-        }
-
         String newTitle = body.get("title");
-        System.out.println(newTitle);
-        ingredient.setTitle(newTitle);
-        return ingredientService.save(user, ingredient);
+        return ingredientService.updateIngredientTitle(id, newTitle, user);
     }
 
     // Ekki hluti af neinum skilum

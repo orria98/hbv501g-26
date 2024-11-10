@@ -17,13 +17,15 @@ public interface IngredientService {
 
     Ingredient update(Ingredient updatedIngredient);
 
-    void deleteById (User user, long id);
+    void deleteById(User user, long id);
 
     // Ekki hluti af skilum
     List<Ingredient> initIngredients();
-    
+
     Ingredient findByTitle(String title);
 
     List<Ingredient> findOrderedIngredients();
+
+    Ingredient updateIngredientTitle(long id, String newTitle, User user);
 
 }

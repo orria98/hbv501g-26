@@ -41,5 +41,5 @@ public interface RecipeService {
 
     List<Recipe> findUnderTIC(int upperLimit, User user);
 
-    List<Recipe> findOrderedRecipes();
+    List<Recipe> findOrderedRecipes(User user);
 }
