@@ -50,25 +50,16 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @return All of the recipeLists from the owner which the requester can access
      */
     public List<RecipeList> findAllUserRecipeLists(User user, long id) {
-        if (user != null) {
-            if (user.getID() != id)
-                return recipeListRepository.findByCreatedBy(user);
-        }
-
-        User author = userService.findByID(id);
-        if (author != null)
+        User owner = userService.findByID(id);
+        if(owner==null){
             return null;
-
-        List<RecipeList> src = recipeListRepository.findByCreatedBy(author);
-        List<RecipeList> out = new ArrayList<>();
-
-        for (RecipeList recipeList : src) {
-            if (!recipeList.isPrivate()) {
-                out.add(recipeList);
-            }
         }
 
-        return out;
+        if (user == null){
+            return recipeListRepository.findByIsPrivateFalseAndCreatedBy(owner);
+        }
+
+        return recipeListRepository.findAllAccessibleByUser(user, owner);
     }
 
     /**
@@ -79,21 +70,10 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @return the recipeList whit the Id valu
      */
     public RecipeList findByID(User user, long id) {
-        RecipeList list = recipeListRepository.findById(id);
-        if (list == null) {
-            return null;
+        if (user!=null){
+            return recipeListRepository.findAccessibleById(user, id);
         }
-
-        if (user != null) {
-            if (list.getCreatedBy().getID() != user.getID() && list.isPrivate()) {
-                return null;
-            }
-        } else if (list.isPrivate()) {
-
-            return null;
-        }
-
-        return list;
+        return recipeListRepository.findByIsPrivateFalseAndID(id);
     }
 
     /**
