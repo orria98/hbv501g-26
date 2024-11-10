@@ -60,11 +60,11 @@ public class IngredientController {
      * 
      * @return some ingredients
      */
-    @GetMapping("/ingredient/init")
-    @ResponseBody
-    public List<Ingredient> InitIngredients() {
-        return ingredientService.initIngredients();
-    }
+    // @GetMapping("/ingredient/init")
+    // @ResponseBody
+    // public List<Ingredient> InitIngredients() {
+    //     return ingredientService.initIngredients();
+    // }
 
     /**
      * Endpoint sem nær í hráefni eftir nafni. Ekki hluti
