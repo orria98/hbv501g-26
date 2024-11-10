@@ -114,7 +114,7 @@ public class RecipeListController {
      * @param session  - the current HTTP session
      * @param listID   - the id of the recipe
      */
-    @GetMapping("list/id/{id}/delete")
+    @DeleteMapping("list/id/{id}/delete")
     public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id){
 	    recipeListService.deletByID(
 	    			    (User) session.getAttribute("LoggedInUser"),
@@ -134,7 +134,7 @@ public class RecipeListController {
      *         is in the recipeList that has the id
      *         value of listID.
      */
-    @GetMapping("/list/id/{listID}/recipe/{recipeID}/remove")
+    @PatchMapping("/list/id/{listID}/recipe/{recipeID}/remove")
     public RecipeList removeRecipeFromList(HttpSession session, @PathVariable(value = "listID") long listID,
             @PathVariable(value = "recipeID") long recipeID) {
         return recipeListService.removeRecipeFromID((User) session.getAttribute("LoggedInUser"), listID, recipeID);
