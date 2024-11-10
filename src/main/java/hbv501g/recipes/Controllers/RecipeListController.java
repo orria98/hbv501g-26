@@ -33,7 +33,7 @@ public class RecipeListController {
      */
     @GetMapping("/list/all")
     @ResponseBody
-    public List<RecipeList> getAllRecipeLists(HttpSession session) {
+    public List<RecipeList> getAllRecipesFromList(HttpSession session) {
         return recipeListService.findAll((User) session.getAttribute("LoggedInUser"));
     }
 
@@ -98,15 +98,14 @@ public class RecipeListController {
      * Endpoint gets all Recipe form resiplist.
      *
      * @param session  - the current HTTP session
-     * @param listID   - the id of the recipe
-     * @param recipeID - the id of the list
+     * @param id   - the id of the recipe
      * @return All of the recipe that are int the 
      *         recipeList that has the id value of 
      *         listID.
      */
-    @GetMapping("/list/id/{listID}/recipe")
-    public List<Recipe> getAllRecipeFormList(HttpSession session, @PathVariable(value = "listID") long listID) {
-        return recipeListService.getAllRecipeFromID((User) session.getAttribute("LoggedInUser"), listID);
+    @GetMapping("/list/id/{id}/recipe")
+    public List<Recipe> getAllRecipeFormList(HttpSession session, @PathVariable(value = "id") long id) {
+        return recipeListService.getAllRecipeFromID((User) session.getAttribute("LoggedInUser"), id);
     }
 
     /**

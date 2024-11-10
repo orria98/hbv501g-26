@@ -10,7 +10,7 @@ import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
     @Query("select r from RecipeList r where r.createdBy = ?1 or not r.isPrivate")
-    List<RecipeList> findAll(User user);
+    List<RecipeList> findAllAccessible(User user);
     
     List<RecipeList> findByCreatedBy(User user);
     
