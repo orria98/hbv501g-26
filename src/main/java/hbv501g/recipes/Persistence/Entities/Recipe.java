@@ -2,7 +2,6 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
@@ -111,12 +110,15 @@ public class Recipe {
      */
     private void addMeasurementToCost(IngredientMeasurement item) {
         Ingredient ingredient = item.getIngredient();
-        if(ingredient == null) return;
+        if (ingredient == null)
+            return;
         double ingredientPrice = ingredient.getPrice();
 
         if (ingredient.getQuantity()!=0){
-            totalPurchaseCost +=ingredientPrice* Math.ceil(item.getQuantity()/ingredient.getQuantity());
-            totalIngredientCost += ingredientPrice * item.getQuantity() / ingredient.getQuantity();
+            //find the amount in the unit of the ingredient
+            double measurementAmount = (item.getQuantity() * item.getUnit().getMlInUnit())/(ingredient.getQuantity()*ingredient.getUnit().getMlInUnit());
+            totalPurchaseCost +=ingredientPrice* Math.ceil(measurementAmount);
+            totalIngredientCost += ingredientPrice * measurementAmount;
         }
     }
 
@@ -144,6 +146,14 @@ public class Recipe {
 
     public void setTotalIngredientCost(double totalIngredientCost) {
         this.totalIngredientCost = totalIngredientCost;
+    }
+
+    /**
+     * Til að hafa aðgang að nafni notanda í framenda, nafn fylgir í json
+     * @return nafn notanda sem gerði uppskrift
+     */
+    public String getRecipeCreator(){
+        return createdBy== null ? "" : createdBy.getUsername();
     }
 
 }

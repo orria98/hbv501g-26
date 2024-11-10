@@ -4,6 +4,7 @@
 package hbv501g.recipes.Services;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
+import hbv501g.recipes.Persistence.Entities.User;
 
 import java.util.List;
 
@@ -11,18 +12,24 @@ public interface IngredientService {
     List<Ingredient> findAll();
 
     Ingredient findByID(long id);
+    
+    Ingredient findAccessibleByID(long id, User user);
 
-    Ingredient save(Ingredient ingredient);
+    List<Ingredient> findAccessibleToUser(User user);
+
+    Ingredient save(User author, Ingredient ingredient);
 
     Ingredient update(Ingredient updatedIngredient);
 
-    void deleteById (long id);
+    void deleteById(User user, long id);
 
     // Ekki hluti af skilum
-    List<Ingredient> initIngredients();
+    // List<Ingredient> initIngredients();
     
     Ingredient findByTitle(String title);
 
     List<Ingredient> findOrderedIngredients();
+
+    Ingredient updateIngredientTitle(long id, String newTitle, User user);
 
 }

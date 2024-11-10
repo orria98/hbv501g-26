@@ -1,5 +1,6 @@
 package hbv501g.recipes.Controllers;
 
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +17,11 @@ import hbv501g.recipes.Services.UserService;
 import java.util.List;
 
 /**
- * Klasi sem upphafsstillir gagnagrunn með gögnum sem tengjast
+ * Klasi sem upphafsstillir gagnagrunn með gögnum sem tengjast. Tímabundið, ekki
+ * hluti af lokaskilum
  */
 @RestController
+@Remove
 public class HomeController {
     private IngredientService ingredientService;
     private RecipeService recipeService;
@@ -32,55 +35,17 @@ public class HomeController {
     }
 
     /**
-     * Upphafsstillir töflu með einhverjum gildum, með tengingum á milli mismunandi
-     * entity
+     * Endpoint to initialize the database with some basic data
+     * 
+     * @return String with a message about the success of the initialization
      */
-    @GetMapping("/init")
-    public String initAll() {
-        List<Ingredient> ingredients = ingredientService.initIngredients();
-        List<Recipe> recipes = recipeService.initRecipes();
-        List<User> users = userService.initUsers();
-
-        Ingredient ingredient;
-        Recipe recipe;
-        User user;
-
-        for (int i = 0; i < recipes.size(); i++) {
-            recipe = recipes.get(i);
-            ingredient = ingredients.get(i % (ingredients.size() - 1));
-            recipe.setCreatedBy(users.get(1));
-            recipe.addIngredientMeasurement(new IngredientMeasurement(ingredient, Unit.ML, (i + 1) * 1000));
-            recipeService.update(recipe);
-        }
-
-        users = userService.findAll();
-
-        for (int i = 0; i < ingredients.size(); i++) {
-            ingredient = ingredients.get(i);
-            ingredient.setCreatedBy(users.get(1));
-            ingredientService.update(ingredient);
-        }
-
-        users = userService.findAll();
-        ingredients = ingredientService.findAll();
-        ingredient = ingredients.get(0);
-
-        for (int i = 0; i < users.size(); i++) {
-            user = users.get(i);
-            userService.addPantryItem(user, ingredient.getID(), Unit.G, 20 + i * 10);
-            userService.update(user);
-        }
-
-        return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
-                ingredients.size(), recipes.size());
-
-    }
-
-    /**
-     * Initialize fall sem gerir fallegri gögn
-     */
+    @Remove
     @GetMapping("/initialize")
     public String initializeData() {
+        if (!ingredientService.findAll().isEmpty() || !recipeService.findAll().isEmpty()
+                || !userService.findAll().isEmpty()) {
+            return "Ekki hægt að upphafsstilla gögn, þar sem gagnagrunnur er ekki tómur.";
+        }
         List<User> users;
         List<Ingredient> ingredients;
         List<Recipe> recipes;
@@ -108,26 +73,20 @@ public class HomeController {
 
         if (ingredients.size() == 0) {
             ingredient = new Ingredient("ger", Unit.G, 25, 250, "Krónan", "Gestus");
-            ingredient.setCreatedBy(users.get(2));
-            ingredientService.save(ingredient);
+            ingredientService.save(users.get(2), ingredient);
 
             ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
-            ingredient.setCreatedBy(users.get(2));
-            ingredientService.save(ingredient);
+            ingredientService.save(users.get(2), ingredient);
 
             ingredient = new Ingredient("sykur", Unit.G, 1000, 400, "Costco", "Kirkland");
-            ingredient.setCreatedBy(users.get(0));
-            ingredientService.save(ingredient);
+            ingredientService.save(users.get(0), ingredient);
 
             ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
-            ingredient.setCreatedBy(users.get(1));
-            ingredientService.save(ingredient);
+            ingredientService.save(users.get(1), ingredient);
 
             ingredient = new Ingredient("Ostur", Unit.G, 500, 1200, "Bónus", "Gotti");
-            ingredient.setCreatedBy(users.get(2));
             ingredient.setPrivate(true);
-            ingredientService.save(ingredient);
-
+            ingredientService.save(users.get(2), ingredient);
 
             ingredients = ingredientService.findAll();
         }
@@ -159,8 +118,6 @@ public class HomeController {
             recipes = recipeService.findAll();
         }
 
-
-
         users = userService.findAll();
 
         user = users.get(0);
@@ -172,9 +129,8 @@ public class HomeController {
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(1), Unit.G, 300));
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(2), Unit.G, 1200));
         user.addIngredientMeasurement(new IngredientMeasurement(ingredients.get(3), Unit.ML, 10000));
-        user.addIngredientMeasurement(new IngredientMeasurement());
+        // user.addIngredientMeasurement(new IngredientMeasurement());
         userService.update(user);
-
 
         return String.format("%d users, %d ingredients and %d recipes have been initialized", users.size(),
                 ingredients.size(), recipes.size());
