@@ -206,7 +206,7 @@ public class RecipeServiceImplementation implements RecipeService {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
         }
-        return recipeRepository.findAllByOrderByTotalPurchaseCostAsc();
+        return recipeRepository.findAllByOrderByTotalPurchaseCostAsc(user);
     }
 
     /**

@@ -40,5 +40,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Recipe findByID(long iD);
 
-    List<Recipe> findAllByOrderByTotalPurchaseCostAsc();
+    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) order by r.totalPurchaseCost asc")
+    List<Recipe> findAllByOrderByTotalPurchaseCostAsc(User user);
 }
