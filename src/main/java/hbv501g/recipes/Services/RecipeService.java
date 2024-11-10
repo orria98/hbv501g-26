@@ -25,9 +25,9 @@ public interface RecipeService {
 
     void deleteById(User user, long id);
 
-    int getTotalPurchaseCost(long id);
+    int getTotalPurchaseCost(User user, long id);
 
-    double getTotalIngredientCost(long id);
+    double getTotalIngredientCost(User user,long id);
 
     double getPersonalizedPurchaseCost(User user, long recipeId);
 

@@ -95,10 +95,10 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Find and delet the rescipe with maching id.
-     *
-     * @param id : is a 8 byte integer and is the id
-     *           of the precipe.
+     * Deletes the recipe with the given id, if it exists and was made by the given user.
+     * 
+     * @param user: the user making the query
+     * @param id: the id of the recipe to be deleted
      */
     @Override
     public void deleteById(User user, long id) {
@@ -134,13 +134,15 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Gets the total purchase cost for a recipe specified by an id
+     * Gets the total purchase cost for a recipe specified by an id, if the recipe
+     * exists and is accessible to the given user
      * 
-     * @param id: recipe id
+     * @param user: the user making the query
+     * @param id:   recipe id
      * @return total purchase cost for the recipe
      */
-    public int getTotalPurchaseCost(long id) {
-        Recipe recipe = findByID(id);
+    public int getTotalPurchaseCost(User user, long id) {
+        Recipe recipe = findAccessibleByID(id, user);
         if (recipe == null)
             return 0;
 
@@ -148,13 +150,15 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Gets the total ingredient cost for a recipe specified by an id
+     * Gets the total ingredient cost for a recipe specified by an id, if the recipe
+     * exists and is accessible to the given user
      * 
-     * @param id: recipe id
+     * @param user: the user making the query
+     * @param id:   recipe id
      * @return total ingredient cost for the recipe
      */
-    public double getTotalIngredientCost(long id) {
-        Recipe recipe = findByID(id);
+    public double getTotalIngredientCost(User user, long id) {
+        Recipe recipe = findAccessibleByID(id, user);
         if (recipe == null)
             return 0;
 
@@ -169,7 +173,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param recipeId - the id of the recipe to calculate for
      */
     public double getPersonalizedPurchaseCost(User user, long recipeId) {
-        Recipe recipe = findByID(recipeId);
+        Recipe recipe = findAccessibleByID(recipeId, user);
 
         if (user == null || recipe == null)
             return 0;

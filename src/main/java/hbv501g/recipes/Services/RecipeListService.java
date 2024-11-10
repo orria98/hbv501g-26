@@ -15,9 +15,11 @@ public interface RecipeListService {
 
     RecipeList save(User user, String title, String description, boolean isPrivate);
 
+    RecipeList updateTitle(User user, String newTitle, long id);
+
     RecipeList addRecipe(long recipeID, long listID, User user);
 
-    Recipe getRecipeFromID(User user, long id, long recipeID);
+    List<Recipe> getAllRecipeFromID(User user, long id);
 
     void deletByID(User user, long id);
 

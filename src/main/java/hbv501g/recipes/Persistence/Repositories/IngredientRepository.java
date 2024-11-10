@@ -10,8 +10,9 @@ package hbv501g.recipes.Persistence.Repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import hbv501g.recipes.Persistence.Entities.Ingredient;
+import hbv501g.recipes.Persistence.Entities.*;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
@@ -20,6 +21,15 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     Ingredient findByID(long id);
 
     void deleteById(long id);
+
+    @Query("select i from Ingredient i where (i.createdBy = ?1 or not i.isPrivate ) and i.id = ?2")
+    Ingredient findAccessibleByID(User user, long id);
+
+    Ingredient findByIsPrivateFalseAndID(long id);
+
+    List<Ingredient> findByIsPrivateFalse();
+
+    List<Ingredient> findByIsPrivateFalseOrCreatedBy(User user);
     
     // Ekki hluti af skilum
     List<Ingredient> findByTitle(String title);
