@@ -51,19 +51,19 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 **Create recipe list:** http://localhost:8080/list/new \
 **Add recipe to list:** http://localhost:8080/list/addRecipe \
 **Retrieve recipe list by ID:** http://localhost:8080/list/id/{id} \
-**Delete recipe list:** http://localhost:8080/ \
-**Retrieve recipes from list:**
-**Retrieve all recipe lists for user:**
-**Remove recipe from list:**
-**Update recipe list name:**
+**Delete recipe list:** http://localhost:8080/list/id/{id}/delete \
+**Retrieve recipes from list:** http://localhost:8080//list/id/{listID}/recipe/{recipeID} \
+**Retrieve all recipe lists for user:** http://localhost:8080/list/user/{id} \
+**Remove recipe from list:** http://localhost:8080/list/id/{listID}/recipe/{recipeID}/remove \
 
 ### Ingredient
-**Update ingredient name:**
+**Update ingredient name:** http://localhost:8080/ingredient/updateTitle/{id}
 
 ### Recipe
-**Retrieve all recipes under a certain price:** \
-**Retrieve all recipes that include a certain string in the title:** \
-**Retrieve all recipes sorted by total purchase cost ascending:** \
+**Retrieve all recipes under a certain price (total ingredient cost):** http://localhost:8080/recipe/underTIC/{tic} \
+**Retrieve all recipes under a certain price (total purchase cost):** http://localhost:8080//recipe/underTPC/{tpc} \
+**Retrieve all recipes that include a certain string in the title:** http://localhost:8080/recipe/search/{term} \
+**Retrieve all recipes sorted by total purchase cost ascending:** http://localhost:8080/recipe/all/ordered \
 
 
 
