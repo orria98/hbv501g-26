@@ -30,6 +30,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Recipe findByIsPrivateFalseAndID(long id);
 
+
     List<Recipe> findByIsPrivateFalseAndTitleContaining(String searchTerm);
 
     List<Recipe> findByIsPrivateFalseOrCreatedBy(User user);
@@ -41,7 +42,12 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Recipe findByID(long iD);
 
     List<Recipe> findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
+    
+    List<Recipe> findByIsPrivateFalseOrderByTitleAsc();
 
     @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) order by r.totalPurchaseCost asc")
     List<Recipe> findRecipesOrderedByTotalPurchasePriceAscending(User user);
+
+    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) order by r.title asc")
+    List<Recipe> findRecipesOrderedAlphabeticallyAscending(User user);
 }

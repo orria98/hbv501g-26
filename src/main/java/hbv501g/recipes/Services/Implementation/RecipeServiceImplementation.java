@@ -227,6 +227,19 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
+     * Finds all recipes accessible to the given user and returns in alphabetical ordered
+     * 
+     * @param user - the user requesting the recipes
+     * @return all accessible recipes, ordered
+     */
+    public List<Recipe> findOrderedRecipesByTitle(User user){
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseOrderByTitleAsc();
+        }
+        return recipeRepository.findRecipesOrderedByTotalPurchasePriceAscending(user);
+    }
+
+    /**
      * Calculates and returns the quantity of the ingredient used in the
      * IngredientMeasurement,
      * in the unit of the Ingredient used. Returns 0 if the measurement, its unit og
