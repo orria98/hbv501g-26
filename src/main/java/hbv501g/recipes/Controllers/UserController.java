@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,11 +31,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/init")
-    @ResponseBody
-    public List<User> initUsers() {
-        return userService.initUsers();
-    }
 
     /**
      * Endpoint to get all users from the db
@@ -84,7 +79,7 @@ public class UserController {
      * @param password - The password of the user logging in
      * @return the user with the given username or password, or null
      */
-    @RequestMapping(value = "/user/login")
+    @GetMapping(value = "/user/login")
     public User login(HttpSession session, @RequestParam String username, @RequestParam String password) {
         User exists = userService.login(username, password);
         session.setAttribute("LoggedInUser", exists);
@@ -105,7 +100,7 @@ public class UserController {
      * @return a new user with the given username and password, or null if no user
      *         created
      */
-    @RequestMapping(value = "user/signup")
+    @PostMapping(value = "user/signup")
     public User signup(HttpSession session, @RequestParam String username, @RequestParam String password) {
         User newUser = userService.signup(username, password);
         session.setAttribute("LoggedInUser", newUser);
@@ -130,7 +125,8 @@ public class UserController {
      * @param iid     - id of ingredient in pantry item to delete
      * @param session - the current session
      */
-    @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET, RequestMethod.PUT })
+    // @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET, RequestMethod.PUT })
+    @PutMapping("/user/pantry/delete")
     public void deletePantryItem(@RequestParam long iid, HttpSession session) {
         userService.deletePantryItem((User) session.getAttribute("LoggedInUser"), iid);
     }
@@ -145,12 +141,20 @@ public class UserController {
      * @param qty  quantity
      * @return the ingredient measurement for the ingredient
      */
-    @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
+    // @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
+    @PutMapping("/user/pantry/add")
     @ResponseBody
     public IngredientMeasurement addPantryItem(@RequestParam long iid, @RequestParam Unit unit,
             @RequestParam double qty, HttpSession session) {
 
         return userService.addPantryItem((User) session.getAttribute("LoggedInUser"), iid, unit, qty);
+    }
+
+    /*Not in any assignment */
+    @GetMapping("/user/init")
+    @ResponseBody
+    public List<User> initUsers() {
+        return userService.initUsers();
     }
 
 }

@@ -6,10 +6,11 @@
 package hbv501g.recipes.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 import java.util.Map;
-import java.time.LocalDate;
 
 @RestController
 public class IngredientController {
@@ -35,7 +35,8 @@ public class IngredientController {
     }
 
     /**
-     * Finds an ingredient with the given id, if one exists and is accessible to the
+     * Endpoint to find an ingredient with the given id, if one exists and is
+     * accessible to the
      * current user
      * 
      * @param session - the current http session
@@ -64,26 +65,27 @@ public class IngredientController {
     }
 
     /**
-     * Endpoint createds new idgrediet for the database
+     * Endpoint to create a new ingredient for the current user. No ingredient is
+     * created if no user is logged in
      *
-     * @param session  : is the current session
-     * @param newIngredient - a Ingredient that is being saved
+     * @param session       - The current http session
+     * @param newIngredient - an Ingredient that is being saved
      * @return the new Ingredient
      */
-    @RequestMapping("ingredient/created")
-    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient) {
-        return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
+    @PostMapping("ingredient/created")
+    @ResponseBody
+    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
+	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
     }
 
     /**
-     * Endpoint that finds an ingredient by id and
-     * removes it form the database if the uesr
-     * own the ingredient.
+     * Deletes an ingredient with the given id, if one exists and it belongs to the
+     * current user
      * 
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
-    @RequestMapping("ingredient/delete/{id}")
+    @DeleteMapping("ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
         ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
@@ -104,7 +106,7 @@ public class IngredientController {
         return ingredientService.updateIngredientTitle(id, newTitle, user);
     }
 
-    // Ekki hluti af neinum skilum 
+    /** Not part of any assignment */
     @GetMapping("ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
@@ -135,7 +137,7 @@ public class IngredientController {
         return ingredientService.findAll();
     }
 
-        /**
+    /**
      * Endpoint sem nær í hráefni eftir nafni. Ekki hluti
      * af endpoints fyrir þetta verkefni.
      *

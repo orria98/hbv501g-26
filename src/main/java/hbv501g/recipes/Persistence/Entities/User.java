@@ -32,7 +32,7 @@ public class User {
     private List<IngredientMeasurement> pantry = new ArrayList<>();
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonIncludeProperties(value = { "id", "title" })
+    @JsonIncludeProperties(value = { "id", "title", "instructions" })
     private List<Recipe> recipesByUser = new ArrayList<>();
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
