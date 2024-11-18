@@ -148,6 +148,14 @@ public class Ingredient {
 
     }
 
+    public double getQuantityInMl(){
+        if (unit==null){
+            return 0;
+        }
+        return quantity*unit.getMlInUnit();
+    }
+
+
     // Custom toString aðferð
     @Override
     public String toString() {
