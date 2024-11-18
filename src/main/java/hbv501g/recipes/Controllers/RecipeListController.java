@@ -95,8 +95,9 @@ public class RecipeListController {
      *         listID.
      */
     @GetMapping("/list/id/{id}/recipe")
-    public List<Recipe> getAllRecipesFromList(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.getAllRecipeFromID((User) session.getAttribute("LoggedInUser"), id);
+
+    public List<Recipe> getAllRecipesFormList(HttpSession session, @PathVariable(value = "id") long id) {
+        return recipeListService.getAllRecipesFromID((User) session.getAttribute("LoggedInUser"), id);
     }
 
     /**

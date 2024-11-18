@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.RecipeList;
 import hbv501g.recipes.Persistence.Entities.User;
 
@@ -22,6 +23,38 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
     List<RecipeList> findByCreatedBy(User user);
     
     RecipeList findById(long id);
+
+     /**
+     * Find recipis in a recipe list.
+     *
+     * @param id - is the ID value of a recipieList
+     * @return Only the publice recipe in the recipieList that has the
+     *         ID value of id and the list has to be public
+     */
+    @Query
+    (
+        "select r from Recipe r where not r.isPrivate and r IN" 
+        + 
+        "(select rl.recipes From RecipeList rl where rl.ID = ?1 and not rl.isPrivate)"
+    )
+    List<Recipe> findAllRecipesFromId(long id);
+
+    /**
+     * Find and get a resipe form a recipeList.
+     *
+     * @param user - is the user that is the sesson
+     * @param id   - is the ID value of a recipieList
+     * @return public and owned by the user, resipes that are in
+     *         the recipieList that has the ID value of id and the 
+     *         list has to be public or owned my the user.
+     */
+    @Query
+    (
+        "select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate) and r IN" 
+        + 
+        "(select rl.recipes From RecipeList rl where rl.ID = ?2 and (rl.createdBy = ?1 or not rl.isPrivate))"
+    )
+    List<Recipe> findAllRecipesFromId(User user, long id);
 
     void delete(RecipeList list);
 
