@@ -146,14 +146,11 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param recipeID - is the ID value of a recipe
      * @return The recipe if it is in the recipieList
      */
-    public List<Recipe> getAllRecipeFromID(User user, long id) {
-        RecipeList list = findByID(user, id);
+    public List<Recipe> getAllRecipesFromID(User user, long id){
+        if(user == null)
+            return recipeListRepository.findAllRecipesFromId(id);
 
-        if (list == null)
-            return null;
-        ;
-
-        return list.getRecipes();
+        return recipeListRepository.findAllRecipesFromId(user, id);
     }
 
     /**
@@ -182,7 +179,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param user : is the user that is loged in.
      * @param id   : the id valu of RecipeList
      */
-    public void deletByID(User user, long id) {
+    public void deleteByID(User user, long id) {
         RecipeList list = findByID(user, id);
         if (list == null || user == null)
             return;
