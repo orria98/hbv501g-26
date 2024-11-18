@@ -19,7 +19,7 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
     
     RecipeList findById(long id);
 
-    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate) and r IN (select Recipe rl From RecipeList rl where rl.ID = ?2 and (r.createdBy = ?1 or not r.isPrivate))")
+    @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate) and r IN (select rl.recipes From RecipeList rl where rl.ID = ?2 and (rl.createdBy = ?1 or not rl.isPrivate))")
     List<Recipe> findAllRecipesFormId(User user, long id);
 
     void delete(RecipeList list);
