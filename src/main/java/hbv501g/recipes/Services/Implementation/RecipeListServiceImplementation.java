@@ -118,15 +118,17 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param recipeID - the id of the Recipe
      * @param listID   - the id of the RecipeList
      * @param user     - the current User
+     * @return the recipeList with the added recipe (if applicable)
      */
     public RecipeList addRecipe(long recipeID, long listID, User user) {
-        Recipe recipe = recipeService.findByID(recipeID);
+        if(user==null){
+            return null;
+        }
+
+        Recipe recipe = recipeService.findAccessibleByID(recipeID, user);
         RecipeList list = findByID(user, listID);
 
-        if (user == null || recipe == null || list == null)
-            return null;
-
-        if (recipe.isPrivate() && recipe.getCreatedBy().getID() != user.getID())
+        if (recipe == null || list == null||list.getCreatedBy().getID() != user.getID())
             return null;
 
         if (list.getRecipes().contains(recipe))
@@ -134,7 +136,6 @@ public class RecipeListServiceImplementation implements RecipeListService {
 
         list.addRecipe(recipe);
 
-        // TODO: finna hvort það átti að nota update
         return recipeListRepository.save(list);
     }
 
