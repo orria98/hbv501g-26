@@ -24,6 +24,13 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
     
     RecipeList findById(long id);
 
+     /**
+     * Find recipis in a recipe list.
+     *
+     * @param id - is the ID value of a recipieList
+     * @return Only the publice recipe in the recipieList that has the
+     *         ID value of id and the list has to be public
+     */
     @Query
     (
         "select r from Recipe r where not r.isPrivate and r IN" 
@@ -32,6 +39,15 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
     )
     List<Recipe> findAllRecipesFromId(long id);
 
+    /**
+     * Find and get a resipe form a recipeList.
+     *
+     * @param user - is the user that is the sesson
+     * @param id   - is the ID value of a recipieList
+     * @return public and owned by the user, resipes that are in
+     *         the recipieList that has the ID value of id and the 
+     *         list has to be public or owned my the user.
+     */
     @Query
     (
         "select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate) and r IN" 

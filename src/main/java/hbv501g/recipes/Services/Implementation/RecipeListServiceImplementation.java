@@ -150,7 +150,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
         if(user == null)
             return recipeListRepository.findAllRecipesFromId(id);
 
-        return recipeListRepository.findAllRecipesFormId(user, id);
+        return recipeListRepository.findAllRecipesFromId(user, id);
     }
 
     /**
