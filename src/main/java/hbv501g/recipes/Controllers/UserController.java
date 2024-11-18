@@ -3,6 +3,7 @@ package hbv501g.recipes.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,6 +106,29 @@ public class UserController {
         User newUser = userService.signup(username, password);
         session.setAttribute("LoggedInUser", newUser);
         return newUser;
+    }
+
+    /**
+     * Logs the current user out by invalidating the session
+     * 
+     * @param session - The current Http session
+     */
+    @GetMapping("/user/logout")
+    public void logout(HttpSession session) {
+        session.invalidate();
+    }
+
+
+    /**
+     * Deletes the current user, if the given password matches. If successful, the user is also logged out.
+     * @param session - the current http session    
+     * @param password - a password to confirm the delete
+     */
+    @DeleteMapping("/user/deleteme")
+    public void deleteCurrentUser(HttpSession session, @RequestParam String password){
+        if (userService.deleteUser((User) session.getAttribute("LoggedInUser"), password)){
+            session.invalidate();
+        }
     }
 
     /**

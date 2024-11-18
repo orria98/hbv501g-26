@@ -23,6 +23,8 @@ public interface UserService {
     User login(String username, String password);
     User update(User user);
 
+    boolean deleteUser(User user, String password);
+
     List<IngredientMeasurement> findUserPantry(User user);
 
     void deletePantryItem(User user, long iid);
