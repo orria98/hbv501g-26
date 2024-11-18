@@ -124,7 +124,7 @@ public class UserController {
      * @param session - the current http session    
      * @param password - a password to confirm the delete
      */
-    @DeleteMapping("/user/deleteme")
+    @DeleteMapping("/user/delete")
     public void deleteCurrentUser(HttpSession session, @RequestParam String password){
         if (userService.deleteUser((User) session.getAttribute("LoggedInUser"), password)){
             session.invalidate();
