@@ -38,7 +38,7 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
         + 
         "(select rl.recipes From RecipeList rl where rl.ID = ?2 and (rl.createdBy = ?1 or not rl.isPrivate))"
     )
-    List<Recipe> findAllRecipesFormId(User user, long id);
+    List<Recipe> findAllRecipesFromId(User user, long id);
 
     void delete(RecipeList list);
 
