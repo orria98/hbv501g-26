@@ -168,6 +168,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @return The recipe if it is in the recipieList
      */
     public List<Recipe> getAllRecipesFromID(User user, long id){
+        if(user == null)
+            return recipeListRepository.findALLRecipesFrom(id);
+
         return recipeListRepository.findAllRecipesFormId(user, id);
     }
 
