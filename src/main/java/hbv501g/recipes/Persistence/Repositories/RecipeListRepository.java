@@ -30,7 +30,7 @@ public interface RecipeListRepository extends JpaRepository<RecipeList, Long> {
         + 
         "(select rl.recipes From RecipeList rl where rl.ID = ?1 and not rl.isPrivate)"
     )
-    List<Recipe> findALLRecipesFrom(long id);
+    List<Recipe> findALLRecipesFromId(long id);
 
     @Query
     (

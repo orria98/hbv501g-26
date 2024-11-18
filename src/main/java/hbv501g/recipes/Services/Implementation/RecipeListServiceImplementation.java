@@ -148,7 +148,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public List<Recipe> getAllRecipesFromID(User user, long id){
         if(user == null)
-            return recipeListRepository.findALLRecipesFrom(id);
+            return recipeListRepository.findALLRecipesFromId(id);
 
         return recipeListRepository.findAllRecipesFormId(user, id);
     }
