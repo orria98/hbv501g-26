@@ -33,6 +33,7 @@ public class RecipeServiceImplementation implements RecipeService {
 
     /**
      * Finds all Recipes in the system
+     * 
      * @return All recipes
      */
     @Override
@@ -42,6 +43,7 @@ public class RecipeServiceImplementation implements RecipeService {
 
     /**
      * Finds the recipe with the given id, if one exists
+     * 
      * @return the recipe with the given id, or null if it does not exist
      */
     @Override
@@ -52,7 +54,8 @@ public class RecipeServiceImplementation implements RecipeService {
     /**
      * Finds the recipe with the given id, if one exists and is accessible to the
      * user. If the user is null, then only public recipes are accessible
-     * @param id - the id of the recipe
+     * 
+     * @param id   - the id of the recipe
      * @param user - the user requesting the recipe
      * @return the recipe with the given id, or null
      */
@@ -65,6 +68,7 @@ public class RecipeServiceImplementation implements RecipeService {
 
     /**
      * Saves a recipe to the database
+     * 
      * @param recipe - the recipe to be saved
      * @return the saved recipe
      */
@@ -75,6 +79,7 @@ public class RecipeServiceImplementation implements RecipeService {
 
     /**
      * Saves an updated version of a recipe to the database
+     * 
      * @param updatedRecipe - the updated recipe to save
      * @return the updated version of the saved recipe
      */
@@ -113,16 +118,18 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Deletes the recipe with the given id, if it exists and was made by the given user.
+     * Deletes the recipe with the given id, if it exists and was made by the given
+     * user.
      * 
      * @param user: the user making the query
-     * @param id: the id of the recipe to be deleted
+     * @param id:   the id of the recipe to be deleted
      */
     @Override
     public void deleteById(User user, long id) {
         if (user != null) {
             Recipe recipe = findByID(id);
-            if(recipe == null) return;
+            if (recipe == null)
+                return;
             User author = recipe.getCreatedBy();
             if (author != null) {
                 if (author.getID() == user.getID()) {
@@ -131,8 +138,6 @@ public class RecipeServiceImplementation implements RecipeService {
             }
         }
     }
-
-   
 
     /**
      * Gets the total purchase cost for a recipe specified by an id, if the recipe
@@ -186,7 +191,7 @@ public class RecipeServiceImplementation implements RecipeService {
             IngredientMeasurement pantryItem = userService.findItemInPantry(pantry, recipeIngredient.getIngredient());
 
             if (recipeIngredient != null && recipeIngredient.getIngredient() != null
-                    && recipeIngredient.getUnit() != null) {
+                    && recipeIngredient.getUnit() != null&& recipeIngredient.getIngredient().getUnit()!=null)  {
                 Ingredient ingredient = recipeIngredient.getIngredient();
 
                 // the quantity used in the recipe, in the unit of the ingredient
@@ -208,13 +213,28 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Finds all recipes accessible to the given user and returns them ordered by their total purchase cost ascending
+     * Finds all recipes accessible to the given user and returns them ordered by
+     * their total purchase cost ascending
+     * 
      * @param user - the user requesting the recipes
      * @return all accessible recipes, ordered
      */
     public List<Recipe> findOrderedRecipes(User user) {
         if (user == null) {
             return recipeRepository.findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
+        }
+        return recipeRepository.findRecipesOrderedByTotalPurchasePriceAscending(user);
+    }
+
+    /**
+     * Finds all recipes accessible to the given user and returns in alphabetical ordered
+     * 
+     * @param user - the user requesting the recipes
+     * @return all accessible recipes, ordered
+     */
+    public List<Recipe> findOrderedRecipesByTitle(User user){
+        if (user == null) {
+            return recipeRepository.findByIsPrivateFalseOrderByTitleAsc();
         }
         return recipeRepository.findRecipesOrderedByTotalPurchasePriceAscending(user);
     }
@@ -229,11 +249,13 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return the quantity of the ingredient, in the same unit
      */
     private double getQuantityInIngredientUnit(IngredientMeasurement measurement) {
-        if (measurement == null || measurement.getIngredient() == null || measurement.getUnit() == null) {
+        if (measurement == null || measurement.getIngredient() == null || measurement.getUnit() == null ||measurement.getIngredient().getUnit()==null) {
             return 0;
         }
-        return (measurement.getQuantity() * measurement.getUnit().getMlInUnit())
-                / (measurement.getUnit().getMlInUnit());
+        if(measurement.getIngredient().getQuantityInMl()==0){
+            return 0;
+        }
+        return measurement.getQuantityInMl()/ measurement.getIngredient().getUnit().getMlInUnit();
     }
 
     /**
@@ -245,7 +267,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return total cost to purchase this measurement
      */
     private double calculateTotalPurchaseCost(Ingredient ingredient, double quantity) {
-        if (ingredient != null && quantity != 0 && ingredient.getQuantity() != 0) {
+        if (ingredient != null && quantity != 0 && ingredient.getQuantity() != 0 && ingredient.getQuantityInMl()!=0) {
             return ingredient.getPrice() * Math.ceil(quantity / ingredient.getQuantity());
         }
         return 0;
@@ -306,8 +328,10 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * updates the details of the recipe with the given id, sets the title, instructions and privacy status as they are in the updatedRecipe
-     * @param id - the id of the recipe to update
+     * updates the details of the recipe with the given id, sets the title,
+     * instructions and privacy status as they are in the updatedRecipe
+     * 
+     * @param id            - the id of the recipe to update
      * @param updatedRecipe - a recipe with the updated information
      * @return a recipe with updated information
      */
@@ -356,7 +380,7 @@ public class RecipeServiceImplementation implements RecipeService {
         return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
     }
 
-     /*
+    /*
      * Initializes a few recipes, if none are found in the db
      */
     public List<Recipe> initRecipes() {

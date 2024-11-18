@@ -57,6 +57,13 @@ public class IngredientMeasurement {
         this.quantity = quantity;
     }
 
+    public double getQuantityInMl(){
+        if (unit==null){
+            return 0;
+        }
+        return quantity*unit.getMlInUnit();
+    }
+
     @Override
     public String toString() {
         return "IngredientMeasurement [ingredient=" + ingredient + ", unit=" + unit + ", quantity=" + quantity + "]";

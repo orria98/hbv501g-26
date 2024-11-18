@@ -276,4 +276,15 @@ public class RecipeController {
         User user = (User) session.getAttribute("LoggedInUser");
         return recipeService.findOrderedRecipes(user);
     }
+
+    /**
+     * Gets all recipes which are accessible to the current user and returns them in alphabetical order
+     * @param session - the current http session
+     * @return all recipes ordered alphabetically
+     */
+    @GetMapping("/recipe/all/orderedByTitle")
+    public List<Recipe> getAllOrderedRecipesByTitle(HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return recipeService.findOrderedRecipesByTitle(user);
+    }
 }

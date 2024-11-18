@@ -58,6 +58,7 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * Saves a user to the database
+     * 
      * @param user - the user to save to the database
      * @return the saved user
      */
@@ -68,6 +69,7 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * Finds all users in the system
+     * 
      * @return all saved users
      */
     public List<User> findAll() {
@@ -76,7 +78,8 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * Finds a user with the given id
-     * @param id - the id of the user 
+     * 
+     * @param id - the id of the user
      * @return the user with the given id, or null if none exists
      */
     @Override
@@ -86,6 +89,7 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * Updates a user, sets it as updatedUser
+     * 
      * @param updatedUser - the user with the updated information
      * @return the updated user
      */
@@ -125,6 +129,24 @@ public class UserServiceImplementation implements UserService {
             return null;
 
         return user.getPantry();
+    }
+
+    /**
+     * Deletes the given user if the given password matches them. Returns true if
+     * successful and false if not
+     * 
+     * @param user     - the user to delete
+     * @param password - the password given to confirm the delete
+     * @return true if successful, false if not
+     */
+    public boolean deleteUser(User user, String password) {
+        if (user != null && user.getPassword() != null && user.getPassword().equals(password)) {
+            userRepository.deleteById(user.getID());
+            if (findByID(user.getID()) == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -214,6 +236,7 @@ public class UserServiceImplementation implements UserService {
 
     /**
      * Initializes a few users if none are found in the database
+     * 
      * @return all users made
      */
     public List<User> initUsers() {
