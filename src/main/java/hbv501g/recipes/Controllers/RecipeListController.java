@@ -96,7 +96,7 @@ public class RecipeListController {
      */
     @GetMapping("/list/id/{id}/recipe")
 
-    public List<Recipe> getAllRecipesFormList(HttpSession session, @PathVariable(value = "id") long id) {
+    public List<Recipe> getAllRecipesFromList(HttpSession session, @PathVariable(value = "id") long id) {
         return recipeListService.getAllRecipesFromID((User) session.getAttribute("LoggedInUser"), id);
     }
 
@@ -108,7 +108,7 @@ public class RecipeListController {
      */
     @GetMapping("list/id/{id}/delete")
     public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id) {
-        recipeListService.deletByID((User) session.getAttribute("LoggedInUser"), id);
+        recipeListService.deleteByID((User) session.getAttribute("LoggedInUser"), id);
     }
 
     /**
