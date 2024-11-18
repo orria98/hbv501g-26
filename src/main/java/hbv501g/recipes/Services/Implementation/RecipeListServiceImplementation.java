@@ -167,12 +167,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param recipeID - is the ID value of a recipe
      * @return The recipe if it is in the recipieList
      */
-    public List<Recipe> getAllRecipeFromID(User user, long id){
-	    RecipeList list = findByID(user, id);
-
-	    if(list == null) return null;;
-
-	    return list.getRecipes();
+    public List<Recipe> getAllRecipesFromID(User user, long id){
+        return recipeListRepository.findAllRecipesFormId(user, id);
     }
 
     /**
