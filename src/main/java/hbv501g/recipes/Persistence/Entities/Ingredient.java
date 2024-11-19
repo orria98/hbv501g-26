@@ -24,7 +24,7 @@ public class Ingredient {
     // ID er sjálfkrafa búið til þegar object er gerður
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ID;
+    private Long ID;
 
     private String title;
     private Unit unit;
@@ -143,9 +143,12 @@ public class Ingredient {
         this.createdBy = createdBy;
     }
 
-    public long getID() {
+    public Long getID() {
         return ID;
+    }
 
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 
     // Custom toString aðferð
