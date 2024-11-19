@@ -206,8 +206,9 @@ public class UserServiceImplementation implements UserService {
     }
 
     /**
-     * Adds ingredientMeasurement to pantry, if the ingredient isn't already in the
-     * pantry.
+     * Adds ingredientMeasurement to pantry for the given user, if the ingredient
+     * isn't already in the pantry and if the user is not null. Users can add any
+     * public ingredient or their own private ingredients to the pantry.
      * 
      * @param user      user owning pantry
      * @param iid       id of ingredient to add to pantry
@@ -217,7 +218,8 @@ public class UserServiceImplementation implements UserService {
      */
     public IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity) {
         Ingredient ingredient = ingredientService.findByID(iid);
-        if (ingredient == null || ingredient.isPrivate() && ingredient.getCreatedBy() != user || user == null)
+        if (ingredient == null || user == null || (ingredient.isPrivate()
+                && (ingredient.getCreatedBy() == null || ingredient.getCreatedBy().getID() != user.getID())))
             return null;
 
         List<IngredientMeasurement> pantry = user.getPantry();
