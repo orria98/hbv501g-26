@@ -5,7 +5,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:21.0.1-jdk-slim
 COPY --from=build /target/recipes-0.0.1-SNAPSHOT.jar recipes.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "recipes.jar"]
+ENTRYPOINT ["java", "-jar", "recipes.jar"] 
 
 
 
