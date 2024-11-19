@@ -150,6 +150,24 @@ public class UserServiceImplementation implements UserService {
     }
 
     /**
+     * Changes the password of the given user to the new password, if the old
+     * password matches the one of the user. If the user is null, or the old
+     * password is incorrect, then nothing happens
+     * 
+     * @param user - the user to change the password of
+     * @param newPassword - the new password of the user
+     * @param oldPassword - the old password of the user
+     */
+    public void changePassword(User user, String newPassword, String oldPassword) {
+        if (user != null) {
+            if (user.getPassword().equals(oldPassword)) {
+                user.setPassword(newPassword);
+                update(user);
+            }
+        }
+    }
+
+    /**
      * Adds ingredientMeasurement to pantry, if the ingredient isn't already in the
      * pantry.
      * 
