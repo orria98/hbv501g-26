@@ -45,15 +45,19 @@ public class UserController {
     }
 
     /**
-     * Finds and returns a user with a given ID. Returns that user if any user has
-     * the ID, otherwise it returns null
+     * Finds and returns a user with a given ID, if one exists. Otherwise, it
+     * returns null. If the user making the request (the current user) and the user
+     * we want to find are the same, the returned user contains all information
+     * about the user. If not, sensitive or private information are not included
      * 
-     * @param id - the userID of the requested user
+     * @param id      - the userID of the requested user
+     * @param session - the current Http session
      * @return the user with that id, or null
      */
     @GetMapping("/user/id/{id}")
-    public User getUserById(@PathVariable(value = "id") long id) {
-        return userService.findByID(id);
+    public User getUserById(HttpSession session, @PathVariable(value = "id") long id) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        return userService.findByID(user, id);
     }
 
     /**
@@ -137,7 +141,7 @@ public class UserController {
      * it to the new password if the old password, which is provided for
      * confirmation, is correct for the current user
      * 
-     * @param session - The current Http session
+     * @param session     - The current Http session
      * @param newPassword - The new password for the current user
      * @param oldPassword - The old password of the current user
      */

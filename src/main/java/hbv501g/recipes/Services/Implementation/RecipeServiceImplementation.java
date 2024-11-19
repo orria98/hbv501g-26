@@ -259,6 +259,15 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
+     * Finds and returns all public recipes by the user provided
+     * @param user - the user who's public recipes are returned
+     * @return the public recipes of the provided user
+     */
+    public List<Recipe> findPublicRecipesByUser(User user) {
+        return recipeRepository.findByIsPrivateFalseAndCreatedBy(user);
+    }
+
+    /**
      * Purchase cost based on how many packages are needed. Assumes both ingredient
      * and measurement have the same unit
      * 

@@ -24,4 +24,6 @@ public interface RecipeListService {
     void deleteByID(User user, long id);
 
     RecipeList removeRecipeFromID(User user, long id, long recipeID);
+
+    List<RecipeList> findPublicRecipeListsByUser(User user);
 }

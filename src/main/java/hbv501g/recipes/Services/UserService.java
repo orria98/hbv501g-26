@@ -14,6 +14,8 @@ public interface UserService {
     List<User> findAll();
 
     User findByID(long id);
+    User findByID(User user,long id);
+
     User findByUsername(String username);
 
     User save(User user);

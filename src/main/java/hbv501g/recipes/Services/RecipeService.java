@@ -44,5 +44,5 @@ public interface RecipeService {
     List<Recipe> findOrderedRecipes(User user);
     List<Recipe> findOrderedRecipesByTitle(User user);
 
-    
+    List<Recipe> findPublicRecipesByUser(User user);
 }

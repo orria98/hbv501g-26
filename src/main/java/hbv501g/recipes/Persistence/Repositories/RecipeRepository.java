@@ -50,4 +50,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("select r from Recipe r where (r.createdBy = ?1 or not r.isPrivate ) order by r.title asc")
     List<Recipe> findRecipesOrderedAlphabeticallyAscending(User user);
+
+    List<Recipe> findByIsPrivateFalseAndCreatedBy(User user);
 }

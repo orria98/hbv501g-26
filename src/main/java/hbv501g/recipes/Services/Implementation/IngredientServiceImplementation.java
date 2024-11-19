@@ -27,6 +27,16 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
+     * Finds and returns all public ingredients by the user provided
+     * @param user - the user who's public ingredient are returned
+     * @return the public ingredients of the provided user
+     */
+    public List<Ingredient> findPublicIngredientsByUser(User user){
+        return ingredientRepository.findByIsPrivateFalseAndCreatedBy(user);
+    }
+
+    
+    /**
      * 
      * @return All ingredients from the database
      */
