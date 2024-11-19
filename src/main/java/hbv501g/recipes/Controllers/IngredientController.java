@@ -72,7 +72,7 @@ public class IngredientController {
      * @param newIngredient - an Ingredient that is being saved
      * @return the new Ingredient
      */
-    @PostMapping("ingredient/created")
+    @PostMapping("/ingredient/created")
     @ResponseBody
     public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
 	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
@@ -85,7 +85,7 @@ public class IngredientController {
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
-    @DeleteMapping("ingredient/delete/{id}")
+    @DeleteMapping("/ingredient/delete/{id}")
     public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
         ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
     }
@@ -98,7 +98,7 @@ public class IngredientController {
      * @param body    : Request body containing the new title
      * @return : The updated ingredient
      */
-    @PatchMapping("ingredient/updateTitle/{id}")
+    @PatchMapping("/ingredient/updateTitle/{id}")
     public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
         User user = (User) session.getAttribute("LoggedInUser");
@@ -107,7 +107,7 @@ public class IngredientController {
     }
 
     /** Not part of any assignment */
-    @GetMapping("ingredient/all/ordered")
+    @GetMapping("/ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
     }

@@ -101,7 +101,7 @@ public class UserController {
      * @return a new user with the given username and password, or null if no user
      *         created
      */
-    @PostMapping(value = "user/signup")
+    @PostMapping(value = "/user/signup")
     public User signup(HttpSession session, @RequestParam String username, @RequestParam String password) {
         User newUser = userService.signup(username, password);
         session.setAttribute("LoggedInUser", newUser);
