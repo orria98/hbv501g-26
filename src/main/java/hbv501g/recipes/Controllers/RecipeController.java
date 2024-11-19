@@ -255,7 +255,7 @@ public class RecipeController {
      */
     @Deprecated
     @GetMapping("/recipe/getById/{id}")
-    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
+    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") Long id) {
         return recipeService.findByID(id);
     }
 

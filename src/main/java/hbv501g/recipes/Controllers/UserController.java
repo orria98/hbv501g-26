@@ -16,6 +16,7 @@ import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.UserService;
+import hbv501g.recipes.jwt.JwtUtils;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,9 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+//       @Autowired
+//   JwtUtils jwtUtils;
 
     @GetMapping("/user/init")
     @ResponseBody
