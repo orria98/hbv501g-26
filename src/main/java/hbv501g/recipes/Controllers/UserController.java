@@ -3,12 +3,14 @@ package hbv501g.recipes.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Unit;
@@ -69,7 +71,13 @@ public class UserController {
      */
     @GetMapping("/user/curr")
     public User getCurrentUser(HttpSession session) {
-        return (User) session.getAttribute("LoggedInUser");
+        User user = (User) session.getAttribute("LoggedInUser");
+        // return (User) session.getAttribute("LoggedInUser");
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
+        }
+        
+        return user;
     }
 
     /**
@@ -86,6 +94,8 @@ public class UserController {
      */
     @GetMapping(value = "/user/login")
     public User login(HttpSession session, @RequestParam String username, @RequestParam String password) {
+        System.out.println("Reyni að logga inn user " + username);
+
         User exists = userService.login(username, password);
         session.setAttribute("LoggedInUser", exists);
         return exists;
