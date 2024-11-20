@@ -31,8 +31,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * Get all RecipeList from the database that are not
      * privat unless the user owns them.
      *
-     * @param user : is the user that is loged in.
-     * @return a list of RcipeList.
+     * @param user : the user requesting the recipes
+     * @return a list of RecipeList.
      */
     public List<RecipeList> findAll(long uid) {
         User user = userService.findByID(uid);
@@ -40,38 +40,28 @@ public class RecipeListServiceImplementation implements RecipeListService {
             return recipeListRepository.findByIsPrivateFalse();
         }
         return recipeListRepository.findAllAccessible(user);
-
     }
 
     /**
-     * Get all the recipicList that a user has.
+     * Get all recipeLists made by the user with the given id, which are accessible
+     * to the user requesting the recipeLists
      * 
-     * @param user : user is a user of the system.
-     * @param id   : is an Id valu of a user
-     * @return retturn a list of Recipie list
-     *         that user owns that is not privat
+     * @param user : the user requesting the recipe lists
+     * @param id   : the id of the user who's lists are being requested
+     * @return All of the recipeLists from the owner which the requester can access
      */
     public List<RecipeList> findAllUserRecipeLists(long uid, long id) {
         User user = userService.findByID(uid);
-        if (user != null) {
-            if (user.getID() != id)
-                return recipeListRepository.findByCreatedBy(user);
-        }
-
-        User author = userService.findByID(id);
-        if (author != null)
+        User owner = userService.findByID(id);
+        if(owner==null){
             return null;
-
-        List<RecipeList> src = recipeListRepository.findByCreatedBy(author);
-        List<RecipeList> out = new ArrayList<>();
-
-        for (RecipeList recipeList : src) {
-            if (!recipeList.isPrivate()) {
-                out.add(recipeList);
-            }
         }
 
-        return out;
+        if (user == null){
+            return recipeListRepository.findByIsPrivateFalseAndCreatedBy(owner);
+        }
+
+        return recipeListRepository.findAllAccessibleByUser(user, owner);
     }
 
     /**
@@ -83,22 +73,10 @@ public class RecipeListServiceImplementation implements RecipeListService {
      */
     public RecipeList findByID(long uid, long id) {
         User user = userService.findByID(uid);
-
-        RecipeList list = recipeListRepository.findById(id);
-        if (list == null) {
-            return null;
+        if (user!=null){
+            return recipeListRepository.findAccessibleById(user, id);
         }
-
-        if (user != null) {
-            if (list.getCreatedBy().getID() != user.getID() && list.isPrivate()) {
-                return null;
-            }
-        } else if (list.isPrivate()) {
-
-            return null;
-        }
-
-        return list;
+        return recipeListRepository.findByIsPrivateFalseAndID(id);
     }
 
     /**

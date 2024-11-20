@@ -33,15 +33,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // @Autowired
-    // JwtUtils jwtUtils;
-
-    @GetMapping("/user/init")
-    @ResponseBody
-    public List<User> initUsers() {
-        return userService.initUsers();
-    }
-
     /**
      * Endpoint to get all users from the db
      * 

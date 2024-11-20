@@ -2,7 +2,6 @@ package hbv501g.recipes.Controllers;
 
 import java.util.List;
 
-import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.RecipeList;
 import hbv501g.recipes.Services.RecipeListService;
@@ -24,19 +23,6 @@ public class RecipeListController {
         this.recipeListService = recipeListService;
     }
 
-    /**
-     * Endpoint to get all recipe lists. Not needed for any assignment, but helpful
-     * for testing
-     *
-     * @param session - the current http session
-     * @return all RecipeList objects that are not privite unless the
-     *         curet user own the list.
-     */
-    @GetMapping("/list/all")
-    @ResponseBody
-    public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid) {
-        return recipeListService.findAll(uid);
-    }
 
     /**
      * Find and return the Recipe list that a
@@ -54,13 +40,12 @@ public class RecipeListController {
     }
 
     /**
-     * Find and return the Recipe list if the user
-     * has acess of it.
+     * Find and return a Recipe list with the given id if the current user has
+     * access to it.
      *
      * @param session - the current http session
      * @param id      - the id number of RecipeList
-     * @return the list of recipe that the user
-     *         of the id number owns.
+     * @return A recipe list with the given id, or null
      */
     @GetMapping("list/id/{id}")
     @ResponseBody
@@ -111,13 +96,13 @@ public class RecipeListController {
      *         listID.
      */
     @GetMapping("/list/id/{id}/recipe")
-    public List<Recipe> getAllRecipeFormList(@RequestParam(defaultValue = "-1") long uid,
+    public List<Recipe> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid,
             @PathVariable(value = "id") long id) {
         return recipeListService.getAllRecipeFromID(uid, id);
     }
 
     /**
-     * Find a Recipelist by it ID number and delets it
+     * Endpoint to find a Recipelist by its' ID number and delete it
      *
      * @param session - the current HTTP session
      * @param listID  - the id of the recipe
@@ -160,7 +145,23 @@ public class RecipeListController {
     public RecipeList updatetitle(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
         String newTitle = body.get("title");
-        return recipeListService.updateTitle(uid, newTitle, id);
+        return recipeListService.updateTitle(uid,  newTitle, id);
     }
+
+    /** Not in any assignment */
+    /**
+     * Endpoint to get all recipe lists. Not needed for any assignment, but helpful
+     * for testing
+     *
+   
+    * @param session - the current http session
+    * @return all RecipeList objects that are not privite unless the
+    *         curet user own the list.
+    */
+   @GetMapping("/list/all")
+   @ResponseBody
+   public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid) {
+       return recipeListService.findAll(uid);
+   }
 
 }

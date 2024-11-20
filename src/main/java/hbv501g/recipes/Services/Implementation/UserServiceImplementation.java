@@ -56,42 +56,39 @@ public class UserServiceImplementation implements UserService {
         return null;
     }
 
+    /**
+     * Saves a user to the database
+     * @param user - the user to save to the database
+     * @return the saved user
+     */
     @Override
     public User save(User user) {
         return userRepository.save(user);
     }
 
+    /**
+     * Finds all users in the system
+     * @return all saved users
+     */
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
     /**
-     * Initializes a few users if none are found in the database
+     * Finds a user with the given id
+     * @param id - the id of the user 
+     * @return the user with the given id, or null if none exists
      */
-    public List<User> initUsers() {
-        List<User> AllUsers = findAll();
-
-        if (AllUsers.size() == 0) {
-            User user = new User("Jón", "jon123", "jon123@gmail.com");
-            userRepository.save(user);
-
-            user = new User("Superman", "123", "superman@gmail.com");
-            userRepository.save(user);
-
-            user = new User("admin", "admin", "admin@hi.is");
-            userRepository.save(user);
-
-            AllUsers = findAll();
-        }
-
-        return AllUsers;
-    }
-
     @Override
     public User findByID(long id) {
         return userRepository.findByID(id);
     }
 
+    /**
+     * Updates a user, sets it as updatedUser
+     * @param updatedUser - the user with the updated information
+     * @return the updated user
+     */
     public User update(User updatedUser) {
         return userRepository.save(updatedUser);
     }
@@ -217,6 +214,29 @@ public class UserServiceImplementation implements UserService {
         if (index == -1)
             return null;
         return pantry.get(index);
+    }
+
+    /**
+     * Initializes a few users if none are found in the database
+     * @return all users made
+     */
+    public List<User> initUsers() {
+        List<User> AllUsers = findAll();
+
+        if (AllUsers.size() == 0) {
+            User user = new User("Jón", "jon123", "jon123@gmail.com");
+            save(user);
+
+            user = new User("Superman", "123", "superman@gmail.com");
+            save(user);
+
+            user = new User("admin", "admin", "admin@hi.is");
+            save(user);
+
+            AllUsers = findAll();
+        }
+
+        return AllUsers;
     }
 
 }
