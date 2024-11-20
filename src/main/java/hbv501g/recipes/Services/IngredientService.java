@@ -13,15 +13,15 @@ public interface IngredientService {
 
     Ingredient findByID(long id);
     
-    Ingredient findAccessibleByID(long id, User user);
+    Ingredient findAccessibleByID(long id, long uid);
 
-    List<Ingredient> findAccessibleToUser(User user);
+    List<Ingredient> findAccessibleToUser(long uid);
 
-    Ingredient save(User author, Ingredient ingredient);
+    Ingredient save(long uid, Ingredient ingredient);
 
     Ingredient update(Ingredient updatedIngredient);
 
-    void deleteById(User user, long id);
+    void deleteById(long uid, long id);
 
     // Ekki hluti af skilum
     // List<Ingredient> initIngredients();
@@ -30,7 +30,7 @@ public interface IngredientService {
 
     List<Ingredient> findOrderedIngredients();
 
-    Ingredient updateIngredientTitle(long id, String newTitle, User user);
+    Ingredient updateIngredientTitle(long id, String newTitle, long uid);
 
     List<Ingredient> findPublicIngredientsByUser(User user);
 

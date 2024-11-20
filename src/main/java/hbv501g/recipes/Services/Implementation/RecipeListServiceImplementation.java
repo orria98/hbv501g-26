@@ -29,10 +29,12 @@ public class RecipeListServiceImplementation implements RecipeListService {
 
     /**
      * Finds and returns all public recipe lists by the user provided
+     * 
      * @param user - the user who's public recipe lists are returned
      * @return the public recipe lists of the provided user
      */
-    public List<RecipeList> findPublicRecipeListsByUser(User user){
+    public List<RecipeList> findPublicRecipeListsByUser(long uid) {
+        User user = userService.findByID(uid);
         return recipeListRepository.findByIsPrivateFalseAndCreatedBy(user);
     }
 
@@ -43,7 +45,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param user : the user requesting the recipes
      * @return a list of RecipeList.
      */
-    public List<RecipeList> findAll(User user) {
+    public List<RecipeList> findAll(long uid) {
+        User user = userService.findByID(uid);
         if (user == null) {
             return recipeListRepository.findByIsPrivateFalse();
         }
@@ -58,13 +61,14 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param id   : the id of the user who's lists are being requested
      * @return All of the recipeLists from the owner which the requester can access
      */
-    public List<RecipeList> findAllUserRecipeLists(User user, long id) {
+    public List<RecipeList> findAllUserRecipeLists(long uid, long id) {
+        User user = userService.findByID(uid);
         User owner = userService.findByID(id);
-        if(owner==null){
+        if (owner == null) {
             return null;
         }
 
-        if (user == null){
+        if (user == null) {
             return recipeListRepository.findByIsPrivateFalseAndCreatedBy(owner);
         }
 
@@ -78,8 +82,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param id   : the id valu of RecipeList
      * @return the recipeList whit the Id valu
      */
-    public RecipeList findByID(User user, long id) {
-        if (user!=null){
+    public RecipeList findByID(long uid, long id) {
+        User user = userService.findByID(uid);
+        if (user != null) {
             return recipeListRepository.findAccessibleById(user, id);
         }
         return recipeListRepository.findByIsPrivateFalseAndID(id);
@@ -94,7 +99,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param isPrivate   - optionally declare whether the list is private. false by
      *                    default.
      */
-    public RecipeList save(User user, String title, String description, boolean isPrivate) {
+    public RecipeList save(long uid, String title, String description, boolean isPrivate) {
+        User user = userService.findByID(uid);
         if (user == null)
             return null;
         return recipeListRepository.save(new RecipeList(user, title, description, isPrivate));
@@ -108,8 +114,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param id       - the id of the recipelist to be changed
      * @return the updated recipelist, if the change was successful, otherwise null
      */
-    public RecipeList updateTitle(User user, String newTitle, long id) {
-        RecipeList recipeList = findByID(user, id);
+    public RecipeList updateTitle(long uid, String newTitle, long id) {
+        User user = userService.findByID(uid);
+        RecipeList recipeList = findByID(uid, id);
         if (recipeList == null || user == null || recipeList.getCreatedBy() == null
                 || recipeList.getCreatedBy().getID() != user.getID()) {
             return null;
@@ -129,15 +136,16 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param user     - the current User
      * @return the recipeList with the added recipe (if applicable)
      */
-    public RecipeList addRecipe(long recipeID, long listID, User user) {
-        if(user==null){
+    public RecipeList addRecipe(long recipeID, long listID, long uid) {
+        User user = userService.findByID(uid);
+        if (user == null) {
             return null;
         }
 
-        Recipe recipe = recipeService.findAccessibleByID(recipeID, user);
-        RecipeList list = findByID(user, listID);
+        Recipe recipe = recipeService.findAccessibleByID(recipeID, uid);
+        RecipeList list = findByID(uid, listID);
 
-        if (recipe == null || list == null||list.getCreatedBy().getID() != user.getID())
+        if (recipe == null || list == null || list.getCreatedBy().getID() != user.getID())
             return null;
 
         if (list.getRecipes().contains(recipe))
@@ -156,8 +164,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param recipeID - is the ID value of a recipe
      * @return The recipe if it is in the recipieList
      */
-    public List<Recipe> getAllRecipesFromID(User user, long id){
-        if(user == null)
+    public List<Recipe> getAllRecipesFromID(long uid, long id) {
+        User user = userService.findByID(uid);
+        if (user == null)
             return recipeListRepository.findAllRecipesFromId(id);
 
         return recipeListRepository.findAllRecipesFromId(user, id);
@@ -189,8 +198,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param user : is the user that is loged in.
      * @param id   : the id valu of RecipeList
      */
-    public void deleteByID(User user, long id) {
-        RecipeList list = findByID(user, id);
+    public void deleteByID(long uid, long id) {
+        User user = userService.findByID(uid);
+        RecipeList list = findByID(uid, id);
         if (list == null || user == null)
             return;
 
@@ -207,8 +217,10 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * @param recipeID - is the ID value of a recipe
      * @return The Recipelist with out the recipe.
      */
-    public RecipeList removeRecipeFromID(User user, long id, long recipeID) {
-        RecipeList list = findByID(user, id);
+    public RecipeList removeRecipeFromID(long uid, long id, long recipeID) {
+        User user = userService.findByID(uid);
+
+        RecipeList list = findByID(uid, id);
         if (list == null || user == null)
             return list;
 

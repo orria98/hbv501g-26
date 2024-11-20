@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.IngredientService;
 
-import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -45,9 +44,8 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable(value = "id") long id, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return ingredientService.findAccessibleByID(id, user);
+    public Ingredient getIngredientById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
+        return ingredientService.findAccessibleByID(id, uid);
     }
 
     /**
@@ -59,9 +57,8 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/all")
     @ResponseBody
-    public List<Ingredient> getAllIngredients(HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return ingredientService.findAccessibleToUser(user);
+    public List<Ingredient> getAllIngredients(@RequestParam(defaultValue = "0") long uid) {
+        return ingredientService.findAccessibleToUser(uid);
     }
 
     /**
@@ -74,8 +71,8 @@ public class IngredientController {
      */
     @PostMapping("/ingredient/created")
     @ResponseBody
-    public Ingredient saveIngredient(HttpSession session, @RequestBody Ingredient newIngredient){
-	    return ingredientService.save((User) session.getAttribute("LoggedInUser"), newIngredient);
+    public Ingredient saveIngredient( @RequestParam(defaultValue = "0") long uid, @RequestBody Ingredient newIngredient){
+	    return ingredientService.save(uid, newIngredient);
     }
 
     /**
@@ -86,8 +83,8 @@ public class IngredientController {
      * @param id      : ID number of the ingredient
      */
     @DeleteMapping("/ingredient/delete/{id}")
-    public void deleteIngredientById(HttpSession session, @PathVariable(value = "id") long id) {
-        ingredientService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+    public void deleteIngredientById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
+        ingredientService.deleteById(uid, id);
     }
 
     /**
@@ -99,11 +96,10 @@ public class IngredientController {
      * @return : The updated ingredient
      */
     @PatchMapping("/ingredient/updateTitle/{id}")
-    public Ingredient updateIngredientName(HttpSession session, @PathVariable(value = "id") long id,
+    public Ingredient updateIngredientName(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
-        User user = (User) session.getAttribute("LoggedInUser");
         String newTitle = body.get("title");
-        return ingredientService.updateIngredientTitle(id, newTitle, user);
+        return ingredientService.updateIngredientTitle(id, newTitle, uid);
     }
 
     /** Not part of any assignment */

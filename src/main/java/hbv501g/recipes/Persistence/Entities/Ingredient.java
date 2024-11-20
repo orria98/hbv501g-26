@@ -145,7 +145,6 @@ public class Ingredient {
 
     public long getID() {
         return ID;
-
     }
 
     public double getQuantityInMl(){

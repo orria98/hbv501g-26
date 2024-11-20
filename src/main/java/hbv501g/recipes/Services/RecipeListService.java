@@ -4,26 +4,25 @@ import java.util.List;
 
 import hbv501g.recipes.Persistence.Entities.RecipeList;
 import hbv501g.recipes.Persistence.Entities.Recipe;
-import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeListService {
-    List<RecipeList> findAll(User user);
+    List<RecipeList> findAll(long uid);
 
-    List<RecipeList> findAllUserRecipeLists(User user, long id);
-    
-    RecipeList findByID(User user, long id);
+    List<RecipeList> findAllUserRecipeLists(long uid, long id);
 
-    RecipeList save(User user, String title, String description, boolean isPrivate);
+    RecipeList findByID(long uid, long id);
 
-    RecipeList updateTitle(User user, String newTitle, long id);
+    RecipeList save(long uid, String title, String description, boolean isPrivate);
 
-    RecipeList addRecipe(long recipeID, long listID, User user);
+    RecipeList updateTitle(long uid, String newTitle, long id);
 
-    List<Recipe> getAllRecipesFromID(User user, long id);
+    RecipeList addRecipe(long recipeID, long listID, long uid);
 
-    void deleteByID(User user, long id);
+    List<Recipe> getAllRecipesFromID(long uid, long id);
 
-    RecipeList removeRecipeFromID(User user, long id, long recipeID);
+    void deleteByID(long uid, long id);
 
-    List<RecipeList> findPublicRecipeListsByUser(User user);
+    RecipeList removeRecipeFromID(long uid, long id, long recipeID);
+
+    List<RecipeList> findPublicRecipeListsByUser(long uid);
 }

@@ -4,9 +4,7 @@ import java.util.List;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.RecipeList;
-import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.RecipeListService;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +34,9 @@ public class RecipeListController {
      */
     @GetMapping("/list/user/{id}")
     @ResponseBody
-    public List<RecipeList> getAllRecipeListsByUserId(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.findAllUserRecipeLists((User) session.getAttribute("LoggedInUser"), id);
+    public List<RecipeList> getAllRecipeListsByUserId(@RequestParam(defaultValue = "0") long uid,
+            @PathVariable(value = "id") long id) {
+        return recipeListService.findAllUserRecipeLists(uid, id);
     }
 
     /**
@@ -50,8 +49,9 @@ public class RecipeListController {
      */
     @GetMapping("/list/id/{id}")
     @ResponseBody
-    public RecipeList getRecipeListById(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.findByID((User) session.getAttribute("LoggedInUser"), id);
+    public RecipeList getRecipeListById(@RequestParam(defaultValue = "0") long uid,
+            @PathVariable(value = "id") long id) {
+        return recipeListService.findByID(uid, id);
     }
 
     /**
@@ -66,10 +66,10 @@ public class RecipeListController {
      */
     @PostMapping("/list/new")
     @ResponseBody
-    public RecipeList newRecipeList(HttpSession session, @RequestParam String title,
+    public RecipeList newRecipeList(@RequestParam(defaultValue = "0") long uid, @RequestParam String title,
             @RequestParam(required = false) String description, @RequestParam(required = false) boolean isPrivate) {
-        return recipeListService.save((User) session.getAttribute("LoggedInUser"), title, description, isPrivate);
-    }    
+        return recipeListService.save(uid, title, description, isPrivate);
+    }
 
     /**
      * Endpoint to add a specific recipe to a given recipe list
@@ -81,23 +81,24 @@ public class RecipeListController {
      */
     @ResponseBody
     @PutMapping("/list/addRecipe")
-    public RecipeList addRecipeToList(@RequestParam long recipeID, @RequestParam long listID, HttpSession session) {
-        return recipeListService.addRecipe(recipeID, listID, (User) session.getAttribute("LoggedInUser"));
+    public RecipeList addRecipeToList(@RequestParam long recipeID, @RequestParam long listID,
+            @RequestParam(defaultValue = "0") long uid) {
+        return recipeListService.addRecipe(recipeID, listID, uid);
     }
 
     /**
      * Endpoint gets all Recipe form resiplist.
      *
-     * @param session  - the current HTTP session
-     * @param id   - the id of the recipe
-     * @return All of the recipe that are int the 
-     *         recipeList that has the id value of 
+     * @param session - the current HTTP session
+     * @param id      - the id of the recipe
+     * @return All of the recipe that are int the
+     *         recipeList that has the id value of
      *         listID.
      */
     @GetMapping("/list/id/{id}/recipe")
-
-    public List<Recipe> getAllRecipesFromList(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.getAllRecipesFromID((User) session.getAttribute("LoggedInUser"), id);
+    public List<Recipe> getAllRecipesFromList(@RequestParam(defaultValue = "0") long uid,
+            @PathVariable(value = "id") long id) {
+        return recipeListService.getAllRecipesFromID(uid, id);
     }
 
     /**
@@ -106,9 +107,9 @@ public class RecipeListController {
      * @param session - the current HTTP session
      * @param listID  - the id of the recipe
      */
-    @GetMapping("/list/id/{id}/delete")
-    public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id) {
-        recipeListService.deleteByID((User) session.getAttribute("LoggedInUser"), id);
+    @DeleteMapping("/list/id/{id}/delete")
+    public void deleteRecipeListByID(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
+        recipeListService.deleteByID(uid, id);
     }
 
     /**
@@ -123,9 +124,10 @@ public class RecipeListController {
      *         value of listID.
      */
     @PatchMapping("/list/id/{listID}/recipe/{recipeID}/remove")
-    public RecipeList removeRecipeFromList(HttpSession session, @PathVariable(value = "listID") long listID,
+    public RecipeList removeRecipeFromList(@RequestParam(defaultValue = "0") long uid,
+            @PathVariable(value = "listID") long listID,
             @PathVariable(value = "recipeID") long recipeID) {
-        return recipeListService.removeRecipeFromID((User) session.getAttribute("LoggedInUser"), listID, recipeID);
+        return recipeListService.removeRecipeFromID(uid, listID, recipeID);
     }
 
     /**
@@ -137,11 +139,10 @@ public class RecipeListController {
      * @return the updated recipelist
      */
     @PatchMapping("/list/updateTitle/{id}")
-    public RecipeList updatetitle(HttpSession session, @PathVariable(value = "id") long id,
+    public RecipeList updatetitle(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
-        User user = (User) session.getAttribute("LoggedInUser");
         String newTitle = body.get("title");
-        return recipeListService.updateTitle(user, newTitle, id);
+        return recipeListService.updateTitle(uid, newTitle, id);
     }
 
     /** Not in any assignment */
@@ -149,14 +150,15 @@ public class RecipeListController {
      * Endpoint to get all recipe lists. Not needed for any assignment, but helpful
      * for testing
      *
+     * 
      * @param session - the current http session
      * @return all RecipeList objects that are not privite unless the
      *         curet user own the list.
      */
     @GetMapping("/list/all")
     @ResponseBody
-    public List<RecipeList> getAllRecipeLists(HttpSession session) {
-        return recipeListService.findAll((User) session.getAttribute("LoggedInUser"));
+    public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "0") long uid) {
+        return recipeListService.findAll(uid);
     }
 
 }
