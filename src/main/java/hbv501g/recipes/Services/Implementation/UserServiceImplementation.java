@@ -3,10 +3,13 @@ package hbv501g.recipes.Services.Implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import hbv501g.recipes.Persistence.Repositories.UserRepository;
 import hbv501g.recipes.Services.IngredientService;
+import hbv501g.recipes.Services.RecipeListService;
+import hbv501g.recipes.Services.RecipeService;
 import hbv501g.recipes.Services.UserService;
 import hbv501g.recipes.Persistence.Entities.*;
 
@@ -14,11 +17,16 @@ import hbv501g.recipes.Persistence.Entities.*;
 public class UserServiceImplementation implements UserService {
     private UserRepository userRepository;
     private IngredientService ingredientService;
+    private RecipeService recipeService;
+    private RecipeListService recipeListService;
 
     @Autowired
-    public UserServiceImplementation(UserRepository userRepository, IngredientService ingredientService) {
+    public UserServiceImplementation(UserRepository userRepository, IngredientService ingredientService,
+            @Lazy RecipeService recipeService, @Lazy RecipeListService recipeListService) {
         this.userRepository = userRepository;
         this.ingredientService = ingredientService;
+        this.recipeListService = recipeListService;
+        this.recipeService = recipeService;
     }
 
     /**
@@ -88,6 +96,36 @@ public class UserServiceImplementation implements UserService {
     }
 
     /**
+     * Finds and returns a user with a given ID, if one exists. Otherwise, it
+     * returns null. If the user making the request and the user
+     * we want to find are the same, the returned user contains all information
+     * about the user. If not, sensitive or private information are not included.
+     * The only information that is provided are the public recipes, ingredients and
+     * recipe lists, and the username
+     * 
+     * @param id   - the userID of the requested user
+     * @param user - the user making the request
+     * @return the user with that id, or null
+     */
+    public User findByID(User user, long id) {
+        User userToShow = userRepository.findByID(id);
+        if (userToShow == null) {
+            return null;
+        }
+        if (user == null || user.getID() != id) {
+            // bara public uppskriftir, listar og hráefni
+            User tmp = new User();
+            tmp.setUsername(userToShow.getUsername());
+            tmp.setIngredientsByUser(ingredientService.findPublicIngredientsByUser(userToShow));
+            tmp.setRecipeLists(recipeListService.findPublicRecipeListsByUser(userToShow));
+            tmp.setRecipesByUser(recipeService.findPublicRecipesByUser(userToShow));
+            return tmp;
+        }
+        return userToShow;
+
+    }
+
+    /**
      * Updates a user, sets it as updatedUser
      * 
      * @param updatedUser - the user with the updated information
@@ -150,8 +188,27 @@ public class UserServiceImplementation implements UserService {
     }
 
     /**
-     * Adds ingredientMeasurement to pantry, if the ingredient isn't already in the
-     * pantry.
+     * Changes the password of the given user to the new password, if the old
+     * password matches the one of the user. If the user is null, or the old
+     * password is incorrect, then nothing happens
+     * 
+     * @param user        - the user to change the password of
+     * @param newPassword - the new password of the user
+     * @param oldPassword - the old password of the user
+     */
+    public void changePassword(User user, String newPassword, String oldPassword) {
+        if (user != null) {
+            if (user.getPassword().equals(oldPassword)) {
+                user.setPassword(newPassword);
+                update(user);
+            }
+        }
+    }
+
+    /**
+     * Adds ingredientMeasurement to pantry for the given user, if the ingredient
+     * isn't already in the pantry and if the user is not null. Users can add any
+     * public ingredient or their own private ingredients to the pantry.
      * 
      * @param user      user owning pantry
      * @param iid       id of ingredient to add to pantry
@@ -161,7 +218,8 @@ public class UserServiceImplementation implements UserService {
      */
     public IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity) {
         Ingredient ingredient = ingredientService.findByID(iid);
-        if (ingredient == null || ingredient.isPrivate() && ingredient.getCreatedBy() != user || user == null)
+        if (ingredient == null || user == null || (ingredient.isPrivate()
+                && (ingredient.getCreatedBy() == null || ingredient.getCreatedBy().getID() != user.getID())))
             return null;
 
         List<IngredientMeasurement> pantry = user.getPantry();

@@ -35,4 +35,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     List<Ingredient> findByTitle(String title);
 
     List<Ingredient> findAllByOrderByPrice();
+
+    List<Ingredient> findByIsPrivateFalseAndCreatedBy(User user);
+
 }

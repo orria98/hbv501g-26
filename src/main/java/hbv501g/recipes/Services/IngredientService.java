@@ -32,4 +32,6 @@ public interface IngredientService {
 
     Ingredient updateIngredientTitle(long id, String newTitle, User user);
 
+    List<Ingredient> findPublicIngredientsByUser(User user);
+
 }

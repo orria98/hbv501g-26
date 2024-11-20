@@ -48,7 +48,7 @@ public class RecipeListController {
      * @param id      - the id number of RecipeList
      * @return A recipe list with the given id, or null
      */
-    @GetMapping("list/id/{id}")
+    @GetMapping("/list/id/{id}")
     @ResponseBody
     public RecipeList getRecipeListById(HttpSession session, @PathVariable(value = "id") long id) {
         return recipeListService.findByID((User) session.getAttribute("LoggedInUser"), id);
@@ -106,7 +106,7 @@ public class RecipeListController {
      * @param session - the current HTTP session
      * @param listID  - the id of the recipe
      */
-    @GetMapping("list/id/{id}/delete")
+    @GetMapping("/list/id/{id}/delete")
     public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id) {
         recipeListService.deleteByID((User) session.getAttribute("LoggedInUser"), id);
     }

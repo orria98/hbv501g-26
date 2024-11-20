@@ -28,6 +28,15 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
+     * Finds and returns all public recipe lists by the user provided
+     * @param user - the user who's public recipe lists are returned
+     * @return the public recipe lists of the provided user
+     */
+    public List<RecipeList> findPublicRecipeListsByUser(User user){
+        return recipeListRepository.findByIsPrivateFalseAndCreatedBy(user);
+    }
+
+    /**
      * Get all RecipeList from the database that are not
      * privat unless the user owns them.
      *
