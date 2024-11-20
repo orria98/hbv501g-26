@@ -262,4 +262,14 @@ public class RecipeController {
     public List<Recipe> getAllOrderedRecipes(@RequestParam(defaultValue = "-1") long uid) {
         return recipeService.findOrderedRecipes(uid);
     }
+
+    /**
+     * Gets all recipes which are accessible to the current user and returns them in alphabetical order
+     * @param session - the current http session
+     * @return all recipes ordered alphabetically
+     */
+    @GetMapping("/recipe/all/orderedByTitle")
+    public List<Recipe> getAllOrderedRecipesByTitle(@RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.findOrderedRecipesByTitle(uid);
+    }
 }

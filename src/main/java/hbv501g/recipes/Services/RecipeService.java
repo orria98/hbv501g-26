@@ -27,7 +27,7 @@ public interface RecipeService {
 
     int getTotalPurchaseCost(long uid, long id);
 
-    double getTotalIngredientCost(long uid,long id);
+    double getTotalIngredientCost(long uid, long id);
 
     double getPersonalizedPurchaseCost(long uid, long recipeId);
 
@@ -42,4 +42,8 @@ public interface RecipeService {
     List<Recipe> findUnderTIC(int upperLimit, long uid);
 
     List<Recipe> findOrderedRecipes(long uid);
+
+    List<Recipe> findOrderedRecipesByTitle(long uid);
+
+    List<Recipe> findPublicRecipesByUser(long uid);
 }

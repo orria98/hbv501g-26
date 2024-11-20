@@ -69,7 +69,7 @@ public class IngredientController {
      * @param newIngredient - an Ingredient that is being saved
      * @return the new Ingredient
      */
-    @PostMapping("ingredient/created")
+    @PostMapping("/ingredient/created")
     @ResponseBody
     public Ingredient saveIngredient( @RequestParam(defaultValue = "-1") long uid, @RequestBody Ingredient newIngredient){
 	    return ingredientService.save(uid, newIngredient);
@@ -103,7 +103,7 @@ public class IngredientController {
     }
 
     /** Not part of any assignment */
-    @GetMapping("ingredient/all/ordered")
+    @GetMapping("/ingredient/all/ordered")
     public List<Ingredient> getOrderedIngredients(){
         return ingredientService.findOrderedIngredients();
     }

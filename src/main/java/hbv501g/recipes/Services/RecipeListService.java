@@ -18,9 +18,11 @@ public interface RecipeListService {
 
     RecipeList addRecipe(long recipeID, long listID, long uid);
 
-    List<Recipe> getAllRecipeFromID(long uid, long id);
+    List<Recipe> getAllRecipesFromID(long uid, long id);
 
-    void deletByID(long uid, long id);
+    void deleteByID(long uid, long id);
 
     RecipeList removeRecipeFromID(long uid, long id, long recipeID);
+
+    List<RecipeList> findPublicRecipeListsByUser(long uid);
 }

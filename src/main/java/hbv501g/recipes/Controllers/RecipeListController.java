@@ -23,7 +23,6 @@ public class RecipeListController {
         this.recipeListService = recipeListService;
     }
 
-
     /**
      * Find and return the Recipe list that a
      * user has.
@@ -47,7 +46,7 @@ public class RecipeListController {
      * @param id      - the id number of RecipeList
      * @return A recipe list with the given id, or null
      */
-    @GetMapping("list/id/{id}")
+    @GetMapping("/list/id/{id}")
     @ResponseBody
     public RecipeList getRecipeListById(@RequestParam(defaultValue = "-1") long uid,
             @PathVariable(value = "id") long id) {
@@ -98,7 +97,7 @@ public class RecipeListController {
     @GetMapping("/list/id/{id}/recipe")
     public List<Recipe> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid,
             @PathVariable(value = "id") long id) {
-        return recipeListService.getAllRecipeFromID(uid, id);
+        return recipeListService.getAllRecipesFromID(uid, id);
     }
 
     /**
@@ -108,11 +107,8 @@ public class RecipeListController {
      * @param listID  - the id of the recipe
      */
     @DeleteMapping("list/id/{id}/delete")
-    public void deletRecipeListByID(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
-        recipeListService.deletByID(
-                uid,
-                id);
-
+    public void deleteRecipeListByID(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
+        recipeListService.deleteByID(uid, id);
     }
 
     /**
@@ -145,7 +141,7 @@ public class RecipeListController {
     public RecipeList updatetitle(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
         String newTitle = body.get("title");
-        return recipeListService.updateTitle(uid,  newTitle, id);
+        return recipeListService.updateTitle(uid, newTitle, id);
     }
 
     /** Not in any assignment */
@@ -153,15 +149,15 @@ public class RecipeListController {
      * Endpoint to get all recipe lists. Not needed for any assignment, but helpful
      * for testing
      *
-   
-    * @param session - the current http session
-    * @return all RecipeList objects that are not privite unless the
-    *         curet user own the list.
-    */
-   @GetMapping("/list/all")
-   @ResponseBody
-   public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid) {
-       return recipeListService.findAll(uid);
-   }
+     * 
+     * @param session - the current http session
+     * @return all RecipeList objects that are not privite unless the
+     *         curet user own the list.
+     */
+    @GetMapping("/list/all")
+    @ResponseBody
+    public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid) {
+        return recipeListService.findAll(uid);
+    }
 
 }

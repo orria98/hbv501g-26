@@ -92,6 +92,10 @@ public class Recipe {
         return ingredientMeasurements;
     }
 
+    /**
+     * Sets the ingredientMeasurements of a recipe and calculates the total purchase cost and the total ingredient cost
+     * @param ingredientMeasurements
+     */
     public void setIngredientMeasurements(List<IngredientMeasurement> ingredientMeasurements) {
         this.ingredientMeasurements = ingredientMeasurements;
 
@@ -114,9 +118,8 @@ public class Recipe {
             return;
         double ingredientPrice = ingredient.getPrice();
 
-        if (ingredient.getQuantity()!=0){
-            //find the amount in the unit of the ingredient
-            double measurementAmount = (item.getQuantity() * item.getUnit().getMlInUnit())/(ingredient.getQuantity()*ingredient.getUnit().getMlInUnit());
+        if (ingredient.getQuantity()!=0 && ingredient.getQuantityInMl()!=0){
+            double measurementAmount = item.getQuantityInMl()/ingredient.getQuantityInMl();            
             totalPurchaseCost +=ingredientPrice* Math.ceil(measurementAmount);
             totalIngredientCost += ingredientPrice * measurementAmount;
         }

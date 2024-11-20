@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,10 +47,13 @@ public class UserController {
     }
 
     /**
-     * Finds and returns a user with a given ID. Returns that user if any user has
-     * the ID, otherwise it returns null
+     * Finds and returns a user with a given ID, if one exists. Otherwise, it
+     * returns null. If the user making the request (the current user) and the user
+     * we want to find are the same, the returned user contains all information
+     * about the user. If not, sensitive or private information are not included
      * 
-     * @param id - the userID of the requested user
+     * @param id      - the userID of the requested user
+     * @param session - the current Http session
      * @return the user with that id, or null
      */
     @GetMapping("/user/id/{id}")
@@ -89,10 +94,50 @@ public class UserController {
      * @return a new user with the given username and password, or null if no user
      *         created
      */
-    @PostMapping(value = "user/signup")
+    @PostMapping(value = "/user/signup")
     public User signup(@RequestParam String username, @RequestParam String password) {
         User newUser = userService.signup(username, password);
         return newUser;
+    }
+
+    /**
+     * Logs the current user out by invalidating the session
+     * 
+     * @param session - The current Http session
+     */
+    @GetMapping("/user/logout")
+    public void logout(HttpSession session) {
+        session.invalidate();
+    }
+
+    /**
+     * Deletes the current user, if the given password matches. If successful, the
+     * user is also logged out.
+     * 
+     * @param session  - the current http session
+     * @param password - a password to confirm the delete
+     */
+    @DeleteMapping("/user/delete")
+    public void deleteCurrentUser(HttpSession session, @RequestParam String password) {
+        if (userService.deleteUser((User) session.getAttribute("LoggedInUser"), password)) {
+            session.invalidate();
+        }
+    }
+
+    /**
+     * Endpoint for changing the password of the user currently logged in. Changes
+     * it to the new password if the old password, which is provided for
+     * confirmation, is correct for the current user
+     * 
+     * @param session     - The current Http session
+     * @param newPassword - The new password for the current user
+     * @param oldPassword - The old password of the current user
+     */
+    @PatchMapping("/user/changePassword")
+    public void changePassword(HttpSession session, @RequestParam String newPassword,
+            @RequestParam String oldPassword) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        userService.changePassword(user, newPassword, oldPassword);
     }
 
     /**
