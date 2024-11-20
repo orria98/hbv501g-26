@@ -5,9 +5,7 @@ import java.util.List;
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.RecipeList;
-import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.RecipeListService;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +30,12 @@ public class RecipeListController {
      *
      * @param session - the current http session
      * @return all RecipeList objects that are not privite unless the
-     *	       curet user own the list.
+     *         curet user own the list.
      */
     @GetMapping("/list/all")
     @ResponseBody
-    public List<RecipeList> getAllRecipesFromList(HttpSession session) {
-        return recipeListService.findAll((User) session.getAttribute("LoggedInUser"));
+    public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid) {
+        return recipeListService.findAll(uid);
     }
 
     /**
@@ -50,8 +48,9 @@ public class RecipeListController {
      */
     @GetMapping("/list/user/{id}")
     @ResponseBody
-    public List<RecipeList> getAllRecipeListsByUserId(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.findAllUserRecipeLists((User) session.getAttribute("LoggedInUser"), id);
+    public List<RecipeList> getAllRecipeListsByUserId(@RequestParam(defaultValue = "-1") long uid,
+            @PathVariable(value = "id") long id) {
+        return recipeListService.findAllUserRecipeLists(uid, id);
     }
 
     /**
@@ -65,8 +64,9 @@ public class RecipeListController {
      */
     @GetMapping("list/id/{id}")
     @ResponseBody
-    public RecipeList getRecipeListById(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.findByID((User) session.getAttribute("LoggedInUser"), id);
+    public RecipeList getRecipeListById(@RequestParam(defaultValue = "-1") long uid,
+            @PathVariable(value = "id") long id) {
+        return recipeListService.findByID(uid, id);
     }
 
     /**
@@ -81,10 +81,10 @@ public class RecipeListController {
      */
     @PostMapping("/list/new")
     @ResponseBody
-    public RecipeList newRecipeList(HttpSession session, @RequestParam String title,
+    public RecipeList newRecipeList(@RequestParam(defaultValue = "-1") long uid, @RequestParam String title,
             @RequestParam(required = false) String description, @RequestParam(required = false) boolean isPrivate) {
-        return recipeListService.save((User) session.getAttribute("LoggedInUser"), title, description, isPrivate);
-    }    
+        return recipeListService.save(uid, title, description, isPrivate);
+    }
 
     /**
      * Endpoint to add a specific recipe to a given recipe list
@@ -96,36 +96,37 @@ public class RecipeListController {
      */
     @ResponseBody
     @PutMapping("/list/addRecipe")
-    public RecipeList addRecipeToList(@RequestParam long recipeID, @RequestParam long listID, HttpSession session) {
-        return recipeListService.addRecipe(recipeID, listID, (User) session.getAttribute("LoggedInUser"));
+    public RecipeList addRecipeToList(@RequestParam long recipeID, @RequestParam long listID,
+            @RequestParam(defaultValue = "-1") long uid) {
+        return recipeListService.addRecipe(recipeID, listID, uid);
     }
 
     /**
      * Endpoint gets all Recipe form resiplist.
      *
-     * @param session  - the current HTTP session
-     * @param id   - the id of the recipe
-     * @return All of the recipe that are int the 
-     *         recipeList that has the id value of 
+     * @param session - the current HTTP session
+     * @param id      - the id of the recipe
+     * @return All of the recipe that are int the
+     *         recipeList that has the id value of
      *         listID.
      */
     @GetMapping("/list/id/{id}/recipe")
-    public List<Recipe> getAllRecipeFormList(HttpSession session, @PathVariable(value = "id") long id) {
-        return recipeListService.getAllRecipeFromID((User) session.getAttribute("LoggedInUser"), id);
+    public List<Recipe> getAllRecipeFormList(@RequestParam(defaultValue = "-1") long uid,
+            @PathVariable(value = "id") long id) {
+        return recipeListService.getAllRecipeFromID(uid, id);
     }
 
     /**
      * Find a Recipelist by it ID number and delets it
      *
-     * @param session  - the current HTTP session
-     * @param listID   - the id of the recipe
+     * @param session - the current HTTP session
+     * @param listID  - the id of the recipe
      */
     @DeleteMapping("list/id/{id}/delete")
-    public void deletRecipeListByID(HttpSession session, @PathVariable(value = "id") long id){
-	    recipeListService.deletByID(
-	    			    (User) session.getAttribute("LoggedInUser"),
-	    			    id
-	    			   );
+    public void deletRecipeListByID(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
+        recipeListService.deletByID(
+                uid,
+                id);
 
     }
 
@@ -141,24 +142,25 @@ public class RecipeListController {
      *         value of listID.
      */
     @PatchMapping("/list/id/{listID}/recipe/{recipeID}/remove")
-    public RecipeList removeRecipeFromList(HttpSession session, @PathVariable(value = "listID") long listID,
+    public RecipeList removeRecipeFromList(@RequestParam(defaultValue = "-1") long uid,
+            @PathVariable(value = "listID") long listID,
             @PathVariable(value = "recipeID") long recipeID) {
-        return recipeListService.removeRecipeFromID((User) session.getAttribute("LoggedInUser"), listID, recipeID);
+        return recipeListService.removeRecipeFromID(uid, listID, recipeID);
     }
-    
+
     /**
      * Updates the title of a recipe list
      * 
      * @param session - the current http session
-     * @param id - the id of the recipe list
-     * @param body - a RequestBody containing a mapping with the new title
-     * @return  the updated recipelist
+     * @param id      - the id of the recipe list
+     * @param body    - a RequestBody containing a mapping with the new title
+     * @return the updated recipelist
      */
     @PatchMapping("/list/updateTitle/{id}")
-    public RecipeList updatetitle(HttpSession session, @PathVariable(value = "id") long id, @RequestBody Map<String,String> body) {
-        User user = (User) session.getAttribute("LoggedInUser");
+    public RecipeList updatetitle(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id,
+            @RequestBody Map<String, String> body) {
         String newTitle = body.get("title");
-        return recipeListService.updateTitle(user,newTitle, id);
+        return recipeListService.updateTitle(uid, newTitle, id);
     }
 
 }
