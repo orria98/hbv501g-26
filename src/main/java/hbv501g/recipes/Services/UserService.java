@@ -14,20 +14,24 @@ public interface UserService {
     List<User> findAll();
 
     User findByID(long id);
+
     User findByUsername(String username);
 
     User save(User user);
 
     List<User> initUsers();
+
     User signup(String username, String password);
+
     User login(String username, String password);
+
     User update(User user);
 
-    List<IngredientMeasurement> findUserPantry(User user);
+    List<IngredientMeasurement> findUserPantry(long uid);
 
-    void deletePantryItem(User user, long iid);
+    void deletePantryItem(long uid, long iid);
 
-    IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity);
+    IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity);
 
     IngredientMeasurement findItemInPantry(List<IngredientMeasurement> pantry, Ingredient ingredient);
 

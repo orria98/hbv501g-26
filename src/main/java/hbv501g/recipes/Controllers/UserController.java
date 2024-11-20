@@ -16,7 +16,6 @@ import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.UserService;
-import hbv501g.recipes.jwt.JwtUtils;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,8 +33,8 @@ public class UserController {
         this.userService = userService;
     }
 
-//       @Autowired
-//   JwtUtils jwtUtils;
+    // @Autowired
+    // JwtUtils jwtUtils;
 
     @GetMapping("/user/init")
     @ResponseBody
@@ -67,24 +66,6 @@ public class UserController {
     }
 
     /**
-     * Gets the user who is currently logged in. It is stored as LoggedInUser in the
-     * current http session. Returns the user, or null if no user is logged in
-     * 
-     * @param session - The current http session
-     * @return - The current user (or null)
-     */
-    @GetMapping("/user/curr")
-    public User getCurrentUser(HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        // return (User) session.getAttribute("LoggedInUser");
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
-        }
-        
-        return user;
-    }
-
-    /**
      * Logs in a user with a given username and password and stores it as the
      * current user/logged in user of the session. Returns the user, or null if the
      * login fails
@@ -97,11 +78,9 @@ public class UserController {
      * @return the user with the given username or password, or null
      */
     @GetMapping(value = "/user/login")
-    public User login(HttpSession session, @RequestParam String username, @RequestParam String password) {
+    public User login(@RequestParam String username, @RequestParam String password) {
         System.out.println("Reyni að logga inn user " + username);
-
         User exists = userService.login(username, password);
-        session.setAttribute("LoggedInUser", exists);
         return exists;
     }
 
@@ -120,9 +99,8 @@ public class UserController {
      *         created
      */
     @PostMapping(value = "user/signup")
-    public User signup(HttpSession session, @RequestParam String username, @RequestParam String password) {
+    public User signup(@RequestParam String username, @RequestParam String password) {
         User newUser = userService.signup(username, password);
-        session.setAttribute("LoggedInUser", newUser);
         return newUser;
     }
 
@@ -133,8 +111,8 @@ public class UserController {
      * @return pantry contents for user
      */
     @GetMapping("/user/pantry")
-    public List<IngredientMeasurement> getUserPantry(HttpSession session) {
-        return userService.findUserPantry((User) session.getAttribute("LoggedInUser"));
+    public List<IngredientMeasurement> getUserPantry(@RequestParam(defaultValue = "-1") long uid) {
+        return userService.findUserPantry(uid);
     }
 
     /**
@@ -144,10 +122,11 @@ public class UserController {
      * @param iid     - id of ingredient in pantry item to delete
      * @param session - the current session
      */
-    // @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET, RequestMethod.PUT })
+    // @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET,
+    // RequestMethod.PUT })
     @PutMapping("/user/pantry/delete")
-    public void deletePantryItem(@RequestParam long iid, HttpSession session) {
-        userService.deletePantryItem((User) session.getAttribute("LoggedInUser"), iid);
+    public void deletePantryItem(@RequestParam long iid, @RequestParam(defaultValue = "-1") long uid) {
+        userService.deletePantryItem(uid, iid);
     }
 
     /**
@@ -160,13 +139,31 @@ public class UserController {
      * @param qty  quantity
      * @return the ingredient measurement for the ingredient
      */
-    // @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET, RequestMethod.PUT })
+    // @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET,
+    // RequestMethod.PUT })
     @PutMapping("/user/pantry/add")
     @ResponseBody
     public IngredientMeasurement addPantryItem(@RequestParam long iid, @RequestParam Unit unit,
-            @RequestParam double qty, HttpSession session) {
+            @RequestParam double qty, @RequestParam(defaultValue = "-1") long uid) {
 
-        return userService.addPantryItem((User) session.getAttribute("LoggedInUser"), iid, unit, qty);
+        return userService.addPantryItem(uid, iid, unit, qty);
     }
 
+    /**
+     * Gets the user who is currently logged in. It is stored as LoggedInUser in the
+     * current http session. Returns the user, or null if no user is logged in
+     * 
+     * @param session - The current http session
+     * @return - The current user (or null)
+     */
+    @GetMapping("/user/curr")
+    @Deprecated
+    public User getCurrentUser(HttpSession session) {
+        User user = (User) session.getAttribute("LoggedInUser");
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
+        }
+
+        return user;
+    }
 }

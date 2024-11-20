@@ -73,13 +73,13 @@ public class UserServiceImplementation implements UserService {
 
         if (AllUsers.size() == 0) {
             User user = new User("Jón", "jon123", "jon123@gmail.com");
-            save(user);
+            userRepository.save(user);
 
             user = new User("Superman", "123", "superman@gmail.com");
-            save(user);
+            userRepository.save(user);
 
             user = new User("admin", "admin", "admin@hi.is");
-            save(user);
+            userRepository.save(user);
 
             AllUsers = findAll();
         }
@@ -111,7 +111,7 @@ public class UserServiceImplementation implements UserService {
         }
         if (findByUsername(username) == null) {
             User newUser = new User(username, password);
-            save(newUser);
+            userRepository.save(newUser);
             return newUser;
         }
         return null;
@@ -123,7 +123,9 @@ public class UserServiceImplementation implements UserService {
      * @param user - user owning pantry
      * @return pantry contents for the user
      */
-    public List<IngredientMeasurement> findUserPantry(User user) {
+    public List<IngredientMeasurement> findUserPantry(long uid) {
+        User user = findByID(uid);
+
         if (user == null)
             return null;
 
@@ -140,7 +142,8 @@ public class UserServiceImplementation implements UserService {
      * @param quantityy quantity in pantry
      * @return ingredient measurement with the ingredient
      */
-    public IngredientMeasurement addPantryItem(User user, long iid, Unit unit, double quantity) {
+    public IngredientMeasurement addPantryItem(long uid, long iid, Unit unit, double quantity) {
+        User user = findByID(uid);
         Ingredient ingredient = ingredientService.findByID(iid);
         if (ingredient == null || ingredient.isPrivate() && ingredient.getCreatedBy() != user || user == null)
             return null;
@@ -166,7 +169,8 @@ public class UserServiceImplementation implements UserService {
      * @param user - user owning pantry
      * @param iid  - id of ingredient in the pantry item
      */
-    public void deletePantryItem(User user, long iid) {
+    public void deletePantryItem(long uid, long iid) {
+        User user = findByID(uid);
         if (user == null)
             return;
 
