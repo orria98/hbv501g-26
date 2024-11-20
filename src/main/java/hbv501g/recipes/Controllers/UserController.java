@@ -85,6 +85,7 @@ public class UserController {
             User exists = userService.login(userService.findByUsername(username));
             if (exists != null) {
                 session.setAttribute("LoggedInUser", exists);
+                System.out.println("Session ID: " + session.getId());
                 return exists;
             }
         }
