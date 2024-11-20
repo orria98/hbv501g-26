@@ -3,14 +3,12 @@ package hbv501g.recipes.Services.Implementation;
 import java.util.List;
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
-import hbv501g.recipes.Persistence.Entities.Recipe;
-import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Repositories.IngredientRepository;
 import hbv501g.recipes.Services.IngredientService;
 import hbv501g.recipes.Services.UserService;
@@ -20,12 +18,12 @@ import hbv501g.recipes.Persistence.Entities.User;
 public class IngredientServiceImplementation implements IngredientService {
 
     private IngredientRepository ingredientRepository;
-    // private UserService userService;
 
-    @Autowired
-    public IngredientServiceImplementation(IngredientRepository ingredientRepository /* , UserService userService */) {
+    private UserService userService;
+
+    public IngredientServiceImplementation(IngredientRepository ingredientRepository, @Lazy UserService userService) {
         this.ingredientRepository = ingredientRepository;
-        // this.userService = userService;
+        this.userService = userService;
     }
 
     /**
@@ -55,7 +53,9 @@ public class IngredientServiceImplementation implements IngredientService {
      * @param user - the user requesting the ingredient
      * @return an ingredient with the given id, or null
      */
-    public Ingredient findAccessibleByID(long id, User user) {
+    public Ingredient findAccessibleByID(long id, long uid) {
+        User user = userService.findByID(uid);
+
         if (user == null) {
             return ingredientRepository.findByIsPrivateFalseAndID(id);
         }
@@ -69,7 +69,9 @@ public class IngredientServiceImplementation implements IngredientService {
      * @param user - the user looking for ingredients
      * @return all ingredients accessible to the given user
      */
-    public List<Ingredient> findAccessibleToUser(User user) {
+    public List<Ingredient> findAccessibleToUser(long uid) {
+        User user = userService.findByID(uid);
+
         if (user == null) {
             return ingredientRepository.findByIsPrivateFalse();
         }
@@ -84,7 +86,9 @@ public class IngredientServiceImplementation implements IngredientService {
      * @return the ingredient saved to db
      */
     @Override
-    public Ingredient save(User author, Ingredient ingredient) {
+    public Ingredient save(long uid, Ingredient ingredient) {
+        User author = userService.findByID(uid);
+
         if (author == null) {
             return null;
         }
@@ -137,8 +141,10 @@ public class IngredientServiceImplementation implements IngredientService {
     // return AllIngredients;
     // }
 
-    public Ingredient updateIngredientTitle(long id, String newTitle, User user) {
+    public Ingredient updateIngredientTitle(long id, String newTitle, long uid) {
         Ingredient ingredient = findByID(id);
+        User user = userService.findByID(uid);
+
         if (ingredient == null || user == null) {
             return null;
         }
@@ -157,7 +163,8 @@ public class IngredientServiceImplementation implements IngredientService {
      *             of the ingredient.
      */
     @Override
-    public void deleteById(User user, long id) {
+    public void deleteById(long uid, long id) {
+        User user = userService.findByID(uid);
         if (user != null) {
             User author = findByID(id).getCreatedBy();
             if (author != null) {
@@ -167,4 +174,5 @@ public class IngredientServiceImplementation implements IngredientService {
             }
         }
     }
+
 }

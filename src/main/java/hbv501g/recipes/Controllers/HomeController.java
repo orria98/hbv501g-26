@@ -121,20 +121,20 @@ public class HomeController {
 
         if (ingredients.size() == 0) {
             ingredient = new Ingredient("ger", Unit.G, 25, 250, "Krónan", "Gestus");
-            ingredientService.save(users.get(2), ingredient);
+            ingredientService.save(users.get(2).getID(), ingredient);
 
             ingredient = new Ingredient("hveiti", Unit.G, 2000, 500, "Bónus", "Kornax");
-            ingredientService.save(users.get(2), ingredient);
+            ingredientService.save(users.get(2).getID(), ingredient);
 
             ingredient = new Ingredient("sykur", Unit.G, 1000, 400, "Costco", "Kirkland");
-            ingredientService.save(users.get(0), ingredient);
+            ingredientService.save(users.get(0).getID(), ingredient);
 
             ingredient = new Ingredient("vatn", Unit.ML, 1000, 200);
-            ingredientService.save(users.get(1), ingredient);
+            ingredientService.save(users.get(1).getID(), ingredient);
 
             ingredient = new Ingredient("Ostur", Unit.G, 500, 1200, "Bónus", "Gotti");
             ingredient.setPrivate(true);
-            ingredientService.save(users.get(2), ingredient);
+            ingredientService.save(users.get(2).getID(), ingredient);
 
             ingredients = ingredientService.findAll();
         }
