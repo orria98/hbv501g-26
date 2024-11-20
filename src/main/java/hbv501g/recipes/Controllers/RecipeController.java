@@ -14,9 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.Unit;
-import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.RecipeService;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,9 +55,8 @@ public class RecipeController {
      */
     @GetMapping("/recipe/all")
     @ResponseBody
-    public List<Recipe> getAllRecipes(HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.findAccessibleToUser(user);
+    public List<Recipe> getAllRecipes(@RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.findAccessibleToUser(uid);
     }
 
     /**
@@ -70,9 +67,8 @@ public class RecipeController {
      * @return all accessible recipes with tpc under the given value
      */
     @GetMapping("/recipe/underTPC/{tpc}")
-    public List<Recipe> getAllRecipesUnderTPC(@PathVariable(value = "tpc") int tpc, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.findUnderTPC(tpc, user);
+    public List<Recipe> getAllRecipesUnderTPC(@PathVariable(value = "tpc") int tpc, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.findUnderTPC(tpc, uid);
     }
 
     /**
@@ -83,9 +79,8 @@ public class RecipeController {
      * @return all accessible recipes with tic under the given value
      */
     @GetMapping("/recipe/underTIC/{tic}")
-    public List<Recipe> getAllRecipesUnderTIC(@PathVariable(value = "tic") int tic, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.findUnderTIC(tic, user);
+    public List<Recipe> getAllRecipesUnderTIC(@PathVariable(value = "tic") int tic, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.findUnderTIC(tic, uid);
     }
 
     /**
@@ -97,9 +92,8 @@ public class RecipeController {
      * @return list of all recipes with the search term in the title
      */
     @GetMapping("/recipe/search/{term}")
-    public List<Recipe> findRecipesByTitle(HttpSession session, @PathVariable(value = "term") String term) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.findByTitleContaining(user, term);
+    public List<Recipe> findRecipesByTitle(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "term") String term) {
+        return recipeService.findByTitleContaining(uid, term);
     }
 
     /**
@@ -111,9 +105,8 @@ public class RecipeController {
      * @return the recipe with that id, or null
      */
     @GetMapping("/recipe/id/{id}")
-    public Recipe getRecipeById(@PathVariable(value = "id") long id, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.findAccessibleByID(id, user);
+    public Recipe getRecipeById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.findAccessibleByID(id, uid);
     }
 
     /**
@@ -125,8 +118,8 @@ public class RecipeController {
      * @param id      : ID number of the recipe
      */
     @DeleteMapping("/recipe/delete/{id}")
-    public void deleteRecipeById(HttpSession session, @PathVariable(value = "id") long id) {
-        recipeService.deleteById((User) session.getAttribute("LoggedInUser"), id);
+    public void deleteRecipeById(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
+        recipeService.deleteById(uid, id);
     }
 
     /**
@@ -139,9 +132,8 @@ public class RecipeController {
      */
     @GetMapping("/recipe/id/{id}/totalpurch")
     @ResponseBody
-    public int getTotalPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.getTotalPurchaseCost(user, id);
+    public int getTotalPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.getTotalPurchaseCost(uid, id);
     }
 
     /**
@@ -154,9 +146,8 @@ public class RecipeController {
      */
     @GetMapping("/recipe/id/{id}/totalIng")
     @ResponseBody
-    public double getTotalIngredientCost(@PathVariable(value = "id") long id, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.getTotalIngredientCost(user, id);
+    public double getTotalIngredientCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.getTotalIngredientCost(uid, id);
     }
 
     /**
@@ -169,9 +160,8 @@ public class RecipeController {
      * @return personalized purchase cost
      */
     @GetMapping("/recipe/id/{id}/personal")
-    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.getPersonalizedPurchaseCost(user, id);
+    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.getPersonalizedPurchaseCost(uid, id);
     }
 
     /**
@@ -187,10 +177,9 @@ public class RecipeController {
      * @return the new recipe, or null
      */
     @PostMapping("/recipe/new")
-    public Recipe newRecipe(HttpSession session, @RequestBody Recipe newRecipe) {
-        User author = (User) session.getAttribute("LoggedInUser");
-        if (author != null) {
-            return recipeService.setRecipeAuthorAndDate(newRecipe, author);
+    public Recipe newRecipe(@RequestParam(defaultValue = "-1") long uid, @RequestBody Recipe newRecipe) {
+        if (uid != -1) {
+            return recipeService.setRecipeAuthorAndDate(newRecipe, uid);
         }
         return null;
     }
@@ -214,16 +203,14 @@ public class RecipeController {
      */
     @PutMapping("recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
-            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, HttpSession session) {
-        User currUser = (User) session.getAttribute("LoggedInUser");
-        return recipeService.addIngredients(currUser.getID(), recipeID, ingredientIDs, qty, units);
+            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, @RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.addIngredients(uid, recipeID, ingredientIDs, qty, units);
     }
 
     @PutMapping("/recipe/{id}/update")
     public Recipe updateRecipeDetails(@PathVariable(value = "id") long id, @RequestBody Recipe updatedRecipe,
-            HttpSession session) {
-        User currUser = (User) session.getAttribute("LoggedInUser");
-        if (currUser == null) {
+            @RequestParam(defaultValue = "-1") long uid) {
+        if (uid == -1) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
         }
 
@@ -261,8 +248,7 @@ public class RecipeController {
 
     @Remove
     @GetMapping("/recipe/all/ordered")
-    public List<Recipe> getAllOrderedRecipes(HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        return recipeService.findOrderedRecipes(user);
+    public List<Recipe> getAllOrderedRecipes(@RequestParam(defaultValue = "-1") long uid) {
+        return recipeService.findOrderedRecipes(uid);
     }
 }

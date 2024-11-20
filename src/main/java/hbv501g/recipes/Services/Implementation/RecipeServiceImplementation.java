@@ -47,7 +47,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * Finds the recipe with the given id, if one exists and is accessible to the
      * user. If the user is null, then only public recipes are accessible
      */
-    public Recipe findAccessibleByID(long id, User user) {
+    public Recipe findAccessibleByID(long id, long uid) {
+        User user = userService.findByID(uid);
         if (user == null) {
             return recipeRepository.findByIsPrivateFalseAndID(id);
         }
@@ -72,7 +73,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param searchTerm - the string that should be in the title
      * @return A list of all recipes with the search term in the title
      */
-    public List<Recipe> findByTitleContaining(User user, String searchTerm) {
+    public List<Recipe> findByTitleContaining(long uid, String searchTerm) {
+        User user = userService.findByID(uid);
         if (user == null) {
             return recipeRepository.findByIsPrivateFalseAndTitleContaining(searchTerm);
         }
@@ -87,7 +89,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param user - the user to find recipes for
      * @return all recipes available to the user
      */
-    public List<Recipe> findAccessibleToUser(User user) {
+    public List<Recipe> findAccessibleToUser(long uid) {
+        User user = userService.findByID(uid);
         if (user == null) {
             return recipeRepository.findByIsPrivateFalse();
         }
@@ -101,7 +104,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param id: the id of the recipe to be deleted
      */
     @Override
-    public void deleteById(User user, long id) {
+    public void deleteById(long uid, long id) {
+        User user = userService.findByID(uid);
         if (user != null) {
             Recipe recipe = findByID(id);
             if(recipe == null) return;
@@ -143,8 +147,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param id:   recipe id
      * @return total purchase cost for the recipe
      */
-    public int getTotalPurchaseCost(User user, long id) {
-        Recipe recipe = findAccessibleByID(id, user);
+    public int getTotalPurchaseCost(long uid, long id) {
+        Recipe recipe = findAccessibleByID(id, uid);
         if (recipe == null)
             return 0;
 
@@ -159,8 +163,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param id:   recipe id
      * @return total ingredient cost for the recipe
      */
-    public double getTotalIngredientCost(User user, long id) {
-        Recipe recipe = findAccessibleByID(id, user);
+    public double getTotalIngredientCost(long uid, long id) {
+        Recipe recipe = findAccessibleByID(id, uid);
         if (recipe == null)
             return 0;
 
@@ -174,8 +178,10 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param user     - the user owning the pantry
      * @param recipeId - the id of the recipe to calculate for
      */
-    public double getPersonalizedPurchaseCost(User user, long recipeId) {
-        Recipe recipe = findAccessibleByID(recipeId, user);
+    public double getPersonalizedPurchaseCost(long uid, long recipeId) {
+        User user = userService.findByID(uid);
+
+        Recipe recipe = findAccessibleByID(recipeId, uid);
 
         if (user == null || recipe == null)
             return 0;
@@ -208,7 +214,9 @@ public class RecipeServiceImplementation implements RecipeService {
         return total;
     }
 
-    public List<Recipe> findOrderedRecipes(User user) {
+    public List<Recipe> findOrderedRecipes(long uid) {
+        User user = userService.findByID(uid);
+
         if (user == null) {
             return recipeRepository.findByIsPrivateFalseOrderByTotalPurchaseCostAsc();
         }
@@ -295,7 +303,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @return The recipe with the added information
      */
     @Override
-    public Recipe setRecipeAuthorAndDate(Recipe recipe, User author) {
+    public Recipe setRecipeAuthorAndDate(Recipe recipe, long uid) {
+        User author = userService.findByID(uid);
         recipe.setCreatedBy(author);
         recipe.setDateOfCreation(LocalDate.now());
         return save(recipe);
@@ -323,7 +332,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param user       - the user making the request
      * @return all accessible recipes under that price
      */
-    public List<Recipe> findUnderTPC(int upperLimit, User user) {
+    public List<Recipe> findUnderTPC(int upperLimit, long uid) {
+        User user = userService.findByID(uid);
         if (user == null) {
             return recipeRepository.findPublicUnderTPC(upperLimit);
         }
@@ -339,7 +349,8 @@ public class RecipeServiceImplementation implements RecipeService {
      * @param user       - the user making the request
      * @return all accessible recipes under that price
      */
-    public List<Recipe> findUnderTIC(int upperLimit, User user) {
+    public List<Recipe> findUnderTIC(int upperLimit, long uid) {
+        User user = userService.findByID(uid);
         if (user == null) {
             return recipeRepository.findPublicUnderTIC(upperLimit);
         }

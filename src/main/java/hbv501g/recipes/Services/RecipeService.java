@@ -13,33 +13,33 @@ public interface RecipeService {
 
     Recipe findByID(long id);
 
-    Recipe findAccessibleByID(long id, User user);
+    Recipe findAccessibleByID(long id, long uid);
 
-    List<Recipe> findByTitleContaining(User user, String searchTerm);
+    List<Recipe> findByTitleContaining(long uid, String searchTerm);
 
-    List<Recipe> findAccessibleToUser(User user);
+    List<Recipe> findAccessibleToUser(long uid);
 
     Recipe save(Recipe recipe);
 
     Recipe update(Recipe recipe);
 
-    void deleteById(User user, long id);
+    void deleteById(long uid, long id);
 
-    int getTotalPurchaseCost(User user, long id);
+    int getTotalPurchaseCost(long uid, long id);
 
-    double getTotalIngredientCost(User user,long id);
+    double getTotalIngredientCost(long uid,long id);
 
-    double getPersonalizedPurchaseCost(User user, long recipeId);
+    double getPersonalizedPurchaseCost(long uid, long recipeId);
 
     Recipe addIngredients(long userID, long recipeID, List<Long> ingredientIDs, List<Double> qty, List<Unit> units);
 
-    Recipe setRecipeAuthorAndDate(Recipe recipe, User author);
+    Recipe setRecipeAuthorAndDate(Recipe recipe, long uid);
 
     Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
 
-    List<Recipe> findUnderTPC(int upperLimit, User user);
+    List<Recipe> findUnderTPC(int upperLimit, long uid);
 
-    List<Recipe> findUnderTIC(int upperLimit, User user);
+    List<Recipe> findUnderTIC(int upperLimit, long uid);
 
-    List<Recipe> findOrderedRecipes(User user);
+    List<Recipe> findOrderedRecipes(long uid);
 }
