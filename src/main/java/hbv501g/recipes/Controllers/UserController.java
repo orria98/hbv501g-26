@@ -57,7 +57,7 @@ public class UserController {
      * @return the user with that id, or null
      */
     @GetMapping("/user/id/{id}")
-    public User getUserById(@PathVariable(value = "id") long id) {
+    public User getUserById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
         return userService.findByID(id);
     }
 
@@ -73,9 +73,8 @@ public class UserController {
      * @param password - The password of the user logging in
      * @return the user with the given username or password, or null
      */
-    @GetMapping(value = "/user/login")
+    @GetMapping("/user/login")
     public User login(@RequestParam String username, @RequestParam String password) {
-        System.out.println("Reyni að logga inn user " + username);
         User exists = userService.login(username, password);
         return exists;
     }
@@ -94,7 +93,7 @@ public class UserController {
      * @return a new user with the given username and password, or null if no user
      *         created
      */
-    @PostMapping(value = "/user/signup")
+    @PostMapping("/user/signup")
     public User signup(@RequestParam String username, @RequestParam String password) {
         User newUser = userService.signup(username, password);
         return newUser;
@@ -147,7 +146,7 @@ public class UserController {
      * @return pantry contents for user
      */
     @GetMapping("/user/pantry")
-    public List<IngredientMeasurement> getUserPantry(@RequestParam(defaultValue = "-1") long uid) {
+    public List<IngredientMeasurement> getUserPantry(@RequestParam(defaultValue = "0") long uid) {
         return userService.findUserPantry(uid);
     }
 
@@ -158,10 +157,8 @@ public class UserController {
      * @param iid     - id of ingredient in pantry item to delete
      * @param session - the current session
      */
-    // @RequestMapping(value = "/user/pantry/delete", method = { RequestMethod.GET,
-    // RequestMethod.PUT })
     @PutMapping("/user/pantry/delete")
-    public void deletePantryItem(@RequestParam long iid, @RequestParam(defaultValue = "-1") long uid) {
+    public void deletePantryItem(@RequestParam long iid, @RequestParam(defaultValue = "0") long uid) {
         userService.deletePantryItem(uid, iid);
     }
 
@@ -175,31 +172,12 @@ public class UserController {
      * @param qty  quantity
      * @return the ingredient measurement for the ingredient
      */
-    // @RequestMapping(value = "/user/pantry/add", method = { RequestMethod.GET,
-    // RequestMethod.PUT })
     @PutMapping("/user/pantry/add")
     @ResponseBody
     public IngredientMeasurement addPantryItem(@RequestParam long iid, @RequestParam Unit unit,
-            @RequestParam double qty, @RequestParam(defaultValue = "-1") long uid) {
+            @RequestParam double qty, @RequestParam(defaultValue = "0") long uid) {
 
         return userService.addPantryItem(uid, iid, unit, qty);
     }
 
-    /**
-     * Gets the user who is currently logged in. It is stored as LoggedInUser in the
-     * current http session. Returns the user, or null if no user is logged in
-     * 
-     * @param session - The current http session
-     * @return - The current user (or null)
-     */
-    @GetMapping("/user/curr")
-    @Deprecated
-    public User getCurrentUser(HttpSession session) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        if (user == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
-        }
-
-        return user;
-    }
 }

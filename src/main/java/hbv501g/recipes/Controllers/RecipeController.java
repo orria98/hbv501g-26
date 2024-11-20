@@ -44,7 +44,7 @@ public class RecipeController {
      */
     @GetMapping("/recipe/all")
     @ResponseBody
-    public List<Recipe> getAllRecipes(@RequestParam(defaultValue = "-1") long uid) {
+    public List<Recipe> getAllRecipes(@RequestParam(defaultValue = "0") long uid) {
         return recipeService.findAccessibleToUser(uid);
     }
 
@@ -57,7 +57,7 @@ public class RecipeController {
      * @return all accessible recipes with tpc under the given value
      */
     @GetMapping("/recipe/underTPC/{tpc}")
-    public List<Recipe> getAllRecipesUnderTPC(@PathVariable(value = "tpc") int tpc, @RequestParam(defaultValue = "-1") long uid) {
+    public List<Recipe> getAllRecipesUnderTPC(@PathVariable(value = "tpc") int tpc, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.findUnderTPC(tpc, uid);
     }
 
@@ -70,7 +70,7 @@ public class RecipeController {
      * @return all accessible recipes with tic under the given value
      */
     @GetMapping("/recipe/underTIC/{tic}")
-    public List<Recipe> getAllRecipesUnderTIC(@PathVariable(value = "tic") int tic, @RequestParam(defaultValue = "-1") long uid) {
+    public List<Recipe> getAllRecipesUnderTIC(@PathVariable(value = "tic") int tic, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.findUnderTIC(tic, uid);
     }
 
@@ -83,7 +83,7 @@ public class RecipeController {
      * @return list of all recipes with the search term in the title
      */
     @GetMapping("/recipe/search/{term}")
-    public List<Recipe> findRecipesByTitle(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "term") String term) {
+    public List<Recipe> findRecipesByTitle(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "term") String term) {
         return recipeService.findByTitleContaining(uid, term);
     }
 
@@ -96,7 +96,7 @@ public class RecipeController {
      * @return the recipe with that id, or null
      */
     @GetMapping("/recipe/id/{id}")
-    public Recipe getRecipeById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+    public Recipe getRecipeById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.findAccessibleByID(id, uid);
     }
 
@@ -109,7 +109,7 @@ public class RecipeController {
      * @param id      : ID number of the recipe
      */
     @DeleteMapping("/recipe/delete/{id}")
-    public void deleteRecipeById(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
+    public void deleteRecipeById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
         recipeService.deleteById(uid, id);
     }
 
@@ -123,7 +123,7 @@ public class RecipeController {
      */
     @GetMapping("/recipe/id/{id}/totalpurch")
     @ResponseBody
-    public int getTotalPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+    public int getTotalPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.getTotalPurchaseCost(uid, id);
     }
 
@@ -137,7 +137,7 @@ public class RecipeController {
      */
     @GetMapping("/recipe/id/{id}/totalIng")
     @ResponseBody
-    public double getTotalIngredientCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+    public double getTotalIngredientCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.getTotalIngredientCost(uid, id);
     }
 
@@ -151,7 +151,7 @@ public class RecipeController {
      * @return personalized purchase cost
      */
     @GetMapping("/recipe/id/{id}/personal")
-    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.getPersonalizedPurchaseCost(uid, id);
     }
 
@@ -168,7 +168,7 @@ public class RecipeController {
      * @return the new recipe, or null
      */
     @PostMapping("/recipe/new")
-    public Recipe newRecipe(@RequestParam(defaultValue = "-1") long uid, @RequestBody Recipe newRecipe) {
+    public Recipe newRecipe(@RequestParam(defaultValue = "0") long uid, @RequestBody Recipe newRecipe) {
         if (uid != -1) {
             return recipeService.setRecipeAuthorAndDate(newRecipe, uid);
         }
@@ -192,9 +192,9 @@ public class RecipeController {
      * @param session       - The current http session
      * @return the recipe with the given recipeID with the measurements added
      */
-    @PutMapping("recipe/addIngredients")
+    @PutMapping("/recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
-            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, @RequestParam(defaultValue = "-1") long uid) {
+            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.addIngredients(uid, recipeID, ingredientIDs, qty, units);
     }
 
@@ -209,7 +209,7 @@ public class RecipeController {
      */
     @PutMapping("/recipe/{id}/update")
     public Recipe updateRecipeDetails(@PathVariable(value = "id") long id, @RequestBody Recipe updatedRecipe,
-            @RequestParam(defaultValue = "-1") long uid) {
+            @RequestParam(defaultValue = "0") long uid) {
         if (uid == -1) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
         }
@@ -253,13 +253,13 @@ public class RecipeController {
      */
     @Deprecated
     @GetMapping("/recipe/getById/{id}")
-    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") Long id) {
+    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
         return recipeService.findByID(id);
     }
 
     @Remove
     @GetMapping("/recipe/all/ordered")
-    public List<Recipe> getAllOrderedRecipes(@RequestParam(defaultValue = "-1") long uid) {
+    public List<Recipe> getAllOrderedRecipes(@RequestParam(defaultValue = "0") long uid) {
         return recipeService.findOrderedRecipes(uid);
     }
 
@@ -269,7 +269,7 @@ public class RecipeController {
      * @return all recipes ordered alphabetically
      */
     @GetMapping("/recipe/all/orderedByTitle")
-    public List<Recipe> getAllOrderedRecipesByTitle(@RequestParam(defaultValue = "-1") long uid) {
+    public List<Recipe> getAllOrderedRecipesByTitle(@RequestParam(defaultValue = "0") long uid) {
         return recipeService.findOrderedRecipesByTitle(uid);
     }
 }

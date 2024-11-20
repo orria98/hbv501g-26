@@ -43,7 +43,6 @@ When the program is run, a `mydatabase.db` file is made, if it doesn't exist alr
 **Get all users:** http://localhost:8080/user/all \
 **Initialize some users:** http://localhost:8080/user/init \
 **Initialize some recipes:** http://localhost:8080/recipe/init \
-**Get the current user:** http://localhost:8080/user/curr \
 
 
 ## Current possibilities

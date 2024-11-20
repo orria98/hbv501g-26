@@ -27,14 +27,14 @@ public class IngredientServiceImplementation implements IngredientService {
 
     /**
      * Finds and returns all public ingredients by the user provided
+     * 
      * @param user - the user who's public ingredient are returned
      * @return the public ingredients of the provided user
      */
-    public List<Ingredient> findPublicIngredientsByUser(User user){
+    public List<Ingredient> findPublicIngredientsByUser(User user) {
         return ingredientRepository.findByIsPrivateFalseAndCreatedBy(user);
     }
 
-    
     /**
      * 
      * @return All ingredients from the database
@@ -108,10 +108,13 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Finds the first ingredient with a given title
+     * Updates the title of the ingredient with the given id, if it was made by the
+     * given user, and sets the title as the given title
      * 
-     * @param title - the ingredient title to search for
-     * @return One or no ingredients
+     * @param id       - the id of the ingredient to update
+     * @param newTitle - the new title of the ingredient
+     * @param user     - the user making the change
+     * @return the ingredient with the new title
      */
     public Ingredient updateIngredientTitle(long id, String newTitle, long uid) {
         Ingredient ingredient = findByID(id);
@@ -147,6 +150,12 @@ public class IngredientServiceImplementation implements IngredientService {
         }
     }
 
+    /**
+     * Finds the first ingredient with a given title
+     * 
+     * @param title - the ingredient title to search for
+     * @return One or no ingredients
+     */
     @Override
     public Ingredient findByTitle(String title) {
         return ingredientRepository.findByTitle(title).get(0);

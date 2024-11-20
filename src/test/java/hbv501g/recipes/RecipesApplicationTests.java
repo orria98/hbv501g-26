@@ -1,13 +1,13 @@
 package hbv501g.recipes;
 
-// import org.junit.jupiter.api.Test;
-// import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-// @SpringBootTest
+@SpringBootTest
 class RecipesApplicationTests {
 
-	// @Test
-	// void contextLoads() {
-	// }
+	@Test
+	void contextLoads() {
+	}
 
 }

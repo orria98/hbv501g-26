@@ -24,16 +24,17 @@ public class RecipeListController {
     }
 
     /**
-     * Find and return the Recipe list that a
-     * user has.
+     * Find and return all RecipeLists made by the user with the given id, which are
+     * accessible to the current user
      *
-     * @param id - the id number of a user
-     * @return the list of recipe that the user
-     *         of the id number owns.
+     * @param session - The current http session
+     * @param id      - the id number of a user who's lists should be found
+     * @return All the recipeLists made by the given user, which are accessible to
+     *         the current user
      */
     @GetMapping("/list/user/{id}")
     @ResponseBody
-    public List<RecipeList> getAllRecipeListsByUserId(@RequestParam(defaultValue = "-1") long uid,
+    public List<RecipeList> getAllRecipeListsByUserId(@RequestParam(defaultValue = "0") long uid,
             @PathVariable(value = "id") long id) {
         return recipeListService.findAllUserRecipeLists(uid, id);
     }
@@ -48,7 +49,7 @@ public class RecipeListController {
      */
     @GetMapping("/list/id/{id}")
     @ResponseBody
-    public RecipeList getRecipeListById(@RequestParam(defaultValue = "-1") long uid,
+    public RecipeList getRecipeListById(@RequestParam(defaultValue = "0") long uid,
             @PathVariable(value = "id") long id) {
         return recipeListService.findByID(uid, id);
     }
@@ -65,7 +66,7 @@ public class RecipeListController {
      */
     @PostMapping("/list/new")
     @ResponseBody
-    public RecipeList newRecipeList(@RequestParam(defaultValue = "-1") long uid, @RequestParam String title,
+    public RecipeList newRecipeList(@RequestParam(defaultValue = "0") long uid, @RequestParam String title,
             @RequestParam(required = false) String description, @RequestParam(required = false) boolean isPrivate) {
         return recipeListService.save(uid, title, description, isPrivate);
     }
@@ -81,7 +82,7 @@ public class RecipeListController {
     @ResponseBody
     @PutMapping("/list/addRecipe")
     public RecipeList addRecipeToList(@RequestParam long recipeID, @RequestParam long listID,
-            @RequestParam(defaultValue = "-1") long uid) {
+            @RequestParam(defaultValue = "0") long uid) {
         return recipeListService.addRecipe(recipeID, listID, uid);
     }
 
@@ -95,7 +96,7 @@ public class RecipeListController {
      *         listID.
      */
     @GetMapping("/list/id/{id}/recipe")
-    public List<Recipe> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid,
+    public List<Recipe> getAllRecipesFromList(@RequestParam(defaultValue = "0") long uid,
             @PathVariable(value = "id") long id) {
         return recipeListService.getAllRecipesFromID(uid, id);
     }
@@ -106,8 +107,8 @@ public class RecipeListController {
      * @param session - the current HTTP session
      * @param listID  - the id of the recipe
      */
-    @DeleteMapping("list/id/{id}/delete")
-    public void deleteRecipeListByID(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
+    @DeleteMapping("/list/id/{id}/delete")
+    public void deleteRecipeListByID(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
         recipeListService.deleteByID(uid, id);
     }
 
@@ -123,7 +124,7 @@ public class RecipeListController {
      *         value of listID.
      */
     @PatchMapping("/list/id/{listID}/recipe/{recipeID}/remove")
-    public RecipeList removeRecipeFromList(@RequestParam(defaultValue = "-1") long uid,
+    public RecipeList removeRecipeFromList(@RequestParam(defaultValue = "0") long uid,
             @PathVariable(value = "listID") long listID,
             @PathVariable(value = "recipeID") long recipeID) {
         return recipeListService.removeRecipeFromID(uid, listID, recipeID);
@@ -138,7 +139,7 @@ public class RecipeListController {
      * @return the updated recipelist
      */
     @PatchMapping("/list/updateTitle/{id}")
-    public RecipeList updatetitle(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id,
+    public RecipeList updatetitle(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
         String newTitle = body.get("title");
         return recipeListService.updateTitle(uid, newTitle, id);
@@ -156,7 +157,7 @@ public class RecipeListController {
      */
     @GetMapping("/list/all")
     @ResponseBody
-    public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "-1") long uid) {
+    public List<RecipeList> getAllRecipesFromList(@RequestParam(defaultValue = "0") long uid) {
         return recipeListService.findAll(uid);
     }
 

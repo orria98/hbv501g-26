@@ -44,7 +44,7 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "-1") long uid) {
+    public Ingredient getIngredientById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
         return ingredientService.findAccessibleByID(id, uid);
     }
 
@@ -57,7 +57,7 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/all")
     @ResponseBody
-    public List<Ingredient> getAllIngredients(@RequestParam(defaultValue = "-1") long uid) {
+    public List<Ingredient> getAllIngredients(@RequestParam(defaultValue = "0") long uid) {
         return ingredientService.findAccessibleToUser(uid);
     }
 
@@ -71,7 +71,7 @@ public class IngredientController {
      */
     @PostMapping("/ingredient/created")
     @ResponseBody
-    public Ingredient saveIngredient( @RequestParam(defaultValue = "-1") long uid, @RequestBody Ingredient newIngredient){
+    public Ingredient saveIngredient( @RequestParam(defaultValue = "0") long uid, @RequestBody Ingredient newIngredient){
 	    return ingredientService.save(uid, newIngredient);
     }
 
@@ -82,8 +82,8 @@ public class IngredientController {
      * @param session : is the current session
      * @param id      : ID number of the ingredient
      */
-    @DeleteMapping("ingredient/delete/{id}")
-    public void deleteIngredientById(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id) {
+    @DeleteMapping("/ingredient/delete/{id}")
+    public void deleteIngredientById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
         ingredientService.deleteById(uid, id);
     }
 
@@ -95,8 +95,8 @@ public class IngredientController {
      * @param body    : Request body containing the new title
      * @return : The updated ingredient
      */
-    @PatchMapping("ingredient/updateTitle/{id}")
-    public Ingredient updateIngredientName(@RequestParam(defaultValue = "-1") long uid, @PathVariable(value = "id") long id,
+    @PatchMapping("/ingredient/updateTitle/{id}")
+    public Ingredient updateIngredientName(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id,
             @RequestBody Map<String, String> body) {
         String newTitle = body.get("title");
         return ingredientService.updateIngredientTitle(id, newTitle, uid);
