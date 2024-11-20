@@ -1,5 +1,7 @@
 package hbv501g.recipes.Persistence.Entities;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,12 +14,11 @@ import jakarta.persistence.ManyToOne;
  * elementCollection á tveimur stöðum í mismunandi töflum.
  */
 @Embeddable
-public class IngredientMeasurement {
-
+public class IngredientMeasurement implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id") // id í ingredient notað í töflu fyrir ingredient measurement
-    private Ingredient ingredient; 
+    private Ingredient ingredient;
 
     private Unit unit;
 
@@ -61,7 +62,5 @@ public class IngredientMeasurement {
     public String toString() {
         return "IngredientMeasurement [ingredient=" + ingredient + ", unit=" + unit + ", quantity=" + quantity + "]";
     }
-
-    
 
 }

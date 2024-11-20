@@ -1,5 +1,6 @@
 package hbv501g.recipes.Persistence.Entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "recipes")
-public class Recipe {
+public class Recipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ID;
@@ -31,7 +32,6 @@ public class Recipe {
     private int totalPurchaseCost;
     /** price for quantity of each ingredient used */
     private double totalIngredientCost;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIncludeProperties(value = { "id", "username" }) // properties úr user til að birta í json fyrir recipe
