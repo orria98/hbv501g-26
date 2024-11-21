@@ -42,8 +42,7 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable long id,
-            @RequestParam(defaultValue = "0") long uid) {
+    public Ingredient getIngredientById(@PathVariable long id, @RequestParam(defaultValue = "0") long uid) {
         return ingredientService.findAccessibleByID(id, uid);
     }
 

@@ -125,8 +125,7 @@ public class RecipeListController {
      */
     @PatchMapping("/list/id/{listID}/recipe/{recipeID}/remove")
     public RecipeList removeRecipeFromList(@RequestParam(defaultValue = "0") long uid,
-            @PathVariable long listID,
-            @PathVariable long recipeID) {
+            @PathVariable long listID, @PathVariable long recipeID) {
         return recipeListService.removeRecipeFromID(uid, listID, recipeID);
     }
 
@@ -151,7 +150,7 @@ public class RecipeListController {
      * for testing
      *
      * 
-     * @param session - the current http session
+     * @param uid  : the id of the current user, or 0 no user is logged in
      * @return all RecipeList objects that are not privite unless the
      *         curet user own the list.
      */

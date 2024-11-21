@@ -45,9 +45,10 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Finds an ingredient with the given id
+     * Finds an ingredient with the given id if one exists
      * 
      * @param id to search for
+     * @return the ingredient with the given id
      */
     @Override
     public Ingredient findByID(long id) {
@@ -56,10 +57,10 @@ public class IngredientServiceImplementation implements IngredientService {
 
     /**
      * Finds an ingredient with the given id, if one exists and is accessible to the
-     * given user. Otherwise, null is returned
+     * user with the given user id. Otherwise, null is returned
      * 
      * @param id   - the id of the ingredient to find
-     * @param user - the user requesting the ingredient
+     * @param uid - the id of the user requesting the ingredient
      * @return an ingredient with the given id, or null
      */
     public Ingredient findAccessibleByID(long id, long uid) {
@@ -72,10 +73,9 @@ public class IngredientServiceImplementation implements IngredientService {
     }
 
     /**
-     * Finds all ingredients that are accessible to the given user. If the user is
-     * null, this is all public ingredients
+     * Finds all ingredients that are accessible to the user with the given id. If no such user exists, this is all public ingredients
      * 
-     * @param user - the user looking for ingredients
+     * @param uid - the id of the user looking for ingredients
      * @return all ingredients accessible to the given user
      */
     public List<Ingredient> findAccessibleToUser(long uid) {
@@ -90,7 +90,7 @@ public class IngredientServiceImplementation implements IngredientService {
     /**
      * Saves the given ingredient to the database
      *
-     * @param author     - the user creating the Ingredient
+     * @param uid     - the id of the user creating the Ingredient
      * @param ingredient - the ingredient
      * @return the ingredient saved to db
      */
@@ -109,11 +109,11 @@ public class IngredientServiceImplementation implements IngredientService {
 
     /**
      * Updates the title of the ingredient with the given id, if it was made by the
-     * given user, and sets the title as the given title
+     * user with given id, and sets the title as the given title
      * 
      * @param id       - the id of the ingredient to update
      * @param newTitle - the new title of the ingredient
-     * @param user     - the user making the change
+     * @param uid     - the id of the user making the change
      * @return the ingredient with the new title
      */
     public Ingredient updateIngredientTitle(long id, String newTitle, long uid) {
@@ -133,7 +133,7 @@ public class IngredientServiceImplementation implements IngredientService {
     /**
      * Find and delet the ingredient with maching id.
      *
-     * @param User : is the user in the sesion.
+     * @param uid : the id of the user in the sesion.
      * @param id   : is a 8 byte integer and is the id
      *             of the ingredient.
      */

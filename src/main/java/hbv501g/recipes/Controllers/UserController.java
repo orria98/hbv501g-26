@@ -73,8 +73,7 @@ public class UserController {
      */
     @GetMapping("/user/login")
     public User login(@RequestParam String username, @RequestParam String password) {
-        User exists = userService.login(username, password);
-        return exists;
+       return userService.login(username, password);
     }
 
     /**
