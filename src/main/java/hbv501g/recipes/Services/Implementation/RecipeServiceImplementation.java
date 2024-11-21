@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
@@ -53,10 +55,10 @@ public class RecipeServiceImplementation implements RecipeService {
 
     /**
      * Finds the recipe with the given id, if one exists and is accessible to the
-     * user. If the user is null, then only public recipes are accessible
+     * user with the given id. If the user is null, then only public recipes are accessible
      * 
      * @param id   - the id of the recipe
-     * @param user - the user requesting the recipe
+     * @param uid - the id of the user requesting the recipe
      * @return the recipe with the given id, or null
      */
     public Recipe findAccessibleByID(long id, long uid) {
@@ -89,10 +91,10 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * finds all recipes which are accessible to the given user, which have a given
+     * finds all recipes which are accessible to the user with the given id, which have a given
      * search term in the title
      * 
-     * @param user       - the user who is searching
+     * @param uid       - the id of the user who is searching
      * @param searchTerm - the string that should be in the title
      * @return A list of all recipes with the search term in the title
      */
@@ -105,11 +107,11 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Finds all recipes that are accessible to the given user.
+     * Finds all recipes that are accessible to the user with the given id.
      * This includes all public recipes, and private recipes by the user
      * If the user us null, only public recipes are returned
      * 
-     * @param user - the user to find recipes for
+     * @param uid - the id of the user to find recipes for
      * @return all recipes available to the user
      */
     public List<Recipe> findAccessibleToUser(long uid) {
@@ -121,10 +123,9 @@ public class RecipeServiceImplementation implements RecipeService {
     }
 
     /**
-     * Deletes the recipe with the given id, if it exists and was made by the given
-     * user.
+     * Deletes the recipe with the given id, if it exists and was made by the user with the given user id
      * 
-     * @param user: the user making the query
+     * @param uid: the id of the user making the query
      * @param id:   the id of the recipe to be deleted
      */
     @Override
@@ -145,7 +146,7 @@ public class RecipeServiceImplementation implements RecipeService {
 
     /**
      * Gets the total purchase cost for a recipe specified by an id, if the recipe
-     * exists and is accessible to the given user
+     * exists and is accessible to the user with the given id
      * 
      * @param user: the user making the query
      * @param id:   recipe id
@@ -163,7 +164,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * Gets the total ingredient cost for a recipe specified by an id, if the recipe
      * exists and is accessible to the given user
      * 
-     * @param user: the user making the query
+     * @param uid: the id of the user making the query
      * @param id:   recipe id
      * @return total ingredient cost for the recipe
      */
@@ -179,7 +180,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * If the units in pantry and recipe do not match, the ingredient will not be
      * found in pantry
      * 
-     * @param user     - the user owning the pantry
+     * @param uid     - the id of the user owning the pantry
      * @param recipeId - the id of the recipe to calculate for
      */
     public double getPersonalizedPurchaseCost(long uid, long recipeId) {
@@ -222,7 +223,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * Finds all recipes accessible to the given user and returns them ordered by
      * their total purchase cost ascending
      * 
-     * @param user - the user requesting the recipes
+     * @param uid - the id of the user requesting the recipes
      * @return all accessible recipes, ordered
      */
     public List<Recipe> findOrderedRecipes(long uid) {
@@ -238,7 +239,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * Finds all recipes accessible to the given user and returns in alphabetical
      * ordered
      * 
-     * @param user - the user requesting the recipes
+     * @param uid - the id of the user requesting the recipes
      * @return all accessible recipes, ordered
      */
     public List<Recipe> findOrderedRecipesByTitle(long uid) {
@@ -272,7 +273,7 @@ public class RecipeServiceImplementation implements RecipeService {
     /**
      * Finds and returns all public recipes by the user provided
      * 
-     * @param user - the user who's public recipes are returned
+     * @param uid - the id of the user who's public recipes are returned
      * @return the public recipes of the provided user
      */
     public List<Recipe> findPublicRecipesByUser(long uid) {
@@ -303,6 +304,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * measurement. These are added to the recipe. If the lists don't all have the
      * same size, the recipe is returned without adding any ingredientMEasuremetns
      * 
+     * @param userID - the id of the user adding the ingredients
      * @param recipeID      - the id of the recipe to which the ingredients are
      *                      added
      * @param ingredientIDs -a list with the ids of the ingredients in the
@@ -339,12 +341,15 @@ public class RecipeServiceImplementation implements RecipeService {
      * and saves it in the database, and returns the recipe
      * 
      * @param recipe - The recipe that is being saved
-     * @param author - The user who made the recipe
+     * @param uid - The id of the user who made the recipe
      * @return The recipe with the added information
      */
     @Override
     public Recipe setRecipeAuthorAndDate(Recipe recipe, long uid) {
         User author = userService.findByID(uid);
+        if(author == null){
+            return null;
+        }
         recipe.setCreatedBy(author);
         recipe.setDateOfCreation(LocalDate.now());
         return save(recipe);
@@ -356,10 +361,15 @@ public class RecipeServiceImplementation implements RecipeService {
      * 
      * @param id            - the id of the recipe to update
      * @param updatedRecipe - a recipe with the updated information
+     * @param uid - the id if the user makingt the update
      * @return a recipe with updated information
      */
     @Override
-    public Recipe updateRecipeDetails(long id, Recipe updatedRecipe) {
+    public Recipe updateRecipeDetails(long id, Recipe updatedRecipe, long uid) {
+        if (userService.findByID(uid) == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
+        }
+        
         Recipe recipe = findByID(id);
         if (recipe == null) {
             return null;
@@ -377,7 +387,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * recipes are searched
      * 
      * @param upperLimit - the upper limit of the total purchase cost
-     * @param user       - the user making the request
+     * @param uid       - the id of the user making the request
      * @return all accessible recipes under that price
      */
     public List<Recipe> findUnderTPC(int upperLimit, long uid) {
@@ -394,7 +404,7 @@ public class RecipeServiceImplementation implements RecipeService {
      * recipes are searched
      * 
      * @param upperLimit - the upper limit of the total ingredient cost
-     * @param user       - the user making the request
+     * @param uid       - the id of the user making the request
      * @return all accessible recipes under that price
      */
     public List<Recipe> findUnderTIC(int upperLimit, long uid) {
@@ -403,26 +413,5 @@ public class RecipeServiceImplementation implements RecipeService {
             return recipeRepository.findPublicUnderTIC(upperLimit);
         }
         return recipeRepository.findAccessibleUnderTIC(user, upperLimit);
-    }
-
-    /*
-     * Initializes a few recipes, if none are found in the db
-     */
-    public List<Recipe> initRecipes() {
-        List<Recipe> AllRecipes = findAll();
-
-        if (AllRecipes.size() == 0) {
-            Recipe recipe = new Recipe();
-            recipe.setTitle("uppskrift 1");
-            save(recipe);
-
-            recipe = new Recipe();
-            recipe.setTitle("uppskrift 2");
-            save(recipe);
-
-            AllRecipes = findAll();
-        }
-
-        return AllRecipes;
     }
 }

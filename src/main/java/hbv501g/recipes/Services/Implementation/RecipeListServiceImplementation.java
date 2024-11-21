@@ -30,7 +30,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Finds and returns all public recipe lists by the user provided
      * 
-     * @param user - the user who's public recipe lists are returned
+     * @param uid - the id of the user who's public recipe lists are returned
      * @return the public recipe lists of the provided user
      */
     public List<RecipeList> findPublicRecipeListsByUser(long uid) {
@@ -42,7 +42,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * Get all RecipeList from the database that are not
      * privat unless the user owns them.
      *
-     * @param user : the user requesting the recipes
+     * @param uid : the id of the user requesting the recipes
      * @return a list of RecipeList.
      */
     public List<RecipeList> findAll(long uid) {
@@ -57,8 +57,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * Get all recipeLists made by the user with the given id, which are accessible
      * to the user requesting the recipeLists
      * 
-     * @param user : the user requesting the recipe lists
-     * @param id   : the id of the user who's lists are being requested
+     * @param uid : the id of the user requesting the recipe lists
+     * @param id  : the id of the user who's lists are being requested
      * @return All of the recipeLists from the owner which the requester can access
      */
     public List<RecipeList> findAllUserRecipeLists(long uid, long id) {
@@ -78,8 +78,8 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Find and returns a RecipeList.
      * 
-     * @param user : is the user that is loged in.
-     * @param id   : the id valu of RecipeList
+     * @param uid : the id of the user that is logged in.
+     * @param id  : the id valu of RecipeList
      * @return the recipeList whit the Id valu
      */
     public RecipeList findByID(long uid, long id) {
@@ -93,7 +93,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * A new list cannot be created without a user logged in
      * 
-     * @param user        - the current user
+     * @param uid         - the id of the current user
      * @param title       - title of the new list
      * @param description - optional description for the list
      * @param isPrivate   - optionally declare whether the list is private. false by
@@ -109,7 +109,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Updates the title of a recipeList, if it belongs to the given user
      * 
-     * @param user     - the user who is changing the title
+     * @param uid      - the id of the user who is changing the title
      * @param newTitle - the new title
      * @param id       - the id of the recipelist to be changed
      * @return the updated recipelist, if the change was successful, otherwise null
@@ -133,7 +133,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
      * 
      * @param recipeID - the id of the Recipe
      * @param listID   - the id of the RecipeList
-     * @param user     - the current User
+     * @param uid      - the id of the user adding the recipe to the list
      * @return the recipeList with the added recipe (if applicable)
      */
     public RecipeList addRecipe(long recipeID, long listID, long uid) {
@@ -157,12 +157,13 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Find and get a resipe form a recipeList.
+     * Finds all recipes which are accessible to the user with the given user id,
+     * from the recipelist with the given id, if the user exist and has access to
+     * the list
      *
-     * @param user     - is the user that is the sesson
+     * @param uid      - the id of the user making the request
      * @param id       - is the ID value of a recipieList
-     * @param recipeID - is the ID value of a recipe
-     * @return The recipe if it is in the recipieList
+     * @return All accessible recipes from the list
      */
     public List<Recipe> getAllRecipesFromID(long uid, long id) {
         User user = userService.findByID(uid);
@@ -193,9 +194,9 @@ public class RecipeListServiceImplementation implements RecipeListService {
     }
 
     /**
-     * Find and delete RecipeList by it ID number.
+     * Find and delete RecipeList by its ID number, if it exists and belongs to the user with the given id.
      * 
-     * @param user : is the user that is loged in.
+     * @param uid :  the id of the user who wants to delete the list.
      * @param id   : the id valu of RecipeList
      */
     public void deleteByID(long uid, long id) {
@@ -212,7 +213,7 @@ public class RecipeListServiceImplementation implements RecipeListService {
     /**
      * Find and removes a resipe form a recipeList.
      *
-     * @param user     - is the user that is the sesson
+     * @param uid     -  the id of the user who wants to remove the recipe
      * @param id       - is the ID value of a recipieList
      * @param recipeID - is the ID value of a recipe
      * @return The Recipelist with out the recipe.

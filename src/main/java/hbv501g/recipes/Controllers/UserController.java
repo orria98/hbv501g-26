@@ -2,8 +2,8 @@ package hbv501g.recipes.Controllers;
 
 import java.util.List;
 
+import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Unit;
@@ -53,11 +52,11 @@ public class UserController {
      * about the user. If not, sensitive or private information are not included
      * 
      * @param id      - the userID of the requested user
-     * @param session - the current Http session
+     * @param uid  : the id of the current user, or 0 no user is logged in
      * @return the user with that id, or null
      */
     @GetMapping("/user/id/{id}")
-    public User getUserById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
+    public User getUserById(@RequestParam(defaultValue = "0") long uid, @PathVariable long id) {
         return userService.findByID(uid, id);
     }
 
@@ -68,15 +67,13 @@ public class UserController {
      * Example of use:
      * http://localhost:8080/user/login?username=admin&password=admin
      * 
-     * @param session  - The current http session
      * @param username - The username of the user logging in
      * @param password - The password of the user logging in
      * @return the user with the given username or password, or null
      */
     @GetMapping("/user/login")
     public User login(@RequestParam String username, @RequestParam String password) {
-        User exists = userService.login(username, password);
-        return exists;
+       return userService.login(username, password);
     }
 
     /**
@@ -87,7 +84,6 @@ public class UserController {
      * 
      * Example of use: http://localhost:8080/user/signup?username=Sep&password=sep
      * 
-     * @param session  - The current http session
      * @param username - The username of the user signing up
      * @param password - The password of the user signing up
      * @return a new user with the given username and password, or null if no user
@@ -95,8 +91,7 @@ public class UserController {
      */
     @PostMapping("/user/signup")
     public User signup(@RequestParam String username, @RequestParam String password) {
-        User newUser = userService.signup(username, password);
-        return newUser;
+        return userService.signup(username, password);
     }
 
     /**
@@ -104,6 +99,7 @@ public class UserController {
      * 
      * @param session - The current Http session
      */
+    @Remove
     @GetMapping("/user/logout")
     public void logout(HttpSession session) {
         session.invalidate();
@@ -113,7 +109,7 @@ public class UserController {
      * Deletes the current user, if the given password matches. If successful, the
      * user is also logged out.
      * 
-     * @param session  - the current http session
+     * @param uid  : the id of the current user, or 0 no user is logged in
      * @param password - a password to confirm the delete
      */
     @DeleteMapping("/user/delete")
@@ -142,7 +138,7 @@ public class UserController {
     /**
      * Endpoint to get the pantry of the current user
      * 
-     * @param session - The current http session
+     * @param uid  : the id of the current user, or 0 no user is logged in
      * @return pantry contents for user
      */
     @GetMapping("/user/pantry")
@@ -155,7 +151,7 @@ public class UserController {
      * specified ingredient. Assumes only one item for each ingredient
      * 
      * @param iid     - id of ingredient in pantry item to delete
-     * @param session - the current session
+     * @param uid  : the id of the current user, or 0 no user is logged in
      */
     @PutMapping("/user/pantry/delete")
     public void deletePantryItem(@RequestParam long iid, @RequestParam(defaultValue = "0") long uid) {

@@ -103,8 +103,8 @@ public class UserServiceImplementation implements UserService {
      * The only information that is provided are the public recipes, ingredients and
      * recipe lists, and the username
      * 
-     * @param id   - the userID of the requested user
-     * @param user - the user making the request
+     * @param id  - the userID of the requested user
+     * @param uid - the id of the user making the request
      * @return the user with that id, or null
      */
     public User findByID(long uid, long id) {
@@ -160,7 +160,7 @@ public class UserServiceImplementation implements UserService {
     /**
      * finds pantry of a user, and returns the contents
      * 
-     * @param user - user owning pantry
+     * @param uid - the is of the user owning pantry
      * @return pantry contents for the user
      */
     public List<IngredientMeasurement> findUserPantry(long uid) {
@@ -213,7 +213,7 @@ public class UserServiceImplementation implements UserService {
      * isn't already in the pantry and if the user is not null. Users can add any
      * public ingredient or their own private ingredients to the pantry.
      * 
-     * @param user      user owning pantry
+     * @param uid       the id of the user adding to their pantry
      * @param iid       id of ingredient to add to pantry
      * @param unit      unit of measure
      * @param quantityy quantity in pantry
@@ -244,8 +244,8 @@ public class UserServiceImplementation implements UserService {
     /**
      * Deletes this ingredient from the user's pantry, and updates the user
      * 
-     * @param user - user owning pantry
-     * @param iid  - id of ingredient in the pantry item
+     * @param uid - the id of the user who owns the pantry
+     * @param iid - id of ingredient in the pantry item
      */
     public void deletePantryItem(long uid, long iid) {
         User user = findByID(uid);
@@ -295,30 +295,6 @@ public class UserServiceImplementation implements UserService {
         if (index == -1)
             return null;
         return pantry.get(index);
-    }
-
-    /**
-     * Initializes a few users if none are found in the database
-     * 
-     * @return all users made
-     */
-    public List<User> initUsers() {
-        List<User> AllUsers = findAll();
-
-        if (AllUsers.size() == 0) {
-            User user = new User("Jón", "jon123", "jon123@gmail.com");
-            save(user);
-
-            user = new User("Superman", "123", "superman@gmail.com");
-            save(user);
-
-            user = new User("admin", "admin", "admin@hi.is");
-            save(user);
-
-            AllUsers = findAll();
-        }
-
-        return AllUsers;
     }
 
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import hbv501g.recipes.Persistence.Entities.Ingredient;
 import hbv501g.recipes.Services.IngredientService;
 
-
 import java.util.List;
 
 import java.util.Map;
@@ -35,16 +34,15 @@ public class IngredientController {
 
     /**
      * Endpoint to find an ingredient with the given id, if one exists and is
-     * accessible to the
-     * current user
+     * accessible to the current user
      * 
-     * @param session - the current http session
-     * @param id      - the id of the ingredient
+     * @param id  - the id of the ingredient
+     * @param uid - the id of the current user, or 0 no user is logged in
      * @return the requested ingredient, or null
      */
     @GetMapping("/ingredient/id/{id}")
     @ResponseBody
-    public Ingredient getIngredientById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
+    public Ingredient getIngredientById(@PathVariable long id, @RequestParam(defaultValue = "0") long uid) {
         return ingredientService.findAccessibleByID(id, uid);
     }
 
@@ -52,7 +50,7 @@ public class IngredientController {
      * Finds all ingredients that are accessible to the current user. If no user is
      * logged in, this is only the public ingredients
      * 
-     * @param session - the current http session
+     * @param uid - the id of the current user, or 0 no user is logged in
      * @return all ingredients accessible to the current user
      */
     @GetMapping("/ingredient/all")
@@ -65,38 +63,40 @@ public class IngredientController {
      * Endpoint to create a new ingredient for the current user. No ingredient is
      * created if no user is logged in
      *
-     * @param session       - The current http session
+     * @param uid           - the id of the current user, or 0 no user is logged in
      * @param newIngredient - an Ingredient that is being saved
      * @return the new Ingredient
      */
     @PostMapping("/ingredient/created")
     @ResponseBody
-    public Ingredient saveIngredient( @RequestParam(defaultValue = "0") long uid, @RequestBody Ingredient newIngredient){
-	    return ingredientService.save(uid, newIngredient);
+    public Ingredient saveIngredient(@RequestParam(defaultValue = "0") long uid,
+            @RequestBody Ingredient newIngredient) {
+        return ingredientService.save(uid, newIngredient);
     }
 
     /**
      * Deletes an ingredient with the given id, if one exists and it belongs to the
      * current user
      * 
-     * @param session : is the current session
-     * @param id      : ID number of the ingredient
+     * @param uid : the id of the current user, or 0 no user is logged in
+     * @param id  : ID number of the ingredient
      */
     @DeleteMapping("/ingredient/delete/{id}")
-    public void deleteIngredientById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
+    public void deleteIngredientById(@RequestParam(defaultValue = "0") long uid, @PathVariable long id) {
         ingredientService.deleteById(uid, id);
     }
 
     /**
      * Endpoint for updating the title of an ingredient
      * 
-     * @param session : Current session
-     * @param id      : ID of the ingredient
-     * @param body    : Request body containing the new title
+     * @param uid  : the id of the current user, or 0 no user is logged in
+     * @param id   : ID of the ingredient
+     * @param body : Request body containing the new title
      * @return : The updated ingredient
      */
     @PatchMapping("/ingredient/updateTitle/{id}")
-    public Ingredient updateIngredientName(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id,
+    public Ingredient updateIngredientName(@RequestParam(defaultValue = "0") long uid,
+            @PathVariable long id,
             @RequestBody Map<String, String> body) {
         String newTitle = body.get("title");
         return ingredientService.updateIngredientTitle(id, newTitle, uid);
@@ -104,7 +104,7 @@ public class IngredientController {
 
     /** Not part of any assignment */
     @GetMapping("/ingredient/all/ordered")
-    public List<Ingredient> getOrderedIngredients(){
+    public List<Ingredient> getOrderedIngredients() {
         return ingredientService.findOrderedIngredients();
     }
 
@@ -117,7 +117,7 @@ public class IngredientController {
     @Deprecated
     @GetMapping("/ingredient/allId/{id}")
     @ResponseBody
-    public Ingredient oldGetIngredientById(@PathVariable(value = "id") long id) {
+    public Ingredient oldGetIngredientById(@PathVariable long id) {
         return ingredientService.findByID(id);
     }
 
@@ -142,19 +142,7 @@ public class IngredientController {
      */
     @GetMapping("/ingredient/title/{title}")
     @ResponseBody
-    public Ingredient getIngredientByTitle(@PathVariable(value = "title") String title) {
+    public Ingredient getIngredientByTitle(@PathVariable String title) {
         return ingredientService.findByTitle(title);
     }
-
-    /**
-     * Initializes a few ingredients. Ekki hluti af skilum, en
-     * gerir það auðveldara að prófa hvort forritið virki.
-     * 
-     * @return some ingredients
-     */
-    // @GetMapping("/ingredient/init")
-    // @ResponseBody
-    // public List<Ingredient> InitIngredients() {
-    // return ingredientService.initIngredients();
-    // }
 }

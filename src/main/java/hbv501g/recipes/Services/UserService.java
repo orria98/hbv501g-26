@@ -20,8 +20,6 @@ public interface UserService {
 
     User save(User user);
 
-    List<User> initUsers();
-
     User signup(String username, String password);
 
     User login(String username, String password);

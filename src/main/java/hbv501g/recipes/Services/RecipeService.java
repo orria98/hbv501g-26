@@ -7,8 +7,6 @@ import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeService {
-    List<Recipe> initRecipes();
-
     List<Recipe> findAll();
 
     Recipe findByID(long id);
@@ -35,7 +33,7 @@ public interface RecipeService {
 
     Recipe setRecipeAuthorAndDate(Recipe recipe, long uid);
 
-    Recipe updateRecipeDetails(long id, Recipe updatedRecipe);
+    Recipe updateRecipeDetails(long id, Recipe updatedRecipe, long uid);
 
     List<Recipe> findUnderTPC(int upperLimit, long uid);
 
