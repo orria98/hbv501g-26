@@ -180,7 +180,8 @@ public class UserServiceImplementation implements UserService {
      * @param password - the password given to confirm the delete
      * @return true if successful, false if not
      */
-    public boolean deleteUser(User user, String password) {
+    public boolean deleteUser(long uid, String password) {
+        User user = findByID(uid);
         if (user != null && user.getPassword() != null && user.getPassword().equals(password)) {
             userRepository.deleteById(user.getID());
             if (findByID(user.getID()) == null) {
@@ -199,7 +200,8 @@ public class UserServiceImplementation implements UserService {
      * @param newPassword - the new password of the user
      * @param oldPassword - the old password of the user
      */
-    public void changePassword(User user, String newPassword, String oldPassword) {
+    public void changePassword(long uid, String newPassword, String oldPassword) {
+        User user = findByID(uid);
         if (user != null) {
             if (user.getPassword().equals(oldPassword)) {
                 user.setPassword(newPassword);

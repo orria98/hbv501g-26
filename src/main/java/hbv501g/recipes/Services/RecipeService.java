@@ -4,7 +4,6 @@ import java.util.List;
 
 import hbv501g.recipes.Persistence.Entities.Recipe;
 import hbv501g.recipes.Persistence.Entities.Unit;
-import hbv501g.recipes.Persistence.Entities.User;
 
 public interface RecipeService {
     List<Recipe> findAll();

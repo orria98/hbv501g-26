@@ -17,7 +17,6 @@ import hbv501g.recipes.Persistence.Entities.IngredientMeasurement;
 import hbv501g.recipes.Persistence.Entities.Unit;
 import hbv501g.recipes.Persistence.Entities.User;
 import hbv501g.recipes.Services.UserService;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -101,8 +100,10 @@ public class UserController {
      */
     @Remove
     @GetMapping("/user/logout")
-    public void logout(HttpSession session) {
-        session.invalidate();
+    public void logout(@RequestParam(defaultValue = "0") long uid) {
+        System.out.println("Gerir ekkert í bakenda??");
+        // TODO: hvað á að gerast?
+        // session.invalidate();
     }
 
     /**
@@ -113,10 +114,12 @@ public class UserController {
      * @param password - a password to confirm the delete
      */
     @DeleteMapping("/user/delete")
-    public void deleteCurrentUser(HttpSession session, @RequestParam String password) {
-        if (userService.deleteUser((User) session.getAttribute("LoggedInUser"), password)) {
-            session.invalidate();
-        }
+    public void deleteCurrentUser(@RequestParam(defaultValue = "0") long uid, @RequestParam String password) {
+        userService.deleteUser(uid, password);
+        // if (userService.deleteUser((User) session.getAttribute("LoggedInUser"),
+        // password)) {
+        // session.invalidate();
+        // }
     }
 
     /**
@@ -129,10 +132,9 @@ public class UserController {
      * @param oldPassword - The old password of the current user
      */
     @PatchMapping("/user/changePassword")
-    public void changePassword(HttpSession session, @RequestParam String newPassword,
+    public void changePassword(@RequestParam(defaultValue = "0") long uid, @RequestParam String newPassword,
             @RequestParam String oldPassword) {
-        User user = (User) session.getAttribute("LoggedInUser");
-        userService.changePassword(user, newPassword, oldPassword);
+        userService.changePassword(uid, newPassword, oldPassword);
     }
 
     /**
