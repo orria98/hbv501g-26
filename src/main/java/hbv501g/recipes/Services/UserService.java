@@ -28,9 +28,9 @@ public interface UserService {
 
     User update(User user);
 
-    boolean deleteUser(User user, String password);
+    boolean deleteUser(long uid, String password);
 
-    void changePassword(User user, String newPassword, String oldPassword);
+    void changePassword(long uid, String newPassword, String oldPassword);
     List<IngredientMeasurement> findUserPantry(long uid);
 
     void deletePantryItem(long uid, long iid);
