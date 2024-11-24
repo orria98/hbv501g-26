@@ -2,7 +2,6 @@ package hbv501g.recipes.Controllers;
 
 import java.util.List;
 
-import org.hibernate.Remove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,13 +33,12 @@ public class RecipeController {
     }
 
     /**
-     * Gets all recipes available to the user who is
-     * currently logged in. This includes all public recipes, and private recipes by
-     * the user
-     * If there is no user currently logged in, only public recipes are returned
+     * Gets all recipes available to the user who is currently logged in. This
+     * includes all public recipes, and private recipes by the user If there is no
+     * user currently logged in, only public recipes are returned
      * 
-     * @param session - The current http session
-     * @return all available recipes
+     * @param uid - the id of the current user, or 0 no user is logged in
+     * @return all accessible recipes
      */
     @GetMapping("/recipe/all")
     @ResponseBody
@@ -52,12 +50,12 @@ public class RecipeController {
      * Given a maximum price, finds all recipes accessible to the current user which
      * have a total purchase cost under that price
      * 
-     * @param tpc     - Maximum total purchase cost of recipe
-     * @param session - The current httpsession
+     * @param tpc - Maximum total purchase cost of recipe
+     * @param uid - the id of the current user, or 0 no user is logged in
      * @return all accessible recipes with tpc under the given value
      */
     @GetMapping("/recipe/underTPC/{tpc}")
-    public List<Recipe> getAllRecipesUnderTPC(@PathVariable(value = "tpc") int tpc, @RequestParam(defaultValue = "0") long uid) {
+    public List<Recipe> getAllRecipesUnderTPC(@PathVariable int tpc, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.findUnderTPC(tpc, uid);
     }
 
@@ -65,12 +63,13 @@ public class RecipeController {
      * Given a maximum price, finds all recipes accessible to the current user which
      * have a total ingredient cost under that price
      * 
-     * @param tic     - Maximum total ingredient cost of recipe
-     * @param session - The current httpsession
+     * @param tic - Maximum total ingredient cost of recipe
+     * @param uid - the id of the current user, or 0 no user is logged in
      * @return all accessible recipes with tic under the given value
      */
     @GetMapping("/recipe/underTIC/{tic}")
-    public List<Recipe> getAllRecipesUnderTIC(@PathVariable(value = "tic") int tic, @RequestParam(defaultValue = "0") long uid) {
+    public List<Recipe> getAllRecipesUnderTIC(@PathVariable int tic,
+            @RequestParam(defaultValue = "0") long uid) {
         return recipeService.findUnderTIC(tic, uid);
     }
 
@@ -78,12 +77,12 @@ public class RecipeController {
      * Gets all recipes that contain the search term in the title, which are
      * accessible to the current user
      * 
-     * @param session - The current httpsession
-     * @param term    - the term the titles should include
+     * @param uid  - the id of the current user, or 0 no user is logged in
+     * @param term - the term the titles should include
      * @return list of all recipes with the search term in the title
      */
     @GetMapping("/recipe/search/{term}")
-    public List<Recipe> findRecipesByTitle(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "term") String term) {
+    public List<Recipe> findRecipesByTitle(@RequestParam(defaultValue = "0") long uid, @PathVariable String term) {
         return recipeService.findByTitleContaining(uid, term);
     }
 
@@ -91,25 +90,24 @@ public class RecipeController {
      * Finds and returns a recipe with a given ID. Returns that reipe if any recipe
      * has the ID, and the current user has access to it, otherwise it returns null
      * 
-     * @param id      - the id of the requested recipe
-     * @param session - the current http session
+     * @param id  - the id of the requested recipe
+     * @param uid - the id of the current user, or 0 no user is logged in
      * @return the recipe with that id, or null
      */
     @GetMapping("/recipe/id/{id}")
-    public Recipe getRecipeById(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
+    public Recipe getRecipeById(@PathVariable long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.findAccessibleByID(id, uid);
     }
 
     /**
-     * Endpoint that finds an recipe by id and
-     * removes it form the database if the uesr
-     * own the recipe.
+     * Endpoint that finds an recipe by id and removes it form the database if the
+     * uesr own the recipe.
      * 
-     * @param session : is the current session
-     * @param id      : ID number of the recipe
+     * @param uid - the id of the current user, or 0 no user is logged in
+     * @param id  : ID number of the recipe
      */
     @DeleteMapping("/recipe/delete/{id}")
-    public void deleteRecipeById(@RequestParam(defaultValue = "0") long uid, @PathVariable(value = "id") long id) {
+    public void deleteRecipeById(@RequestParam(defaultValue = "0") long uid, @PathVariable long id) {
         recipeService.deleteById(uid, id);
     }
 
@@ -117,13 +115,13 @@ public class RecipeController {
      * gets the total cost to purchase all ingredients needed for a recipe, if the
      * recipe exists and is accessible to the current user
      * 
-     * @param id      - recipe id
-     * @param session - the current http session
+     * @param id  - recipe id
+     * @param uid : the id of the current user, or 0 no user is logged in
      * @return total purchase cost
      */
     @GetMapping("/recipe/id/{id}/totalpurch")
     @ResponseBody
-    public int getTotalPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
+    public int getTotalPurchaseCost(@PathVariable long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.getTotalPurchaseCost(uid, id);
     }
 
@@ -131,13 +129,13 @@ public class RecipeController {
      * Gets the total ingredient cost for a given recipe, that is the exact cost for
      * the quantity used, if the recipe exists and is accessible to the current user
      * 
-     * @param id      - recipe id
-     * @param session - the current http session
+     * @param id  - recipe id
+     * @param uid : the id of the current user, or 0 no user is logged in
      * @return total ingredient cost
      */
     @GetMapping("/recipe/id/{id}/totalIng")
     @ResponseBody
-    public double getTotalIngredientCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
+    public double getTotalIngredientCost(@PathVariable long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.getTotalIngredientCost(uid, id);
     }
 
@@ -146,12 +144,12 @@ public class RecipeController {
      * pantry for the recipe specified, if the recipe exists and is accessible to
      * the current user
      * 
-     * @param id      - recipe id
-     * @param session - current session
+     * @param id  - recipe id
+     * @param uid : the id of the current user, or 0 no user is logged in
      * @return personalized purchase cost
      */
     @GetMapping("/recipe/id/{id}/personal")
-    public double getPersonalizedPurchaseCost(@PathVariable(value = "id") long id, @RequestParam(defaultValue = "0") long uid) {
+    public double getPersonalizedPurchaseCost(@PathVariable long id, @RequestParam(defaultValue = "0") long uid) {
         return recipeService.getPersonalizedPurchaseCost(uid, id);
     }
 
@@ -163,16 +161,13 @@ public class RecipeController {
      * in the session. The recipe is saved in the database.
      * If no user is logged in, null is returned
      * 
-     * @param session   - the current http session
+     * @param uid       : the id of the current user, or 0 no user is logged in
      * @param newRecipe - a recipe that is being saved
      * @return the new recipe, or null
      */
     @PostMapping("/recipe/new")
     public Recipe newRecipe(@RequestParam(defaultValue = "0") long uid, @RequestBody Recipe newRecipe) {
-        if (uid != 0) {
-            return recipeService.setRecipeAuthorAndDate(newRecipe, uid);
-        }
-        return null;
+        return recipeService.setRecipeAuthorAndDate(newRecipe, uid);
     }
 
     /**
@@ -189,12 +184,13 @@ public class RecipeController {
      * @param ingredientIDs - a list with the ids of the ingredients in the
      *                      measurements
      * @param qty           - list with the quantities of the measurements
-     * @param session       - The current http session
+     * @param uid           : the id of the current user, or 0 no user is logged in
      * @return the recipe with the given recipeID with the measurements added
      */
     @PutMapping("/recipe/addIngredients")
     public Recipe addIngredients(@RequestParam long recipeID, @RequestParam List<Unit> units,
-            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty, @RequestParam(defaultValue = "0") long uid) {
+            @RequestParam List<Long> ingredientIDs, @RequestParam List<Double> qty,
+            @RequestParam(defaultValue = "0") long uid) {
         return recipeService.addIngredients(uid, recipeID, ingredientIDs, qty, units);
     }
 
@@ -204,33 +200,16 @@ public class RecipeController {
      * 
      * @param id            - the id of the recipe that should be updated
      * @param updatedRecipe - a recipe with the updated information
-     * @param session       - the current http session
+     * @param uid           : the id of the current user, or 0 no user is logged in
      * @return the original recipe after being updated
      */
     @PutMapping("/recipe/{id}/update")
-    public Recipe updateRecipeDetails(@PathVariable(value = "id") long id, @RequestBody Recipe updatedRecipe,
+    public Recipe updateRecipeDetails(@PathVariable long id, @RequestBody Recipe updatedRecipe,
             @RequestParam(defaultValue = "0") long uid) {
-        if (uid == 0) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
-        }
-
-        Recipe recipe = recipeService.updateRecipeDetails(id, updatedRecipe);
-        return recipe;
-
+        return recipeService.updateRecipeDetails(id, updatedRecipe, uid);
     }
 
     // ** Not in any assignment */
-
-    /**
-     * Initializes a few recipes
-     * 
-     * @return all recipes from db
-     */
-    @GetMapping("/recipe/init")
-    @ResponseBody
-    public List<Recipe> initRecipes() {
-        return recipeService.initRecipes();
-    }
 
     /**
      * Gets all recipes from the database. Not part of any assignment
@@ -253,19 +232,20 @@ public class RecipeController {
      */
     @Deprecated
     @GetMapping("/recipe/getById/{id}")
-    public Recipe getRecipeByIdWithPrivate(@PathVariable(value = "id") long id) {
+    public Recipe getRecipeByIdWithPrivate(@PathVariable long id) {
         return recipeService.findByID(id);
     }
 
-    @Remove
     @GetMapping("/recipe/all/ordered")
     public List<Recipe> getAllOrderedRecipes(@RequestParam(defaultValue = "0") long uid) {
         return recipeService.findOrderedRecipes(uid);
     }
 
     /**
-     * Gets all recipes which are accessible to the current user and returns them in alphabetical order
-     * @param session - the current http session
+     * Gets all recipes which are accessible to the current user and returns them in
+     * alphabetical order
+     * 
+     * @param uid : the id of the current user, or 0 no user is logged in
      * @return all recipes ordered alphabetically
      */
     @GetMapping("/recipe/all/orderedByTitle")
