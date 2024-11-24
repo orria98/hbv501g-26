@@ -169,7 +169,7 @@ public class RecipeController {
      */
     @PostMapping("/recipe/new")
     public Recipe newRecipe(@RequestParam(defaultValue = "0") long uid, @RequestBody Recipe newRecipe) {
-        if (uid != -1) {
+        if (uid != 0) {
             return recipeService.setRecipeAuthorAndDate(newRecipe, uid);
         }
         return null;
@@ -210,7 +210,7 @@ public class RecipeController {
     @PutMapping("/recipe/{id}/update")
     public Recipe updateRecipeDetails(@PathVariable(value = "id") long id, @RequestBody Recipe updatedRecipe,
             @RequestParam(defaultValue = "0") long uid) {
-        if (uid == -1) {
+        if (uid == 0) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not logged in.");
         }
 
