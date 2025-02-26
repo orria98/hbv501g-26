@@ -7,6 +7,7 @@ package hbv501g.recipes.Persistence.Entities;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import jakarta.persistence.Entity;
@@ -33,6 +34,8 @@ public class Ingredient {
     private String store;
     private String brand;
     private boolean isPrivate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfCreation;
 
     // Hver user getur verið á fleiri ingredients, en alltaf bara einn user á hverju

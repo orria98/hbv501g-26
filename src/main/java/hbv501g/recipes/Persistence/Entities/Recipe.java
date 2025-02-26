@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import jakarta.persistence.CollectionTable;
@@ -26,6 +27,8 @@ public class Recipe {
     private String title;
     private String instructions;
     private boolean isPrivate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfCreation;
     /** Total price for all groceries bought new */
     private int totalPurchaseCost;
