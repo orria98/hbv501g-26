@@ -247,7 +247,7 @@ public class RecipeServiceImplementation implements RecipeService {
         if (user == null) {
             return recipeRepository.findByIsPrivateFalseOrderByTitleAsc();
         }
-        return recipeRepository.findRecipesOrderedByTotalPurchasePriceAscending(user);
+        return recipeRepository.findRecipesOrderedAlphabeticallyAscending(user);
     }
 
     /**
